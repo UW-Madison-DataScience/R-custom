@@ -1,0 +1,31 @@
+---
+title: "R for text data"
+author: "Tobin Magle, Sarah Stevens"
+teaching: 
+exercises: 
+questions:
+- 
+objectives:
+- 
+keypoints:
+- 
+source: Rmd
+---
+
+```{r, echo = FALSE, purl = FALSE, message = FALSE}
+source("../bin/chunk-options.R")
+```
+
+## Openrefine outline
+
+- Faceting -> factors in forcats, or dplyr::distinct
+- Clustering - there are ways to do this in R, but i’ve taught it before andit’s pretty confusing. Maybe show them how to recode with forcats instead?
+- Split - tidyr::separate
+- Trim whitespace stringr:str_trim
+- Filtering - do we need to repeat this from dplyr?
+- Sorting - dplyr::arrange
+- Numbers + numeric facets - not sure this makes sense either
+- Scripts - already covered
+- Saving - maybe reiterate write_csv
+
+Link to slides from my first try at teaching this stuff as "data cleaning": (https://docs.google.com/presentation/d/1iZYep0u5OPQjkchEzLxYencLcQhoKYsK_3FvfzojK5c/edit#slide=id.g2a7f47f09d_1_121)
