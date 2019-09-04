@@ -13,19 +13,187 @@ source: Rmd
 ---
 
 ```{r, echo = FALSE, purl = FALSE, message = FALSE}
+library(knitr)
+library(tidyverse)
 source("../bin/chunk-options.R")
 ```
 
-## Openrefine outline
+## Why do this in R?
+Data is rarely clean and tidy
+Misspellings
+White space
+Multiple variables per column
+Inconsistent coding
 
-- Faceting -> factors in forcats, or dplyr::distinct
-- Clustering - there are ways to do this in R, but i’ve taught it before andit’s pretty confusing. Maybe show them how to recode with forcats instead?
-- Split - tidyr::separate
-- Trim whitespace stringr:str_trim
-- Filtering - do we need to repeat this from dplyr?
-- Sorting - dplyr::arrange
-- Numbers + numeric facets - not sure this makes sense either
-- Scripts - already covered
-- Saving - maybe reiterate write_csv
+Fixing it by hand takes forever
 
-Link to slides from my first try at teaching this stuff as "data cleaning": (https://docs.google.com/presentation/d/1iZYep0u5OPQjkchEzLxYencLcQhoKYsK_3FvfzojK5c/edit#slide=id.g2a7f47f09d_1_121)
+## Types of text data
+Up until now, we've largely treated all text data the same as either all factors or all strings. However, the type of a text column in a tibble determines what you can do with the data. If you want to clean up misspellings or look for patterns in unstructured data, you can do that in a string column. If you want to subset based on a catagory or combine categories, factors are more useful.
+
+This lesson will cover packages that make working with text data easier: `stringr` and `forcats`. These packages are part of the `tidyverse`, meaning that they work well with `dplyr`, specifically the `mutate` function. We will also cover options in the `read_csv` function that will allow you to choose what type the data are when they are imported.
+
+## The data
+
+We will be using a messier version of the surveys data that were used in the dplyr and ggplot2 lessons. 
+
+## Importing the data
+
+Let's start by importing the data with `read_csv`.
+```{r read_data}
+surveys<-read_csv(file = "data/Portal_rodents_19772002_scinameUUIDs.csv")
+```
+
+Because we imported the data using `read_csv`, all of the non-numeric columns were converted to the `character` class. If we used `read.csv`, they would all be factors.
+
+> ## Challenge 1
+> Look at the data columns in the surveys dataset. Which columns should be 
+> converted to factors? Which should stay as text? Why?
+> 
+> Hint: should any numeric columns be factors?
+> 
+> > ## Solution to Challenge 1
+> > 
+> > 
+> > 
+> {: .solution}
+{: .challenge}
+
+## Changing column classes
+
+```{r convert_text}
+#Create a text vector
+species<-c("AB", "AS", "AS", "AB")
+class(species)
+
+#convert it to factor
+species<-as_factor(species)
+class(species)
+
+#convert back to character
+species<-as_string(species)
+class(species)
+```
+
+```{r convert_text_tibble}
+surveys<- surveys%>%
+  mutate(species = as_factor(species))
+```
+
+Or, you could specify the types of all of your columns upon reading.
+
+```{r read_data_coltypes}
+surveys<-read_csv(file = "data/Portal_rodents_19772002_scinameUUIDs.csv",
+                  col_types = c("character", #survey_id
+                                "character", #recordID
+                                "int",    #Month
+                                "int",    #day
+                                "int",    #year
+                                "int",    #period
+                                "factor", #plot_id
+                                "factor", #plot
+                                "character", #note1
+                                "character", #stake
+                                "factor", #species
+                                "character", #scientificName
+                                "character", #locality
+                                "character", #JSON
+                                "numeric", #decimalLatitude
+                                "numeric", #decimalLongitude
+                                "factor", #county
+                                "factor", #state
+                                "factor", #country
+                                "factor", #sex
+                                "numeric", #age
+                                "character", #reprod
+                                "character", #testes
+                                "character", #vagina
+                                "character", #pregnant
+                                "character", #nippples
+                                "character", #lactation
+                                "numeric", #hfl
+                                "numeric", #wgt
+                                "character", #tag
+                                "character", #note2
+                                "int", #ltag
+                                "character", #note3
+                                "int", #prevrt
+                                "int", #prevlet
+                                "character", #nestdir
+                                "int", #neststk
+                                "character", #note4
+                                "character" #note5
+                                )
+                  )
+```
+
+> ## Challenge 2
+> Convert the columns you identified in Challenge 1 to factors
+> 
+> > ## Solution to Challenge 2
+> > 
+> > 
+> > 
+> {: .solution}
+{: .challenge}
+
+## Cleaning up text data
+
+When text data is entered by hand, small differences can be introduced that aren't easy to see with the human eye, but are important to the computer. One easy way to identify these small differences is the `count` function.
+
+```{r}
+
+surveys%>%
+  count(scientificName)
+
+```
+
+You can see some very similar species names, for example: "Ammospermophilis harrisi", "Ammospermophilus harrisi", "Ammospermophilus harrisii". However one spelling has many more records than the others. How can we fix the spellings?
+
+```{r}
+fct_collapse()
+```
+
+
+### Extra white space
+```{r}
+
+str_trim()
+str_pad()
+str_trunc()
+str_to_upper()
+str_to_lower()
+str_to_title()
+
+```
+
+## Splitting Variables
+```{r}
+#after fixing, separate scientificName into genus and species
+separate()
+
+```
+
+## Joining Variables
+```{r}
+#MAybe join lat and long?
+
+
+```
+
+## STringr functions
+```{r}
+str_length()
+str_sub()
+str_dup()
+```
+## Finding patterns
+
+```{r}
+str_detect()
+str_subset()
+str_count()
+str_locate()
+str_extract()
+str_match()
+str_replace()
+```
