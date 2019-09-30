@@ -39,7 +39,6 @@ source("../bin/chunk-options.R")
 ```{r setup}
 library(stringr)
 library(forcats)
-library(readr)
 library(ggplot2)
 library(dplyr)
 
@@ -54,10 +53,31 @@ While some of the operations you can do on them are the same as with character v
 They also different in their underlying structure.
 Character vectors are stored as the characters in each vector.
 Factors assign a value to each category and then store the values instead of the characters for each item.
-Given that this reduces the size of your dataset, many functions may run faster when categories 
+Given that this reduces the size of your data set, many functions may run faster when categories 
 are set as factors instead of characters.
 
-<!--- Challenge - which columns should be set as factors? -->
+> ## Challenge
+>
+>  In the surveys data set we have read in, which columns are categories
+>  and might be better typed as factors?
+> 
+>
+> > ## Solution to Challenge
+> > `plot_type`, `plot_id`, `species_id`, `genus`, `species`, and `sex` are all categorical values
+> > though they are a mix of text or numeric values.  You are unlikely to want to do math on
+> > the `plot_id` column despite it having numbers in it which means we may want to treat 
+> > it as a factor instead. Along those same lines, the `day`, `month`, `year` columns
+> > are also numeric columns which we are unlikely to do math on. While the `day` column
+> > doesn't form groups as naturally, we may want to group by observations by `month` or `year`
+> > which is another indicator that these might be better as factors.
+> > 
+> > `weight` and `hindfoot_length` are true numberic observations and so we may want to perform
+> > mathematical functions on them so they can be left as integers.
+> > `record_id` is unique to each row so it also doesn't form categories and would be better as
+> > an integer or character vector.
+> {: .solution}
+{: .challenge}
+
 
 
 ## Recoding factors
