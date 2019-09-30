@@ -24,7 +24,7 @@ source: Rmd
 - Recoding factors 
 - Reorder factors
 - Joining two string vectors
-- Remove leading/trailing whitespace
+- Remove leading/trailing white space
 - Split - tidyr::separate <!--- Maybe? -->
 <!--- Filtering - do we need to repeat this from dplyr? S: no? -->
 - Sorting - dplyr::arrange <!--- Maybe? -->
@@ -82,8 +82,13 @@ surveys <- read.csv("data/raw_surveys.csv")
 
 ## Factors
 
-Factors are...<!--- fill in -->
-
+Factors are categorical vectors in R.
+While some of the operations you can do on them are the same as with character vectors, others differ.
+They also different in their underlying structure.
+Character vectors are stored as the characters in each vector.
+Factors assign a value to each category and then store the values instead of the characters for each item.
+Given that this reduces the size of your dataset, many functions may run faster when categories 
+are set as factors instead of characters.
 
 <!--- Challenge - which columns should be set as factors? -->
 
@@ -235,7 +240,7 @@ surveys$plot_type <- surveys$plot_type %>% fct_relevel("Control", after= Inf)
 ~~~
 {: .language-r}
 
-Now if we plot the same boxplot above, the Control is the to the far right.
+Now if we plot the same box plot above, the Control is the to the far right.
 You can this to reorder the categories in your other plots as well.
 
 
@@ -310,7 +315,7 @@ str_c("Hi my name is ", name)
 ~~~
 {: .output}
 
-We can similarlly use this on vectors.
+We can similarly use this on vectors.
 
 
 ~~~
@@ -324,7 +329,7 @@ Another function that you could have used here is `paste()`
 ## Remove leading/trailing whitespace
 
 For this example, let's read in a messy version of the data.
-Convienently, there are some whitespace issues in the first few entries of `scientificName`.
+Conveniently, there are some white space issues in the first few entries of `scientificName`.
 Let's take a look.
 
 
@@ -441,7 +446,7 @@ messy_surveys$scientificName %>% as.character() %>% head()
 Now we can see that there are both leading and trailing spaces in these first view entries.
 We can use `str_trim()` to trim off white space.  It takes two arguments, the character vector
 and `side` which indicates which side we want to trim.  We will use "both" since we have both
-leading and trailing whitespace.
+leading and trailing white space.
 
 
 ~~~
@@ -458,7 +463,7 @@ messy_surveys$scientificName %>% str_trim(side="both") %>% head()
 ~~~
 {: .output}
 
-Let's replace this column in our messy dataset to clean it up a little.
+Let's replace this column in our messy data set to clean it up a little.
 Note we don't want to use `head()` this time.
 
 
@@ -487,7 +492,7 @@ samp_ids <- c("1", "10", "100", "200")
 First we should look up the arguments for `str_pad` the function we need to use.
 
 From the help we can see that we need the character vector, and the following 
-addtional arguments: `width`, `side`, and `pad`.
+additional arguments: `width`, `side`, and `pad`.
 
 
 ~~~
@@ -502,7 +507,7 @@ str_pad(samp_ids, width = 3, side = "left", pad="0")
 ~~~
 {: .output}
 
-Now we can try this on our dataset.
+Now we can try this on our data set.
 
 
 ~~~
