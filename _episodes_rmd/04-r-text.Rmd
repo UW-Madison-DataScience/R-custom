@@ -17,20 +17,36 @@ library(knitr)
 library(tidyverse)
 source("../bin/chunk-options.R")
 ```
+<!--- Link to slides from Tobin's first try at teaching this stuff as "data cleaning": (https://docs.google.com/presentation/d/1iZYep0u5OPQjkchEzLxYencLcQhoKYsK_3FvfzojK5c/edit#slide=id.g2a7f47f09d_1_121) -->
 
 ## Why do this in R?
-Data is rarely clean and tidy
-Misspellings
-White space
-Multiple variables per column
-Inconsistent coding
-
-Fixing it by hand takes forever
+- Data is rarely clean and tidy
+- Misspellings
+- White space
+- Multiple variables per column
+- Inconsistent coding
+- Fixing it by hand takes forever
 
 ## Types of text data
-Up until now, we've largely treated all text data the same as either all factors or all strings. However, the type of a text column in a tibble determines what you can do with the data. If you want to clean up misspellings or look for patterns in unstructured data, you can do that in a string column. If you want to subset based on a catagory or combine categories, factors are more useful.
+Up until now, we've largely treated all text data the same as either all factors or all strings.
+However, the type of a text column in a tibble determines what you can do with the data.
+If you want to clean up misspellings or look for patterns in unstructured data, you can do that 
+in a string column. If you want to subset based on a catagory or combine categories, factors are more useful.
 
-This lesson will cover packages that make working with text data easier: `stringr` and `forcats`. These packages are part of the `tidyverse`, meaning that they work well with `dplyr`, specifically the `mutate` function. We will also cover options in the `read_csv` function that will allow you to choose what type the data are when they are imported.
+This lesson will cover packages that make working with text data easier: `stringr` and `forcats`.
+These packages are part of the `tidyverse`, meaning that they work well with `dplyr`, specifically
+the `mutate` function. We will also cover options in the `read_csv` function that will allow you to
+choose what type the data are when they are imported.
+
+## Factors
+
+Factors are categorical vectors in R.
+While some of the operations you can do on them are the same as with character vectors, others differ.
+They also different in their underlying structure.
+Character vectors are stored as the characters in each vector.
+Factors assign a value to each category and then store the values instead of the characters for each item.
+Given that this reduces the size of your data set, many functions may run faster when categories 
+are set as factors instead of characters.
 
 ## The data
 
@@ -38,12 +54,20 @@ We will be using a messier version of the surveys data that were used in the dpl
 
 ## Importing the data
 
-Let's start by importing the data with `read_csv`.
+Let's start by loading the libraries and importing the data with `read_csv`.
 ```{r read_data}
+library(tidyverse)
+# OR
+library(stringr)
+library(forcats)
+library(ggplot2)
+library(dplyr)
+
 surveys<-read_csv(file = "data/Portal_rodents_19772002_scinameUUIDs.csv")
 ```
 
-Because we imported the data using `read_csv`, all of the non-numeric columns were converted to the `character` class. If we used `read.csv`, they would all be factors.
+Because we imported the data using `read_csv`, all of the non-numeric columns were converted to the 
+`character` class. If we used `read.csv`, they would all be factors.
 
 > ## Challenge 1
 > Look at the data columns in the surveys dataset. Which columns should be 
@@ -57,6 +81,30 @@ Because we imported the data using `read_csv`, all of the non-numeric columns we
 > > 
 > {: .solution}
 {: .challenge}
+
+<!---
+> ## Challenge
+>
+>  In the surveys data set we have read in, which columns are categories
+>  and might be better typed as factors?
+> 
+>
+> > ## Solution to Challenge
+> > `plot_type`, `plot_id`, `species_id`, `genus`, `species`, and `sex` are all categorical values
+> > though they are a mix of text or numeric values.  You are unlikely to want to do math on
+> > the `plot_id` column despite it having numbers in it which means we may want to treat 
+> > it as a factor instead. Along those same lines, the `day`, `month`, `year` columns
+> > are also numeric columns which we are unlikely to do math on. While the `day` column
+> > doesn't form groups as naturally, we may want to group by observations by `month` or `year`
+> > which is another indicator that these might be better as factors.
+> > 
+> > `weight` and `hindfoot_length` are true numberic observations and so we may want to perform
+> > mathematical functions on them so they can be left as integers.
+> > `record_id` is unique to each row so it also doesn't form categories and would be better as
+> > an integer or character vector.
+> {: .solution}
+{: .challenge}
+-->
 
 ## Changing column classes
 
@@ -136,9 +184,141 @@ surveys<-read_csv(file = "data/Portal_rodents_19772002_scinameUUIDs.csv",
 > {: .solution}
 {: .challenge}
 
+
+## Fun with Factors
+
+- Recoding factors, `fct_recode()`
+- Reordering factors, `fct_re
+
+
+### Recoding factors
+
+One common function we may need to perform is recoding the factors.
+In this case we may want to use the month names, instead of their numbers.
+
+```{r}
+surveys$month_abbv <- surveys$month %>% as.factor() %>% 
+  fct_recode(Jan='1', Feb='2', Mar='3', Apr='4', May='5', 
+             Jun='6', Jul='7', Aug='8', Sep='9', Oct='10',
+             Nov='11', Dec='12')
+head(surveys)
+```
+
+#### Easier way to do this.
+
+Getting the month abbreviations recoded more easily.
+First let's look at the first 6 months.
+
+````{r}
+surveys$month %>% head()
+```
+
+Now we can use the `month.abb[]` to get back the abbreviated names.
+(Still looking at only the first 6)
+```{r}
+month.abb[surveys$month] %>% head()
+```
+
+You can also do this with the full month name using `month.name[]`
+```{r}
+month.name[surveys$month] %>% head()
+```
+
+> ## Challenge
+>
+>  Add a new column called `month_full` onto the `surveys` data 
+>  from that includes the full month name.
+> 
+> Hint: Check out what `month.name[]` does.
+>
+> > ## Solution to Challenge
+> > ```{r, answer=TRUE, eval=FALSE, purl=FALSE}
+> > surveys$month_full <- month.name[surveys$month]
+> > ```
+> {: .solution}
+{: .challenge}
+
+
+### Reorder factors
+
+If we use the ggplot skills we learned in the last session.
+We see that the factors for `plot_type` display in the order of their 
+levels, which are in alphabetical order by default.
+
+```{r}
+levels(surveys$plot_type)
+surveys %>% filter(!is.na(hindfoot_length)) %>% 
+  ggplot(aes(x=plot_type, y=hindfoot_length)) +
+  geom_boxplot()
+```
+
+#### Control on the right
+
+Suppose we need the control to be on the right side of our plot instead.
+Before we would have to use the following code.
+```
+surveys$plot_type <- factor(surveys$plot_type, levels = c("Long-term Krat Exclosure", "Rodent Exclosure", "Short-term Krat Exclosure", "Spectab exclosure", "Control"))
+```
+
+Instead with the tidyverse we can use the function `fct_relevel` and specify the placement of "Control" with
+`after=Inf` (after everything) instead of typing out each of the levels.
+
+```{r}
+surveys$plot_type <- surveys$plot_type %>% fct_relevel("Control", after= Inf)
+```
+
+Now if we plot the same box plot above, the Control is the to the far right.
+You can this to reorder the categories in your other plots as well.
+
+```{r}
+surveys %>% 
+  filter(!is.na(hindfoot_length)) %>% 
+  ggplot(aes(x=plot_type, y=hindfoot_length)) +
+  geom_boxeplot()
+```
+
+> ## Challenge
+>
+>  1. Make a box plot of the hindfoot lenghts by `plot_id`. 
+>  Hint: you may need to change the data type.
+>  2. Figure out which `plot_id`'s belong to the "Control" `plot_type.  
+>  Hint: You may want to the `dplyr` skills we've learned and the `unique()` function.
+>  3. Reorder the `plot_id`'s in the boxplot so the control plots are on the right.
+>
+> > ## Solution to Challenge
+> > 1. 
+> > ```{r, answer=TRUE, eval=FALSE, purl=FALSE}
+> > surveys$plot_id <- as.factor(surveys$plot_id)
+> > surveys %>% 
+> >     filter(!is.na(hindfoot_length)) %>% 
+> >     ggplot(aes(x=plot_id, y=hindfoot_length)) +
+> >     geom_boxplot()
+> > ```
+> > 2. 
+> > ```{r, answer=TRUE, eval=FALSE, purl=FALSE}
+> > ctrl_id <- surveys %>% filter(plot_type == "Control") %>% select(plot_id) %>%  unique()
+> > ```
+> > 3. 
+> > ```{r, answer=TRUE, eval=FALSE, purl=FALSE}
+> > surveys$plot_id <- surveys$plot_id %>% fct_relevel('2', '17', '12', '11', '22', '14', '4', '8', after= Inf)
+> > surveys %>% 
+> >     filter(!is.na(hindfoot_length)) %>% 
+> >     ggplot(aes(x=plot_id, y=hindfoot_length)) +
+> >     geom_boxplot()
+> > ```
+> {: .solution}
+{: .challenge}
+
+<!--- alt challenge, reorder months in plot? 
+surveys %>% filter(!is.na(weight)) %>% ggplot(aes(x=month_abbv, y=weight)) + geom_boxplot()
+-->
+
+
 ## Cleaning up text data
 
-When text data is entered by hand, small differences can be introduced that aren't easy to see with the human eye, but are important to the computer. One easy way to identify these small differences is the `count` function.
+When text data is entered by hand, small differences can be introduced that 
+aren't easy to see with the human eye, but are important to the computer. 
+One easy way to identify these small differences is the `count` function.
 
 ```{r}
 
@@ -147,7 +327,9 @@ surveys%>%
 
 ```
 
-You can see some very similar species names, for example: "Ammospermophilis harrisi", "Ammospermophilus harrisi", "Ammospermophilus harrisii". However one spelling has many more records than the others. How can we fix the spellings?
+You can see some very similar species names, for example: 
+"Ammospermophilis harrisi", "Ammospermophilus harrisi", "Ammospermophilus harrisii". 
+However one spelling has many more records than the others. How can we fix the spellings?
 
 ```{r}
 fct_collapse()
@@ -174,18 +356,36 @@ separate()
 ```
 
 ## Joining Variables
+
+### Maybe join lat and long?
+
+### Make a Scientific Name column from genus+species
+
+In some of our plots we may want to label with the full scientific name.
+To do so we can add a new column which joins two strings together.
+Before we get into vectors lets try an example with two strings
 ```{r}
-#MAybe join lat and long?
-
-
+name = "Sarah"
+str_c("Hi my name is ", name)
 ```
 
-## STringr functions
+We can similarly use this on vectors.
+
+```{r}
+surveys$sci_name <- str_c(surveys$genus, " ",  surveys$species)
+```
+
+Now we could make a plot and have it labeled by the full scientific name.
+Another function that you could have used here is `paste()`
+
+
+## Stringr functions
 ```{r}
 str_length()
 str_sub()
 str_dup()
 ```
+
 ## Finding patterns
 
 ```{r}
@@ -197,3 +397,109 @@ str_extract()
 str_match()
 str_replace()
 ```
+
+
+
+## Make a Scientific Name column from genus+species
+
+In some of our plots we may want to label with the full scientific name.
+To do so we can add a new column which joins two strings together.
+Before we get into vectors lets try an example with two strings
+```{r}
+name = "Sarah"
+str_c("Hi my name is ", name)
+```
+
+We can similarly use this on vectors.
+
+```{r}
+surveys$sci_name <- str_c(surveys$genus, " ",  surveys$species)
+```
+
+Now we could make a plot and have it labeled by the full scientific name.
+Another function that you could have used here is `paste()`
+
+## Remove leading/trailing whitespace
+
+For this example, let's read in a messy version of the data.
+Conveniently, there are some white space issues in the first few entries of `scientificName`.
+Let's take a look.
+
+```{r}
+messy_surveys <- read.csv("data/Portal_rodents_19772002_scinameUUIDs.csv")
+head(messy_surveys)
+messy_surveys$scientificName %>% head()
+```
+
+The spacing here shows us that there is probably something.  It is a little easier
+to see if we view it as a character vector instead of a factor in this case.
+
+```{r}
+messy_surveys$scientificName %>% as.character() %>% head()
+```
+
+Now we can see that there are both leading and trailing spaces in these first view entries.
+We can use `str_trim()` to trim off white space.  It takes two arguments, the character vector
+and `side` which indicates which side we want to trim.  We will use "both" since we have both
+leading and trailing white space.
+
+```{r}
+messy_surveys$scientificName %>% str_trim(side="both") %>% head()
+```
+
+Let's replace this column in our messy data set to clean it up a little.
+Note we don't want to use `head()` this time.
+
+```{r}
+messy_surveys$scientificName <- messy_surveys$scientificName %>% str_trim(side="both")
+```
+
+
+## Regular expressions
+
+
+## Left pad the months, for data consistency
+
+In the past we've seen cases where sorting on number characters/factors 
+can behave differently than expected.
+If we want to avoid this we can add zero's on the left side and make our numbers
+a consistent length.
+
+```{r}
+samp_ids <- c("1", "10", "100", "200")
+```
+
+First we should look up the arguments for `str_pad` the function we need to use.
+
+From the help we can see that we need the character vector, and the following 
+additional arguments: `width`, `side`, and `pad`.
+
+```{r}
+str_pad(samp_ids, width = 3, side = "left", pad="0")
+```
+
+Now we can try this on our data set.
+
+```{r}
+surveys$month <- surveys$month %>% 
+  str_pad(width = 2, side = "left", pad='0')
+head(surveys)
+```
+
+> ## Challenge
+>
+>  Try the same thing with the `day` column.
+> 
+>
+> > ## Solution to Challenge
+> > ```{r, answer=TRUE, eval=FALSE, purl=FALSE}
+> >  surveys$day <- surveys$day %>% 
+> >   str_pad(width = 2, side = "left", pad='0')
+> > ```
+> {: .solution}
+{: .challenge}
+
+
+
+## Write back to a csv file
+
