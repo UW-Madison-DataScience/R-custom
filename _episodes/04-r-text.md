@@ -15,69 +15,26 @@ source: Rmd
 ---
 
 
+<!--- Link to slides from Tobin's first try at teaching this stuff as "data cleaning": (https://docs.google.com/presentation/d/1iZYep0u5OPQjkchEzLxYencLcQhoKYsK_3FvfzojK5c/edit#slide=id.g2a7f47f09d_1_121) -->
 
-## Outline
+## Why do this in R?
+- Data is rarely clean and tidy
+- Misspellings
+- White space
+- Multiple variables per column
+- Inconsistent coding
+- Fixing it by hand takes forever
 
-<!--- Faceting -> factors in forcats, or dplyr::distinct -->
-<!--- Clustering - there are ways to do this in R, but i’ve taught it before andit’s pretty confusing. Maybe show them how to recode with forcats instead? -->
-- Reminder about what factors are
-- Recoding factors 
-- Reorder factors
-- Joining two string vectors
-- Remove leading/trailing white space
-- Split - tidyr::separate <!--- Maybe? -->
-<!--- Filtering - do we need to repeat this from dplyr? S: no? -->
-- Sorting - dplyr::arrange <!--- Maybe? -->
-<!--- Numbers + numeric facets - not sure this makes sense either, S: yeah I'm not sure what you mean here -->
-- Saving - maybe reiterate write_csv
+## Types of text data
+Up until now, we've largely treated all text data the same as either all factors or all strings.
+However, the type of a text column in a tibble determines what you can do with the data.
+If you want to clean up misspellings or look for patterns in unstructured data, you can do that 
+in a string column. If you want to subset based on a catagory or combine categories, factors are more useful.
 
-<!--- Link to slides from my first try at teaching this stuff as "data cleaning": (https://docs.google.com/presentation/d/1iZYep0u5OPQjkchEzLxYencLcQhoKYsK_3FvfzojK5c/edit#slide=id.g2a7f47f09d_1_121) -->
-
-
-## Setup
-
-
-~~~
-library(stringr)
-library(forcats)
-library(ggplot2)
-library(dplyr)
-~~~
-{: .language-r}
-
-
-
-~~~
-
-Attaching package: 'dplyr'
-~~~
-{: .output}
-
-
-
-~~~
-The following objects are masked from 'package:stats':
-
-    filter, lag
-~~~
-{: .output}
-
-
-
-~~~
-The following objects are masked from 'package:base':
-
-    intersect, setdiff, setequal, union
-~~~
-{: .output}
-
-
-
-~~~
-surveys <- read.csv("data/raw_surveys.csv")
-~~~
-{: .language-r}
-
+This lesson will cover packages that make working with text data easier: `stringr` and `forcats`.
+These packages are part of the `tidyverse`, meaning that they work well with `dplyr`, specifically
+the `mutate` function. We will also cover options in the `read_csv` function that will allow you to
+choose what type the data are when they are imported.
 
 ## Factors
 
@@ -89,6 +46,93 @@ Factors assign a value to each category and then store the values instead of the
 Given that this reduces the size of your data set, many functions may run faster when categories 
 are set as factors instead of characters.
 
+## The data
+
+We will be using a messier version of the surveys data that were used in the dplyr and ggplot2 lessons. 
+
+## Importing the data
+
+Let's start by loading the libraries and importing the data with `read_csv`.
+
+~~~
+library(tidyverse)
+# OR
+library(stringr)
+library(forcats)
+library(ggplot2)
+library(dplyr)
+
+surveys<-read_csv(file = "data/Portal_rodents_19772002_scinameUUIDs.csv")
+~~~
+{: .language-r}
+
+
+
+~~~
+Parsed with column specification:
+cols(
+  .default = col_character(),
+  recordID = col_double(),
+  mo = col_double(),
+  dy = col_double(),
+  yr = col_double(),
+  period = col_double(),
+  plot = col_double(),
+  note1 = col_double(),
+  stake = col_double(),
+  decimalLatitude = col_double(),
+  decimalLongitude = col_double(),
+  hfl = col_double(),
+  wgt = col_double(),
+  ltag = col_double(),
+  note3 = col_logical(),
+  prevrt = col_double(),
+  prevlet = col_double(),
+  neststk = col_double(),
+  note4 = col_logical()
+)
+~~~
+{: .output}
+
+
+
+~~~
+See spec(...) for full column specifications.
+~~~
+{: .output}
+
+
+
+~~~
+Warning: 674 parsing failures.
+ row   col           expected actual                                            file
+1039 note4 1/0/T/F/TRUE/FALSE     TE 'data/Portal_rodents_19772002_scinameUUIDs.csv'
+1070 note4 1/0/T/F/TRUE/FALSE     TA 'data/Portal_rodents_19772002_scinameUUIDs.csv'
+1092 note4 1/0/T/F/TRUE/FALSE     TE 'data/Portal_rodents_19772002_scinameUUIDs.csv'
+1099 note4 1/0/T/F/TRUE/FALSE     TE 'data/Portal_rodents_19772002_scinameUUIDs.csv'
+1110 note4 1/0/T/F/TRUE/FALSE     TE 'data/Portal_rodents_19772002_scinameUUIDs.csv'
+.... ..... .................. ...... ...............................................
+See problems(...) for more details.
+~~~
+{: .error}
+
+Because we imported the data using `read_csv`, all of the non-numeric columns were converted to the 
+`character` class. If we used `read.csv`, they would all be factors.
+
+> ## Challenge 1
+> Look at the data columns in the surveys dataset. Which columns should be 
+> converted to factors? Which should stay as text? Why?
+> 
+> Hint: should any numeric columns be factors?
+> 
+> > ## Solution to Challenge 1
+> > 
+> > 
+> > 
+> {: .solution}
+{: .challenge}
+
+<!---
 > ## Challenge
 >
 >  In the surveys data set we have read in, which columns are categories
@@ -110,10 +154,151 @@ are set as factors instead of characters.
 > > an integer or character vector.
 > {: .solution}
 {: .challenge}
+-->
+
+## Changing column classes
+
+
+~~~
+#Create a text vector
+species<-c("AB", "AS", "AS", "AB")
+class(species)
+~~~
+{: .language-r}
 
 
 
-## Recoding factors
+~~~
+[1] "character"
+~~~
+{: .output}
+
+
+
+~~~
+#convert it to factor
+species<-as_factor(species)
+class(species)
+~~~
+{: .language-r}
+
+
+
+~~~
+[1] "factor"
+~~~
+{: .output}
+
+
+
+~~~
+#convert back to character
+species<-as_string(species)
+~~~
+{: .language-r}
+
+
+
+~~~
+Error in as_string(species): could not find function "as_string"
+~~~
+{: .error}
+
+
+
+~~~
+class(species)
+~~~
+{: .language-r}
+
+
+
+~~~
+[1] "factor"
+~~~
+{: .output}
+
+
+~~~
+surveys<- surveys%>%
+  mutate(species = as_factor(species))
+~~~
+{: .language-r}
+
+Or, you could specify the types of all of your columns upon reading.
+
+
+~~~
+surveys<-read_csv(file = "data/Portal_rodents_19772002_scinameUUIDs.csv",
+                  col_types = c("character", #survey_id
+                                "character", #recordID
+                                "int",    #Month
+                                "int",    #day
+                                "int",    #year
+                                "int",    #period
+                                "factor", #plot_id
+                                "factor", #plot
+                                "character", #note1
+                                "character", #stake
+                                "factor", #species
+                                "character", #scientificName
+                                "character", #locality
+                                "character", #JSON
+                                "numeric", #decimalLatitude
+                                "numeric", #decimalLongitude
+                                "factor", #county
+                                "factor", #state
+                                "factor", #country
+                                "factor", #sex
+                                "numeric", #age
+                                "character", #reprod
+                                "character", #testes
+                                "character", #vagina
+                                "character", #pregnant
+                                "character", #nippples
+                                "character", #lactation
+                                "numeric", #hfl
+                                "numeric", #wgt
+                                "character", #tag
+                                "character", #note2
+                                "int", #ltag
+                                "character", #note3
+                                "int", #prevrt
+                                "int", #prevlet
+                                "character", #nestdir
+                                "int", #neststk
+                                "character", #note4
+                                "character" #note5
+                                )
+                  )
+~~~
+{: .language-r}
+
+
+
+~~~
+Error: Unknown shortcut: h
+~~~
+{: .error}
+
+> ## Challenge 2
+> Convert the columns you identified in Challenge 1 to factors
+> 
+> > ## Solution to Challenge 2
+> > 
+> > 
+> > 
+> {: .solution}
+{: .challenge}
+
+
+## Fun with Factors
+
+- Recoding factors, `fct_recode()`
+- Reordering factors, `fct_re
+
+
+### Recoding factors
 
 One common function we may need to perform is recoding the factors.
 In this case we may want to use the month names, instead of their numbers.
@@ -124,6 +309,33 @@ surveys$month_abbv <- surveys$month %>% as.factor() %>%
   fct_recode(Jan='1', Feb='2', Mar='3', Apr='4', May='5', 
              Jun='6', Jul='7', Aug='8', Sep='9', Oct='10',
              Nov='11', Dec='12')
+~~~
+{: .language-r}
+
+
+
+~~~
+Warning: Unknown or uninitialised column: 'month'.
+~~~
+{: .error}
+
+
+
+~~~
+Warning: Unknown levels in `f`: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+~~~
+{: .error}
+
+
+
+~~~
+Error in `$<-.data.frame`(`*tmp*`, month_abbv, value = structure(integer(0), .Label = character(0), class = "factor")): replacement has 0 rows, data has 35549
+~~~
+{: .error}
+
+
+
+~~~
 head(surveys)
 ~~~
 {: .language-r}
@@ -131,27 +343,30 @@ head(surveys)
 
 
 ~~~
-  record_id month day year plot_id species_id sex hindfoot_length weight
-1         1     7  16 1977       2         NL   M              32     NA
-2        72     8  19 1977       2         NL   M              31     NA
-3       224     9  13 1977       2         NL                  NA     NA
-4       266    10  16 1977       2         NL                  NA     NA
-5       349    11  12 1977       2         NL                  NA     NA
-6       363    11  12 1977       2         NL                  NA     NA
-    genus  species   taxa plot_type month_abbv
-1 Neotoma albigula Rodent   Control        Jul
-2 Neotoma albigula Rodent   Control        Aug
-3 Neotoma albigula Rodent   Control        Sep
-4 Neotoma albigula Rodent   Control        Oct
-5 Neotoma albigula Rodent   Control        Nov
-6 Neotoma albigula Rodent   Control        Nov
+# A tibble: 6 x 39
+  survey_id recordID    mo    dy    yr period plot_id  plot note1 stake
+  <chr>        <dbl> <dbl> <dbl> <dbl>  <dbl> <chr>   <dbl> <dbl> <dbl>
+1 491ec41b…     6545     9    18  1982     62 4dc160…    13    13    36
+2 f280bade…     5220     1    24  1982     54 dcbbd3…    20    13    27
+3 2b1b4a8a…    18932     8     7  1991    162 1e87b1…    19    13    33
+4 e98e66c4…    20588     1    24  1993    179 91829d…    12    13    41
+5 768cdd0d…     7020    11    21  1982     63 f24f2d…    24    13    72
+6 13851c71…     7645     4    16  1983     67 f24f2d…    24    13    21
+# … with 29 more variables: species <fct>, scientificName <chr>,
+#   locality <chr>, JSON <chr>, decimalLatitude <dbl>,
+#   decimalLongitude <dbl>, county <chr>, state <chr>, country <chr>,
+#   sex <chr>, age <chr>, reprod <chr>, testes <chr>, vagina <chr>,
+#   pregnant <chr>, nipples <chr>, lactation <chr>, hfl <dbl>, wgt <dbl>,
+#   tag <chr>, note2 <chr>, ltag <dbl>, note3 <lgl>, prevrt <dbl>,
+#   prevlet <dbl>, nestdir <chr>, neststk <dbl>, note4 <lgl>, note5 <chr>
 ~~~
 {: .output}
 
-### Easier way to do this.
+#### Easier way to do this.
 
 Getting the month abbreviations recoded more easily.
 First let's look at the first 6 months.
+
 
 ~~~
 surveys$month %>% head()
@@ -161,7 +376,14 @@ surveys$month %>% head()
 
 
 ~~~
-[1]  7  8  9 10 11 11
+Warning: Unknown or uninitialised column: 'month'.
+~~~
+{: .error}
+
+
+
+~~~
+NULL
 ~~~
 {: .output}
 
@@ -176,7 +398,14 @@ month.abb[surveys$month] %>% head()
 
 
 ~~~
-[1] "Jul" "Aug" "Sep" "Oct" "Nov" "Nov"
+Warning: Unknown or uninitialised column: 'month'.
+~~~
+{: .error}
+
+
+
+~~~
+character(0)
 ~~~
 {: .output}
 
@@ -190,7 +419,14 @@ month.name[surveys$month] %>% head()
 
 
 ~~~
-[1] "July"      "August"    "September" "October"   "November"  "November" 
+Warning: Unknown or uninitialised column: 'month'.
+~~~
+{: .error}
+
+
+
+~~~
+character(0)
 ~~~
 {: .output}
 
@@ -211,11 +447,12 @@ month.name[surveys$month] %>% head()
 {: .challenge}
 
 
-## Reorder factors
+### Reorder factors
 
 If we use the ggplot skills we learned in the last session.
 We see that the factors for `plot_type` display in the order of their 
 levels, which are in alphabetical order by default.
+
 
 ~~~
 levels(surveys$plot_type)
@@ -225,9 +462,14 @@ levels(surveys$plot_type)
 
 
 ~~~
-[1] "Control"                   "Long-term Krat Exclosure" 
-[3] "Rodent Exclosure"          "Short-term Krat Exclosure"
-[5] "Spectab exclosure"        
+Warning: Unknown or uninitialised column: 'plot_type'.
+~~~
+{: .error}
+
+
+
+~~~
+NULL
 ~~~
 {: .output}
 
@@ -240,10 +482,14 @@ surveys %>% filter(!is.na(hindfoot_length)) %>%
 ~~~
 {: .language-r}
 
-<img src="../fig/rmd-unnamed-chunk-7-1.png" title="plot of chunk unnamed-chunk-7" alt="plot of chunk unnamed-chunk-7" width="612" style="display: block; margin: auto;" />
 
 
-### Control on the right
+~~~
+Error: object 'hindfoot_length' not found
+~~~
+{: .error}
+
+#### Control on the right
 
 Suppose we need the control to be on the right side of our plot instead.
 Before we would have to use the following code.
@@ -260,6 +506,20 @@ surveys$plot_type <- surveys$plot_type %>% fct_relevel("Control", after= Inf)
 ~~~
 {: .language-r}
 
+
+
+~~~
+Warning: Unknown or uninitialised column: 'plot_type'.
+~~~
+{: .error}
+
+
+
+~~~
+Error: `f` must be a factor (or character vector or numeric vector).
+~~~
+{: .error}
+
 Now if we plot the same box plot above, the Control is the to the far right.
 You can this to reorder the categories in your other plots as well.
 
@@ -268,11 +528,16 @@ You can this to reorder the categories in your other plots as well.
 surveys %>% 
   filter(!is.na(hindfoot_length)) %>% 
   ggplot(aes(x=plot_type, y=hindfoot_length)) +
-  geom_boxplot()
+  geom_boxeplot()
 ~~~
 {: .language-r}
 
-<img src="../fig/rmd-unnamed-chunk-9-1.png" title="plot of chunk unnamed-chunk-9" alt="plot of chunk unnamed-chunk-9" width="612" style="display: block; margin: auto;" />
+
+
+~~~
+Error: object 'hindfoot_length' not found
+~~~
+{: .error}
 
 > ## Challenge
 >
@@ -316,7 +581,162 @@ surveys %>%
 surveys %>% filter(!is.na(weight)) %>% ggplot(aes(x=month_abbv, y=weight)) + geom_boxplot()
 -->
 
-## Make a Scientific Name column
+
+## Cleaning up text data
+
+When text data is entered by hand, small differences can be introduced that 
+aren't easy to see with the human eye, but are important to the computer. 
+One easy way to identify these small differences is the `count` function.
+
+
+~~~
+surveys%>%
+  count(scientificName)
+~~~
+{: .language-r}
+
+
+
+~~~
+# A tibble: 27 x 2
+   scientificName                n
+   <chr>                     <int>
+ 1 Ammodramus savannarum         2
+ 2 Ammospermophilis harrisi      1
+ 3 Ammospermophilus harrisi    435
+ 4 Ammospermophilus harrisii     1
+ 5 Amphespiza bilineata          7
+ 6 Amphispiza bilineata        291
+ 7 Amphispiza bilineatus         1
+ 8 Amphispiza cilineata          1
+ 9 Amphispizo bilineata          1
+10 Baiomys taylori              46
+# … with 17 more rows
+~~~
+{: .output}
+
+You can see some very similar species names, for example: 
+"Ammospermophilis harrisi", "Ammospermophilus harrisi", "Ammospermophilus harrisii". 
+However one spelling has many more records than the others. How can we fix the spellings?
+
+
+~~~
+fct_collapse()
+~~~
+{: .language-r}
+
+
+
+~~~
+Error in fct_recode(.f, !!!levs): argument ".f" is missing, with no default
+~~~
+{: .error}
+
+
+### Extra white space
+
+~~~
+str_trim()
+~~~
+{: .language-r}
+
+
+
+~~~
+Error in stri_trim_both(string): argument "string" is missing, with no default
+~~~
+{: .error}
+
+
+
+~~~
+str_pad()
+~~~
+{: .language-r}
+
+
+
+~~~
+Error in stri_pad_left(string, width, pad = pad): argument "string" is missing, with no default
+~~~
+{: .error}
+
+
+
+~~~
+str_trunc()
+~~~
+{: .language-r}
+
+
+
+~~~
+Error in str_trunc(): argument "string" is missing, with no default
+~~~
+{: .error}
+
+
+
+~~~
+str_to_upper()
+~~~
+{: .language-r}
+
+
+
+~~~
+Error in stri_trans_toupper(string, locale = locale): argument "string" is missing, with no default
+~~~
+{: .error}
+
+
+
+~~~
+str_to_lower()
+~~~
+{: .language-r}
+
+
+
+~~~
+Error in stri_trans_tolower(string, locale = locale): argument "string" is missing, with no default
+~~~
+{: .error}
+
+
+
+~~~
+str_to_title()
+~~~
+{: .language-r}
+
+
+
+~~~
+Error in stri_trans_totitle(string, opts_brkiter = stri_opts_brkiter(locale = locale)): argument "string" is missing, with no default
+~~~
+{: .error}
+
+## Splitting Variables
+
+~~~
+#after fixing, separate scientificName into genus and species
+separate()
+~~~
+{: .language-r}
+
+
+
+~~~
+Error in separate_(data, col = col, into = into, sep = sep, remove = remove, : argument "data" is missing, with no default
+~~~
+{: .error}
+
+## Joining Variables
+
+### Maybe join lat and long?
+
+### Make a Scientific Name column from genus+species
 
 In some of our plots we may want to label with the full scientific name.
 To do so we can add a new column which joins two strings together.
@@ -342,6 +762,194 @@ We can similarly use this on vectors.
 surveys$sci_name <- str_c(surveys$genus, " ",  surveys$species)
 ~~~
 {: .language-r}
+
+
+
+~~~
+Warning: Unknown or uninitialised column: 'genus'.
+~~~
+{: .error}
+
+Now we could make a plot and have it labeled by the full scientific name.
+Another function that you could have used here is `paste()`
+
+
+## Stringr functions
+
+~~~
+str_length()
+~~~
+{: .language-r}
+
+
+
+~~~
+Error in stri_length(string): argument "string" is missing, with no default
+~~~
+{: .error}
+
+
+
+~~~
+str_sub()
+~~~
+{: .language-r}
+
+
+
+~~~
+Error in stri_sub(string, from = start, to = end): argument "string" is missing, with no default
+~~~
+{: .error}
+
+
+
+~~~
+str_dup()
+~~~
+{: .language-r}
+
+
+
+~~~
+Error in stri_dup(string, times): argument "string" is missing, with no default
+~~~
+{: .error}
+
+## Finding patterns
+
+
+~~~
+str_detect()
+~~~
+{: .language-r}
+
+
+
+~~~
+Error in type(pattern): argument "pattern" is missing, with no default
+~~~
+{: .error}
+
+
+
+~~~
+str_subset()
+~~~
+{: .language-r}
+
+
+
+~~~
+Error in type(pattern): argument "pattern" is missing, with no default
+~~~
+{: .error}
+
+
+
+~~~
+str_count()
+~~~
+{: .language-r}
+
+
+
+~~~
+Error in stri_count_boundaries(string, opts_brkiter = opts(pattern)): argument "string" is missing, with no default
+~~~
+{: .error}
+
+
+
+~~~
+str_locate()
+~~~
+{: .language-r}
+
+
+
+~~~
+Error in type(pattern): argument "pattern" is missing, with no default
+~~~
+{: .error}
+
+
+
+~~~
+str_extract()
+~~~
+{: .language-r}
+
+
+
+~~~
+Error in type(pattern): argument "pattern" is missing, with no default
+~~~
+{: .error}
+
+
+
+~~~
+str_match()
+~~~
+{: .language-r}
+
+
+
+~~~
+Error in type(pattern): argument "pattern" is missing, with no default
+~~~
+{: .error}
+
+
+
+~~~
+str_replace()
+~~~
+{: .language-r}
+
+
+
+~~~
+Error in type(pattern): argument "pattern" is missing, with no default
+~~~
+{: .error}
+
+
+
+## Make a Scientific Name column from genus+species
+
+In some of our plots we may want to label with the full scientific name.
+To do so we can add a new column which joins two strings together.
+Before we get into vectors lets try an example with two strings
+
+~~~
+name = "Sarah"
+str_c("Hi my name is ", name)
+~~~
+{: .language-r}
+
+
+
+~~~
+[1] "Hi my name is Sarah"
+~~~
+{: .output}
+
+We can similarly use this on vectors.
+
+
+~~~
+surveys$sci_name <- str_c(surveys$genus, " ",  surveys$species)
+~~~
+{: .language-r}
+
+
+
+~~~
+Warning: Unknown or uninitialised column: 'genus'.
+~~~
+{: .error}
 
 Now we could make a plot and have it labeled by the full scientific name.
 Another function that you could have used here is `paste()`
@@ -533,6 +1141,26 @@ Now we can try this on our data set.
 ~~~
 surveys$month <- surveys$month %>% 
   str_pad(width = 2, side = "left", pad='0')
+~~~
+{: .language-r}
+
+
+
+~~~
+Warning: Unknown or uninitialised column: 'month'.
+~~~
+{: .error}
+
+
+
+~~~
+Error in `$<-.data.frame`(`*tmp*`, month, value = character(0)): replacement has 0 rows, data has 35549
+~~~
+{: .error}
+
+
+
+~~~
 head(surveys)
 ~~~
 {: .language-r}
@@ -540,20 +1168,23 @@ head(surveys)
 
 
 ~~~
-  record_id month day year plot_id species_id sex hindfoot_length weight
-1         1    07  16 1977       2         NL   M              32     NA
-2        72    08  19 1977       2         NL   M              31     NA
-3       224    09  13 1977       2         NL                  NA     NA
-4       266    10  16 1977       2         NL                  NA     NA
-5       349    11  12 1977       2         NL                  NA     NA
-6       363    11  12 1977       2         NL                  NA     NA
-    genus  species   taxa plot_type month_abbv         sci_name
-1 Neotoma albigula Rodent   Control        Jul Neotoma albigula
-2 Neotoma albigula Rodent   Control        Aug Neotoma albigula
-3 Neotoma albigula Rodent   Control        Sep Neotoma albigula
-4 Neotoma albigula Rodent   Control        Oct Neotoma albigula
-5 Neotoma albigula Rodent   Control        Nov Neotoma albigula
-6 Neotoma albigula Rodent   Control        Nov Neotoma albigula
+# A tibble: 6 x 40
+  survey_id recordID    mo    dy    yr period plot_id  plot note1 stake
+  <chr>        <dbl> <dbl> <dbl> <dbl>  <dbl> <chr>   <dbl> <dbl> <dbl>
+1 491ec41b…     6545     9    18  1982     62 4dc160…    13    13    36
+2 f280bade…     5220     1    24  1982     54 dcbbd3…    20    13    27
+3 2b1b4a8a…    18932     8     7  1991    162 1e87b1…    19    13    33
+4 e98e66c4…    20588     1    24  1993    179 91829d…    12    13    41
+5 768cdd0d…     7020    11    21  1982     63 f24f2d…    24    13    72
+6 13851c71…     7645     4    16  1983     67 f24f2d…    24    13    21
+# … with 30 more variables: species <fct>, scientificName <chr>,
+#   locality <chr>, JSON <chr>, decimalLatitude <dbl>,
+#   decimalLongitude <dbl>, county <chr>, state <chr>, country <chr>,
+#   sex <chr>, age <chr>, reprod <chr>, testes <chr>, vagina <chr>,
+#   pregnant <chr>, nipples <chr>, lactation <chr>, hfl <dbl>, wgt <dbl>,
+#   tag <chr>, note2 <chr>, ltag <dbl>, note3 <lgl>, prevrt <dbl>,
+#   prevlet <dbl>, nestdir <chr>, neststk <dbl>, note4 <lgl>, note5 <chr>,
+#   sci_name <chr>
 ~~~
 {: .output}
 
@@ -575,8 +1206,4 @@ head(surveys)
 
 
 ## Write back to a csv file
-
-
-
-
 
