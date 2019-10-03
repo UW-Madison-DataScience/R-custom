@@ -207,7 +207,7 @@ surveys<-read_csv(file = "data/Portal_rodents_19772002_scinameUUIDs.csv",
 ## Fun with Factors
 
 - Recoding factors, `fct_recode()`
-- Reordering factors, `fct_re
+- Reordering factors, `fct_relevel()`
 
 
 ### Recoding factors
@@ -216,7 +216,7 @@ One common function we may need to perform is recoding the factors.
 In this case we may want to use the month names, instead of their numbers.
 
 ```{r}
-surveys$month_abbv <- surveys$month %>% as.factor() %>% 
+surveys$mo_abbv <- surveys$mo %>% as.factor() %>% 
   fct_recode(Jan='1', Feb='2', Mar='3', Apr='4', May='5', 
              Jun='6', Jul='7', Aug='8', Sep='9', Oct='10',
              Nov='11', Dec='12')
@@ -229,28 +229,31 @@ Getting the month abbreviations recoded more easily.
 First let's look at the first 6 months.
 
 ````{r}
-surveys$month %>% head()
+surveys$mo %>% head()
 ```
 
 Now we can use the `month.abb[]` to get back the abbreviated names.
 (Still looking at only the first 6)
 ```{r}
-month.abb[surveys$month] %>% head()
+month.abb[surveys$mo] %>% head()
 ```
 
-You can also do this with the full month name using `month.name[]`
-```{r}
-month.name[surveys$month] %>% head()
-```
 
 > ## Challenge
 >
->  Add a new column called `month_full` onto the `surveys` data 
+>  Add a new column called `mo_full` onto the `surveys` data 
 >  from that includes the full month name.
 > 
-> Hint: Check out what `month.name[]` does.
+> Shortcut hint: Check out what `month.name[]` does.
 >
 > > ## Solution to Challenge
+> > ```{r}
+> > surveys$mo_abbv <- surveys$mo %>% as.factor() %>% 
+> >   fct_recode(January='1', Febuary='2', March='3', April='4', May='5', 
+> >              June='6', July='7', August='8', September='9', October='10',
+> >              November='11', December='12')
+> > ```
+> > OR
 > > ```{r, answer=TRUE, eval=FALSE, purl=FALSE}
 > > surveys$month_full <- month.name[surveys$month]
 > > ```

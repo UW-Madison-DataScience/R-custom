@@ -367,7 +367,7 @@ surveys<-read_csv(file = "data/Portal_rodents_19772002_scinameUUIDs.csv",
 ## Fun with Factors
 
 - Recoding factors, `fct_recode()`
-- Reordering factors, `fct_re
+- Reordering factors, `fct_relevel()`
 
 
 ### Recoding factors
@@ -377,37 +377,10 @@ In this case we may want to use the month names, instead of their numbers.
 
 
 ~~~
-surveys$month_abbv <- surveys$month %>% as.factor() %>% 
+surveys$mo_abbv <- surveys$mo %>% as.factor() %>% 
   fct_recode(Jan='1', Feb='2', Mar='3', Apr='4', May='5', 
              Jun='6', Jul='7', Aug='8', Sep='9', Oct='10',
              Nov='11', Dec='12')
-~~~
-{: .language-r}
-
-
-
-~~~
-Warning: Unknown or uninitialised column: 'month'.
-~~~
-{: .error}
-
-
-
-~~~
-Warning: Unknown levels in `f`: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
-~~~
-{: .error}
-
-
-
-~~~
-Error in `$<-.data.frame`(`*tmp*`, month_abbv, value = structure(integer(0), .Label = character(0), class = "factor")): replacement has 0 rows, data has 35549
-~~~
-{: .error}
-
-
-
-~~~
 head(surveys)
 ~~~
 {: .language-r}
@@ -415,7 +388,7 @@ head(surveys)
 
 
 ~~~
-# A tibble: 6 x 39
+# A tibble: 6 x 40
   survey_id recordID    mo    dy    yr period plot_id plot  note1 stake
   <chr>     <chr>    <int> <int> <int>  <dbl> <fct>   <fct> <chr> <chr>
 1 491ec41b… 6545         9    18  1982     62 4dc160… 13    13    36   
@@ -424,13 +397,14 @@ head(surveys)
 4 e98e66c4… 20588        1    24  1993    179 91829d… 12    13    41   
 5 768cdd0d… 7020        11    21  1982     63 f24f2d… 24    13    72   
 6 13851c71… 7645         4    16  1983     67 f24f2d… 24    13    21   
-# … with 29 more variables: species <fct>, scientificName <chr>,
+# … with 30 more variables: species <fct>, scientificName <chr>,
 #   locality <chr>, JSON <chr>, decimalLatitude <dbl>,
 #   decimalLongitude <dbl>, county <fct>, state <fct>, country <fct>,
 #   sex <fct>, age <fct>, reprod <chr>, testes <chr>, vagina <chr>,
 #   pregnant <chr>, nipples <chr>, lactation <chr>, hfl <dbl>, wgt <dbl>,
 #   tag <chr>, note2 <chr>, ltag <chr>, note3 <chr>, prevrt <chr>,
-#   prevlet <int>, nestdir <chr>, neststk <int>, note4 <chr>, note5 <chr>
+#   prevlet <int>, nestdir <chr>, neststk <int>, note4 <chr>, note5 <chr>,
+#   mo_abbv <fct>
 ~~~
 {: .output}
 
@@ -441,21 +415,14 @@ First let's look at the first 6 months.
 
 
 ~~~
-surveys$month %>% head()
+surveys$mo %>% head()
 ~~~
 {: .language-r}
 
 
 
 ~~~
-Warning: Unknown or uninitialised column: 'month'.
-~~~
-{: .error}
-
-
-
-~~~
-NULL
+[1]  9  1  8  1 11  4
 ~~~
 {: .output}
 
@@ -463,53 +430,35 @@ Now we can use the `month.abb[]` to get back the abbreviated names.
 (Still looking at only the first 6)
 
 ~~~
-month.abb[surveys$month] %>% head()
+month.abb[surveys$mo] %>% head()
 ~~~
 {: .language-r}
 
 
 
 ~~~
-Warning: Unknown or uninitialised column: 'month'.
-~~~
-{: .error}
-
-
-
-~~~
-character(0)
+[1] "Sep" "Jan" "Aug" "Jan" "Nov" "Apr"
 ~~~
 {: .output}
 
-You can also do this with the full month name using `month.name[]`
-
-~~~
-month.name[surveys$month] %>% head()
-~~~
-{: .language-r}
-
-
-
-~~~
-Warning: Unknown or uninitialised column: 'month'.
-~~~
-{: .error}
-
-
-
-~~~
-character(0)
-~~~
-{: .output}
 
 > ## Challenge
 >
->  Add a new column called `month_full` onto the `surveys` data 
+>  Add a new column called `mo_full` onto the `surveys` data 
 >  from that includes the full month name.
 > 
-> Hint: Check out what `month.name[]` does.
+> Shortcut hint: Check out what `month.name[]` does.
 >
 > > ## Solution to Challenge
+> > 
+> > ~~~
+> > surveys$mo_abbv <- surveys$mo %>% as.factor() %>% 
+> >   fct_recode(January='1', Febuary='2', March='3', April='4', May='5', 
+> >              June='6', July='7', August='8', September='9', October='10',
+> >              November='11', December='12')
+> > ~~~
+> > {: .language-r}
+> > OR
 > > 
 > > ~~~
 > > surveys$month_full <- month.name[surveys$month]
@@ -1240,7 +1189,7 @@ head(surveys)
 
 
 ~~~
-# A tibble: 6 x 40
+# A tibble: 6 x 41
   survey_id recordID    mo    dy    yr period plot_id plot  note1 stake
   <chr>     <chr>    <int> <int> <int>  <dbl> <fct>   <fct> <chr> <chr>
 1 491ec41b… 6545         9    18  1982     62 4dc160… 13    13    36   
@@ -1249,14 +1198,14 @@ head(surveys)
 4 e98e66c4… 20588        1    24  1993    179 91829d… 12    13    41   
 5 768cdd0d… 7020        11    21  1982     63 f24f2d… 24    13    72   
 6 13851c71… 7645         4    16  1983     67 f24f2d… 24    13    21   
-# … with 30 more variables: species <fct>, scientificName <chr>,
+# … with 31 more variables: species <fct>, scientificName <chr>,
 #   locality <chr>, JSON <chr>, decimalLatitude <dbl>,
 #   decimalLongitude <dbl>, county <fct>, state <fct>, country <fct>,
 #   sex <fct>, age <fct>, reprod <chr>, testes <chr>, vagina <chr>,
 #   pregnant <chr>, nipples <chr>, lactation <chr>, hfl <dbl>, wgt <dbl>,
 #   tag <chr>, note2 <chr>, ltag <chr>, note3 <chr>, prevrt <chr>,
 #   prevlet <int>, nestdir <chr>, neststk <int>, note4 <chr>, note5 <chr>,
-#   sci_name <chr>
+#   mo_abbv <fct>, sci_name <chr>
 ~~~
 {: .output}
 
