@@ -62,8 +62,21 @@ library(stringr)
 library(forcats)
 library(ggplot2)
 library(dplyr)
+library(rlang)
 
 surveys<-read_csv(file = "data/Portal_rodents_19772002_scinameUUIDs.csv")
+```
+
+Note that there are a few parsing errors. This error happens becaues `read_csv`
+looks at the first 1000 rows of each column and guess which type that column
+should be based on those entries.  In our case there are a few entries at the
+bottom of the notes columns which don't fit the type it guessed based on the first
+1000 rows.  We will add the `guess_max` argument to have `read_csv` check the 
+whole column before it automatically chooses a type for that column.
+
+```{r}
+surveys<-read_csv(file = "data/Portal_rodents_19772002_scinameUUIDs.csv", 
+                  guess_max = 40000)
 ```
 
 Because we imported the data using `read_csv`, all of the non-numeric columns were converted to the 
@@ -115,10 +128,11 @@ class(species)
 
 #convert it to factor
 species<-as_factor(species)
+species
 class(species)
 
 #convert back to character
-species<-as_string(species)
+species<-as.character(species) 
 class(species)
 ```
 
@@ -126,50 +140,55 @@ class(species)
 surveys<- surveys%>%
   mutate(species = as_factor(species))
 ```
+OR
+
+```{r}
+surveys$scientificName <- as_factor(surveys$scientificName)
+```
 
 Or, you could specify the types of all of your columns upon reading.
 
 ```{r read_data_coltypes}
 surveys<-read_csv(file = "data/Portal_rodents_19772002_scinameUUIDs.csv",
-                  col_types = c("character", #survey_id
-                                "character", #recordID
-                                "int",    #Month
-                                "int",    #day
-                                "int",    #year
-                                "int",    #period
-                                "factor", #plot_id
-                                "factor", #plot
-                                "character", #note1
-                                "character", #stake
-                                "factor", #species
-                                "character", #scientificName
-                                "character", #locality
-                                "character", #JSON
-                                "numeric", #decimalLatitude
-                                "numeric", #decimalLongitude
-                                "factor", #county
-                                "factor", #state
-                                "factor", #country
-                                "factor", #sex
-                                "numeric", #age
-                                "character", #reprod
-                                "character", #testes
-                                "character", #vagina
-                                "character", #pregnant
-                                "character", #nippples
-                                "character", #lactation
-                                "numeric", #hfl
-                                "numeric", #wgt
-                                "character", #tag
-                                "character", #note2
-                                "int", #ltag
-                                "character", #note3
-                                "int", #prevrt
-                                "int", #prevlet
-                                "character", #nestdir
-                                "int", #neststk
-                                "character", #note4
-                                "character" #note5
+                  col_types = cols(col_character(), #survey_id
+                                col_character(), #recordID
+                                col_integer(),    #Month
+                                col_integer(),    #day
+                                col_integer(),    #year
+                                col_double(),    #period
+                                col_factor(), #plot_id
+                                col_factor(), #plot
+                                col_character(), #note1
+                                col_character(), #stake
+                                col_factor(), #species
+                                col_character(), #scientificName
+                                col_character(), #locality
+                                col_character(), #JSON
+                                col_double(), #decimalLatitude
+                                col_double(), #decimalLongitude
+                                col_factor(), #county
+                                col_factor(), #state
+                                col_factor(), #country
+                                col_factor(), #sex
+                                col_factor(), #age
+                                col_character(), #reprod
+                                col_character(), #testes
+                                col_character(), #vagina
+                                col_character(), #pregnant
+                                col_character(), #nippples
+                                col_character(), #lactation
+                                col_double(), #hfl
+                                col_double(), #wgt
+                                col_character(), #tag
+                                col_character(), #note2
+                                col_character(), #ltag
+                                col_character(), #note3
+                                col_character(), #prevrt
+                                col_integer(), #prevlet
+                                col_character(), #nestdir
+                                col_integer(), #neststk
+                                col_character(), #note4
+                                col_character() #note5
                                 )
                   )
 ```

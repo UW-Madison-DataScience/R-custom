@@ -61,7 +61,32 @@ library(stringr)
 library(forcats)
 library(ggplot2)
 library(dplyr)
+library(rlang)
+~~~
+{: .language-r}
 
+
+
+~~~
+
+Attaching package: 'rlang'
+~~~
+{: .output}
+
+
+
+~~~
+The following objects are masked from 'package:purrr':
+
+    %@%, as_function, flatten, flatten_chr, flatten_dbl,
+    flatten_int, flatten_lgl, flatten_raw, invoke, list_along,
+    modify, prepend, splice
+~~~
+{: .output}
+
+
+
+~~~
 surveys<-read_csv(file = "data/Portal_rodents_19772002_scinameUUIDs.csv")
 ~~~
 {: .language-r}
@@ -115,6 +140,51 @@ Warning: 674 parsing failures.
 See problems(...) for more details.
 ~~~
 {: .error}
+
+Note that there are a few parsing errors. This error happens becaues `read_csv`
+looks at the first 1000 rows of each column and guess which type that column
+should be based on those entries.  In our case there are a few entries at the
+bottom of the notes columns which don't fit the type it guessed based on the first
+1000 rows.  We will add the `guess_max` argument to have `read_csv` check the 
+whole column before it automatically chooses a type for that column.
+
+
+~~~
+surveys<-read_csv(file = "data/Portal_rodents_19772002_scinameUUIDs.csv", 
+                  guess_max = 40000)
+~~~
+{: .language-r}
+
+
+
+~~~
+Parsed with column specification:
+cols(
+  .default = col_character(),
+  recordID = col_double(),
+  mo = col_double(),
+  dy = col_double(),
+  yr = col_double(),
+  period = col_double(),
+  plot = col_double(),
+  note1 = col_double(),
+  stake = col_double(),
+  decimalLatitude = col_double(),
+  decimalLongitude = col_double(),
+  hfl = col_double(),
+  wgt = col_double(),
+  prevlet = col_double(),
+  neststk = col_double()
+)
+~~~
+{: .output}
+
+
+
+~~~
+See spec(...) for full column specifications.
+~~~
+{: .output}
 
 Because we imported the data using `read_csv`, all of the non-numeric columns were converted to the 
 `character` class. If we used `read.csv`, they would all be factors.
@@ -178,6 +248,21 @@ class(species)
 ~~~
 #convert it to factor
 species<-as_factor(species)
+species
+~~~
+{: .language-r}
+
+
+
+~~~
+[1] AB AS AS AB
+Levels: AB AS
+~~~
+{: .output}
+
+
+
+~~~
 class(species)
 ~~~
 {: .language-r}
@@ -193,20 +278,7 @@ class(species)
 
 ~~~
 #convert back to character
-species<-as_string(species)
-~~~
-{: .language-r}
-
-
-
-~~~
-Error in as_string(species): could not find function "as_string"
-~~~
-{: .error}
-
-
-
-~~~
+species<-as.character(species) 
 class(species)
 ~~~
 {: .language-r}
@@ -214,7 +286,7 @@ class(species)
 
 
 ~~~
-[1] "factor"
+[1] "character"
 ~~~
 {: .output}
 
@@ -224,62 +296,62 @@ surveys<- surveys%>%
   mutate(species = as_factor(species))
 ~~~
 {: .language-r}
+OR
+
+
+~~~
+surveys$scientificName <- as_factor(surveys$scientificName)
+~~~
+{: .language-r}
 
 Or, you could specify the types of all of your columns upon reading.
 
 
 ~~~
 surveys<-read_csv(file = "data/Portal_rodents_19772002_scinameUUIDs.csv",
-                  col_types = c("character", #survey_id
-                                "character", #recordID
-                                "int",    #Month
-                                "int",    #day
-                                "int",    #year
-                                "int",    #period
-                                "factor", #plot_id
-                                "factor", #plot
-                                "character", #note1
-                                "character", #stake
-                                "factor", #species
-                                "character", #scientificName
-                                "character", #locality
-                                "character", #JSON
-                                "numeric", #decimalLatitude
-                                "numeric", #decimalLongitude
-                                "factor", #county
-                                "factor", #state
-                                "factor", #country
-                                "factor", #sex
-                                "numeric", #age
-                                "character", #reprod
-                                "character", #testes
-                                "character", #vagina
-                                "character", #pregnant
-                                "character", #nippples
-                                "character", #lactation
-                                "numeric", #hfl
-                                "numeric", #wgt
-                                "character", #tag
-                                "character", #note2
-                                "int", #ltag
-                                "character", #note3
-                                "int", #prevrt
-                                "int", #prevlet
-                                "character", #nestdir
-                                "int", #neststk
-                                "character", #note4
-                                "character" #note5
+                  col_types = cols(col_character(), #survey_id
+                                col_character(), #recordID
+                                col_integer(),    #Month
+                                col_integer(),    #day
+                                col_integer(),    #year
+                                col_double(),    #period
+                                col_factor(), #plot_id
+                                col_factor(), #plot
+                                col_character(), #note1
+                                col_character(), #stake
+                                col_factor(), #species
+                                col_character(), #scientificName
+                                col_character(), #locality
+                                col_character(), #JSON
+                                col_double(), #decimalLatitude
+                                col_double(), #decimalLongitude
+                                col_factor(), #county
+                                col_factor(), #state
+                                col_factor(), #country
+                                col_factor(), #sex
+                                col_factor(), #age
+                                col_character(), #reprod
+                                col_character(), #testes
+                                col_character(), #vagina
+                                col_character(), #pregnant
+                                col_character(), #nippples
+                                col_character(), #lactation
+                                col_double(), #hfl
+                                col_double(), #wgt
+                                col_character(), #tag
+                                col_character(), #note2
+                                col_character(), #ltag
+                                col_character(), #note3
+                                col_character(), #prevrt
+                                col_integer(), #prevlet
+                                col_character(), #nestdir
+                                col_integer(), #neststk
+                                col_character(), #note4
+                                col_character() #note5
                                 )
                   )
 ~~~
 {: .language-r}
-
-
-
-~~~
-Error: Unknown shortcut: h
-~~~
-{: .error}
 
 > ## Challenge 2
 > Convert the columns you identified in Challenge 1 to factors
@@ -344,21 +416,21 @@ head(surveys)
 
 ~~~
 # A tibble: 6 x 39
-  survey_id recordID    mo    dy    yr period plot_id  plot note1 stake
-  <chr>        <dbl> <dbl> <dbl> <dbl>  <dbl> <chr>   <dbl> <dbl> <dbl>
-1 491ec41b…     6545     9    18  1982     62 4dc160…    13    13    36
-2 f280bade…     5220     1    24  1982     54 dcbbd3…    20    13    27
-3 2b1b4a8a…    18932     8     7  1991    162 1e87b1…    19    13    33
-4 e98e66c4…    20588     1    24  1993    179 91829d…    12    13    41
-5 768cdd0d…     7020    11    21  1982     63 f24f2d…    24    13    72
-6 13851c71…     7645     4    16  1983     67 f24f2d…    24    13    21
+  survey_id recordID    mo    dy    yr period plot_id plot  note1 stake
+  <chr>     <chr>    <int> <int> <int>  <dbl> <fct>   <fct> <chr> <chr>
+1 491ec41b… 6545         9    18  1982     62 4dc160… 13    13    36   
+2 f280bade… 5220         1    24  1982     54 dcbbd3… 20    13    27   
+3 2b1b4a8a… 18932        8     7  1991    162 1e87b1… 19    13    33   
+4 e98e66c4… 20588        1    24  1993    179 91829d… 12    13    41   
+5 768cdd0d… 7020        11    21  1982     63 f24f2d… 24    13    72   
+6 13851c71… 7645         4    16  1983     67 f24f2d… 24    13    21   
 # … with 29 more variables: species <fct>, scientificName <chr>,
 #   locality <chr>, JSON <chr>, decimalLatitude <dbl>,
-#   decimalLongitude <dbl>, county <chr>, state <chr>, country <chr>,
-#   sex <chr>, age <chr>, reprod <chr>, testes <chr>, vagina <chr>,
+#   decimalLongitude <dbl>, county <fct>, state <fct>, country <fct>,
+#   sex <fct>, age <fct>, reprod <chr>, testes <chr>, vagina <chr>,
 #   pregnant <chr>, nipples <chr>, lactation <chr>, hfl <dbl>, wgt <dbl>,
-#   tag <chr>, note2 <chr>, ltag <dbl>, note3 <lgl>, prevrt <dbl>,
-#   prevlet <dbl>, nestdir <chr>, neststk <dbl>, note4 <lgl>, note5 <chr>
+#   tag <chr>, note2 <chr>, ltag <chr>, note3 <chr>, prevrt <chr>,
+#   prevlet <int>, nestdir <chr>, neststk <int>, note4 <chr>, note5 <chr>
 ~~~
 {: .output}
 
@@ -1169,21 +1241,21 @@ head(surveys)
 
 ~~~
 # A tibble: 6 x 40
-  survey_id recordID    mo    dy    yr period plot_id  plot note1 stake
-  <chr>        <dbl> <dbl> <dbl> <dbl>  <dbl> <chr>   <dbl> <dbl> <dbl>
-1 491ec41b…     6545     9    18  1982     62 4dc160…    13    13    36
-2 f280bade…     5220     1    24  1982     54 dcbbd3…    20    13    27
-3 2b1b4a8a…    18932     8     7  1991    162 1e87b1…    19    13    33
-4 e98e66c4…    20588     1    24  1993    179 91829d…    12    13    41
-5 768cdd0d…     7020    11    21  1982     63 f24f2d…    24    13    72
-6 13851c71…     7645     4    16  1983     67 f24f2d…    24    13    21
+  survey_id recordID    mo    dy    yr period plot_id plot  note1 stake
+  <chr>     <chr>    <int> <int> <int>  <dbl> <fct>   <fct> <chr> <chr>
+1 491ec41b… 6545         9    18  1982     62 4dc160… 13    13    36   
+2 f280bade… 5220         1    24  1982     54 dcbbd3… 20    13    27   
+3 2b1b4a8a… 18932        8     7  1991    162 1e87b1… 19    13    33   
+4 e98e66c4… 20588        1    24  1993    179 91829d… 12    13    41   
+5 768cdd0d… 7020        11    21  1982     63 f24f2d… 24    13    72   
+6 13851c71… 7645         4    16  1983     67 f24f2d… 24    13    21   
 # … with 30 more variables: species <fct>, scientificName <chr>,
 #   locality <chr>, JSON <chr>, decimalLatitude <dbl>,
-#   decimalLongitude <dbl>, county <chr>, state <chr>, country <chr>,
-#   sex <chr>, age <chr>, reprod <chr>, testes <chr>, vagina <chr>,
+#   decimalLongitude <dbl>, county <fct>, state <fct>, country <fct>,
+#   sex <fct>, age <fct>, reprod <chr>, testes <chr>, vagina <chr>,
 #   pregnant <chr>, nipples <chr>, lactation <chr>, hfl <dbl>, wgt <dbl>,
-#   tag <chr>, note2 <chr>, ltag <dbl>, note3 <lgl>, prevrt <dbl>,
-#   prevlet <dbl>, nestdir <chr>, neststk <dbl>, note4 <lgl>, note5 <chr>,
+#   tag <chr>, note2 <chr>, ltag <chr>, note3 <chr>, prevrt <chr>,
+#   prevlet <int>, nestdir <chr>, neststk <int>, note4 <chr>, note5 <chr>,
 #   sci_name <chr>
 ~~~
 {: .output}
