@@ -476,122 +476,106 @@ levels, which are in alphabetical order by default.
 
 
 ~~~
-levels(surveys$plot_type)
+levels(surveys$plot)
 ~~~
 {: .language-r}
 
 
 
 ~~~
-Warning: Unknown or uninitialised column: 'plot_type'.
-~~~
-{: .error}
-
-
-
-~~~
-NULL
+ [1] "13" "20" "19" "12" "24" "15" "9"  "1"  "3"  "14" "2"  "16" "23" "7" 
+[15] "18" "22" "8"  "10" "17" "21" "6"  "4"  "11" "5" 
 ~~~
 {: .output}
 
 
 
 ~~~
-surveys %>% filter(!is.na(hindfoot_length)) %>% 
-  ggplot(aes(x=plot_type, y=hindfoot_length)) +
+surveys %>% filter(!is.na(hfl)) %>% 
+  ggplot(aes(x=plot, y=hfl)) +
   geom_boxplot()
 ~~~
 {: .language-r}
 
+<img src="../fig/rmd-unnamed-chunk-9-1.png" title="plot of chunk unnamed-chunk-9" alt="plot of chunk unnamed-chunk-9" width="612" style="display: block; margin: auto;" />
 
+#### Ordered by number
 
-~~~
-Error: object 'hindfoot_length' not found
-~~~
-{: .error}
-
-#### Control on the right
-
-Suppose we need the control to be on the right side of our plot instead.
-Before we would have to use the following code.
-```
-surveys$plot_type <- factor(surveys$plot_type, levels = c("Long-term Krat Exclosure", "Rodent Exclosure", "Short-term Krat Exclosure", "Spectab exclosure", "Control"))
-```
-
-Instead with the tidyverse we can use the function `fct_relevel` and specify the placement of "Control" with
-`after=Inf` (after everything) instead of typing out each of the levels.
-
+Let's put the plots in order by their number using the `fct_relevel` function.
 
 ~~~
-surveys$plot_type <- surveys$plot_type %>% fct_relevel("Control", after= Inf)
+order <- surveys$plot %>% 
+  levels() %>% 
+  as.integer() %>% 
+  sort() %>% 
+  as.character()
+surveys$plot <- fct_relevel(surveys$plot, order)
+levels(surveys$plot)
 ~~~
 {: .language-r}
 
 
 
 ~~~
-Warning: Unknown or uninitialised column: 'plot_type'.
+ [1] "1"  "2"  "3"  "4"  "5"  "6"  "7"  "8"  "9"  "10" "11" "12" "13" "14"
+[15] "15" "16" "17" "18" "19" "20" "21" "22" "23" "24"
 ~~~
-{: .error}
+{: .output}
 
 
 
 ~~~
-Error: `f` must be a factor (or character vector or numeric vector).
+surveys %>% filter(!is.na(hfl)) %>% 
+  ggplot(aes(x=plot, y=hfl)) +
+  geom_boxplot()
 ~~~
-{: .error}
+{: .language-r}
 
-Now if we plot the same box plot above, the Control is the to the far right.
-You can this to reorder the categories in your other plots as well.
+<img src="../fig/rmd-unnamed-chunk-10-1.png" title="plot of chunk unnamed-chunk-10" alt="plot of chunk unnamed-chunk-10" width="612" style="display: block; margin: auto;" />
+
+
+We can also reorder only a subset of the levels without having to specify 
+all of the levels by using the `after=` argument
+We can say 1 (after the first level) to Inf (after everything) instead of
+typing out each of the levels in order.
+
+We know from other information that the levels 
+'2', '4', '8', '11', '12', '17', '22' are the control plots.
+Let's try putting the level '2' at the end so we can see all
+the controls to the right.
+
+
+~~~
+surveys$plot <- surveys$plot %>% fct_relevel('2', after= Inf)
+~~~
+{: .language-r}
+
+Now if we plot the same box plot above, plot 2 is now on the far right.
+You can this to reorder the categories in other plots as well.
 
 
 ~~~
 surveys %>% 
-  filter(!is.na(hindfoot_length)) %>% 
-  ggplot(aes(x=plot_type, y=hindfoot_length)) +
-  geom_boxeplot()
+  filter(!is.na(hfl)) %>% 
+  ggplot(aes(x=plot, y=hfl)) +
+  geom_boxplot()
 ~~~
 {: .language-r}
 
-
-
-~~~
-Error: object 'hindfoot_length' not found
-~~~
-{: .error}
+<img src="../fig/rmd-unnamed-chunk-12-1.png" title="plot of chunk unnamed-chunk-12" alt="plot of chunk unnamed-chunk-12" width="612" style="display: block; margin: auto;" />
 
 > ## Challenge
 >
->  1. Make a box plot of the hindfoot lenghts by `plot_id`. 
->  Hint: you may need to change the data type.
->  2. Figure out which `plot_id`'s belong to the "Control" `plot_type.  
->  Hint: You may want to the `dplyr` skills we've learned and the `unique()` function.
->  3. Reorder the `plot_id`'s in the boxplot so the control plots are on the right.
+>  Reorder the `plot`'s in the boxplot above so all the control plots 
+>  are on the right.
 >
 > > ## Solution to Challenge
-> > 1. 
 > > 
 > > ~~~
-> > surveys$plot_id <- as.factor(surveys$plot_id)
+> > surveys$plot<- surveys$plot %>% fct_relevel('2', '4', '8', '11', '12', '17', '22', after= Inf)
 > > surveys %>% 
-> >     filter(!is.na(hindfoot_length)) %>% 
-> >     ggplot(aes(x=plot_id, y=hindfoot_length)) +
-> >     geom_boxplot()
-> > ~~~
-> > {: .language-r}
-> > 2. 
-> > 
-> > ~~~
-> > ctrl_id <- surveys %>% filter(plot_type == "Control") %>% select(plot_id) %>%  unique()
-> > ~~~
-> > {: .language-r}
-> > 3. 
-> > 
-> > ~~~
-> > surveys$plot_id <- surveys$plot_id %>% fct_relevel('2', '17', '12', '11', '22', '14', '4', '8', after= Inf)
-> > surveys %>% 
-> >     filter(!is.na(hindfoot_length)) %>% 
-> >     ggplot(aes(x=plot_id, y=hindfoot_length)) +
+> >     filter(!is.na(hfl)) %>% 
+> >     ggplot(aes(x=plot, y=hfl)) +
 > >     geom_boxplot()
 > > ~~~
 > > {: .language-r}
@@ -599,7 +583,7 @@ Error: object 'hindfoot_length' not found
 {: .challenge}
 
 <!--- alt challenge, reorder months in plot? 
-surveys %>% filter(!is.na(weight)) %>% ggplot(aes(x=month_abbv, y=weight)) + geom_boxplot()
+surveys %>% filter(!is.na(wgt)) %>% ggplot(aes(x=mo_abbv, y=wgt)) + geom_boxplot()
 -->
 
 
