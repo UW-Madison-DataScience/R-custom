@@ -398,6 +398,24 @@ surveys%>%
 ```
 
 
+> ## Challenge
+>
+>  1. Find all the possible variants on the country name "United States""
+>  2. Change them all to the most common variant.
+>
+> > ## Solution to Challenge
+> > ```{r, answer=TRUE, eval=FALSE, purl=FALSE}
+> > surveys %>% count(country)
+> > # We can see that "United States of America", "UNITED STATES", and "US"
+> > # Are possible options with "UNITED STATES" being the most common.
+> > surveys$country <- fct_collapse(surveys$country, 
+> >              "UNITED STATES" = c("United States of America",
+> >                                  "US"))
+> > ```
+> {: .solution}
+{: .challenge}
+
+
 ## Splitting Variables
 
 Next we may want to split the scientific names into genus and species columns
@@ -408,8 +426,6 @@ surveys <- separate(surveys, scientificName, c("genusName", "speciesName"), sep=
 ```
 
 ## Joining Variables
-
-### Maybe join lat and long?
 
 In some of our plots we may want to label with the full scientific name.
 To do so we can add a new column which joins two strings together.
@@ -431,10 +447,46 @@ Another function that you could have used here is `paste()`
 <!--- edits up to above here -->
 
 
-## Stringr functions
+## Other stringr functions
+
+Next, let's see if all our recordIDs are the same length.
+
 ```{r}
-str_length()
-str_sub()
+str_length(surveys$recordID)
+```
+
+We can see that they are not all the same length but it is hard
+to see what the different lengths are lets see the different 
+lengths using the `unique()` function.
+
+```{r}
+str_length(surveys$recordID) %>% unique()
+```
+
+> ## Challenge
+>
+>  Use the use stringr function we learned earlier to make all the
+>  recordIDs the same length.
+>
+> > ## Solution to Challenge
+> > ```{r, answer=TRUE, eval=FALSE, purl=FALSE}
+> > surveys$recordID<- surveys$recordID %>%  str_pad(width = 5, side = "left", pad = "0")
+> > ```
+> {: .solution}
+{: .challenge}
+
+Another string function we can use is to get a subset of a string.
+We can use that function, `str_sub()` to create abbvs for the genera.
+We can then add those abbrvs as their own column
+
+```{r}
+str_sub(surveys$genusName, 1, 5) %>%  head()
+surveys <- surveys %>%  mutate(genusAbbv = str_sub(surveys$genusName, 1, 5))
+```
+
+
+
+```
 str_dup()
 ```
 
@@ -452,7 +504,7 @@ str_replace()
 
 
 ## Remove leading/trailing whitespace
-<!--- need -->
+<!--- need read.csv version -->
 
 For this example, let's read in a messy version of the data.
 Conveniently, there are some white space issues in the first few entries of `scientificName`.
@@ -546,4 +598,8 @@ head(surveys)
 
 
 ## Write back to a csv file
+
+```
+write_csv(surveys, "cleaned_surveys_20191005_slr.csv") 
+```
 
