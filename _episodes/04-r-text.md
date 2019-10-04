@@ -61,32 +61,9 @@ library(stringr)
 library(forcats)
 library(ggplot2)
 library(dplyr)
-library(rlang)
-~~~
-{: .language-r}
+library(readr)
+library(tidyr)
 
-
-
-~~~
-
-Attaching package: 'rlang'
-~~~
-{: .output}
-
-
-
-~~~
-The following objects are masked from 'package:purrr':
-
-    %@%, as_function, flatten, flatten_chr, flatten_dbl,
-    flatten_int, flatten_lgl, flatten_raw, invoke, list_along,
-    modify, prepend, splice
-~~~
-{: .output}
-
-
-
-~~~
 surveys<-read_csv(file = "data/Portal_rodents_19772002_scinameUUIDs.csv")
 ~~~
 {: .language-r}
@@ -320,7 +297,7 @@ surveys<-read_csv(file = "data/Portal_rodents_19772002_scinameUUIDs.csv",
                                 col_character(), #note1
                                 col_character(), #stake
                                 col_factor(), #species
-                                col_character(), #scientificName
+                                col_factor(), #scientificName
                                 col_character(), #locality
                                 col_character(), #JSON
                                 col_double(), #decimalLatitude
@@ -397,7 +374,7 @@ head(surveys)
 4 e98e66c4… 20588        1    24  1993    179 91829d… 12    13    41   
 5 768cdd0d… 7020        11    21  1982     63 f24f2d… 24    13    72   
 6 13851c71… 7645         4    16  1983     67 f24f2d… 24    13    21   
-# … with 30 more variables: species <fct>, scientificName <chr>,
+# … with 30 more variables: species <fct>, scientificName <fct>,
 #   locality <chr>, JSON <chr>, decimalLatitude <dbl>,
 #   decimalLongitude <dbl>, county <fct>, state <fct>, country <fct>,
 #   sex <fct>, age <fct>, reprod <chr>, testes <chr>, vagina <chr>,
@@ -452,7 +429,7 @@ month.abb[surveys$mo] %>% head()
 > > ## Solution to Challenge
 > > 
 > > ~~~
-> > surveys$mo_abbv <- surveys$mo %>% as.factor() %>% 
+> > surveys$mo_full <- surveys$mo %>% as.factor() %>% 
 > >   fct_recode(January='1', Febuary='2', March='3', April='4', May='5', 
 > >              June='6', July='7', August='8', September='9', October='10',
 > >              November='11', December='12')
@@ -461,7 +438,7 @@ month.abb[surveys$mo] %>% head()
 > > OR
 > > 
 > > ~~~
-> > surveys$month_full <- month.name[surveys$month]
+> > surveys$mo_full <- month.name[surveys$mo]
 > > ~~~
 > > {: .language-r}
 > {: .solution}
@@ -499,9 +476,10 @@ surveys %>% filter(!is.na(hfl)) %>%
 
 <img src="../fig/rmd-unnamed-chunk-9-1.png" title="plot of chunk unnamed-chunk-9" alt="plot of chunk unnamed-chunk-9" width="612" style="display: block; margin: auto;" />
 
-#### Ordered by number
+#### Ordered by number and left pad
 
 Let's put the plots in order by their number using the `fct_relevel` function.
+<!--- ORIGINAL VERSION
 
 ~~~
 order <- surveys$plot %>% 
@@ -532,6 +510,68 @@ surveys %>% filter(!is.na(hfl)) %>%
 {: .language-r}
 
 <img src="../fig/rmd-unnamed-chunk-10-1.png" title="plot of chunk unnamed-chunk-10" alt="plot of chunk unnamed-chunk-10" width="612" style="display: block; margin: auto;" />
+-->
+
+~~~
+surveys$plot %>% 
+  levels() %>% 
+  sort()
+~~~
+{: .language-r}
+
+
+
+~~~
+ [1] "1"  "10" "11" "12" "13" "14" "15" "16" "17" "18" "19" "2"  "20" "21"
+[15] "22" "23" "24" "3"  "4"  "5"  "6"  "7"  "8"  "9" 
+~~~
+{: .output}
+This sort is sorting alphabetically and by place. To fix the sorting, we can 
+add a leading zero and 'left pad' the names using a string method. 
+
+
+~~~
+str_pad(surveys$plot, width = 2, side = "left", pad="0") %>% head(10)
+~~~
+{: .language-r}
+
+
+
+~~~
+ [1] "13" "20" "19" "12" "24" "24" "15" "09" "15" "13"
+~~~
+{: .output}
+
+
+
+~~~
+surveys$plot <- str_pad(surveys$plot, width = 2, side = "left", pad="0") %>% as_factor()
+order <- surveys$plot %>% 
+  levels() %>%
+  sort() 
+surveys$plot <- fct_relevel(surveys$plot, order)
+levels(surveys$plot)
+~~~
+{: .language-r}
+
+
+
+~~~
+ [1] "01" "02" "03" "04" "05" "06" "07" "08" "09" "10" "11" "12" "13" "14"
+[15] "15" "16" "17" "18" "19" "20" "21" "22" "23" "24"
+~~~
+{: .output}
+
+
+
+~~~
+surveys %>% filter(!is.na(hfl)) %>% 
+  ggplot(aes(x=plot, y=hfl)) +
+  geom_boxplot()
+~~~
+{: .language-r}
+
+<img src="../fig/rmd-unnamed-chunk-13-1.png" title="plot of chunk unnamed-chunk-13" alt="plot of chunk unnamed-chunk-13" width="612" style="display: block; margin: auto;" />
 
 
 We can also reorder only a subset of the levels without having to specify 
@@ -550,6 +590,13 @@ surveys$plot <- surveys$plot %>% fct_relevel('2', after= Inf)
 ~~~
 {: .language-r}
 
+
+
+~~~
+Warning: Unknown levels in `f`: 2
+~~~
+{: .error}
+
 Now if we plot the same box plot above, plot 2 is now on the far right.
 You can this to reorder the categories in other plots as well.
 
@@ -562,7 +609,7 @@ surveys %>%
 ~~~
 {: .language-r}
 
-<img src="../fig/rmd-unnamed-chunk-12-1.png" title="plot of chunk unnamed-chunk-12" alt="plot of chunk unnamed-chunk-12" width="612" style="display: block; margin: auto;" />
+<img src="../fig/rmd-unnamed-chunk-15-1.png" title="plot of chunk unnamed-chunk-15" alt="plot of chunk unnamed-chunk-15" width="612" style="display: block; margin: auto;" />
 
 > ## Challenge
 >
@@ -603,15 +650,23 @@ surveys%>%
 
 
 ~~~
+Warning: Factor `scientificName` contains implicit NA, consider using
+`forcats::fct_explicit_na`
+~~~
+{: .error}
+
+
+
+~~~
 # A tibble: 27 x 2
    scientificName                n
-   <chr>                     <int>
- 1 Ammodramus savannarum         2
- 2 Ammospermophilis harrisi      1
- 3 Ammospermophilus harrisi    435
- 4 Ammospermophilus harrisii     1
- 5 Amphespiza bilineata          7
- 6 Amphispiza bilineata        291
+   <fct>                     <int>
+ 1 Amphispiza bilineata        291
+ 2 Ammodramus savannarum         2
+ 3 Ammospermophilis harrisi      1
+ 4 Ammospermophilus harrisi    435
+ 5 Ammospermophilus harrisii     1
+ 6 Amphespiza bilineata          7
  7 Amphispiza bilineatus         1
  8 Amphispiza cilineata          1
  9 Amphispizo bilineata          1
@@ -620,128 +675,77 @@ surveys%>%
 ~~~
 {: .output}
 
+
 You can see some very similar species names, for example: 
 "Ammospermophilis harrisi", "Ammospermophilus harrisi", "Ammospermophilus harrisii". 
 However one spelling has many more records than the others. How can we fix the spellings?
 
 
 ~~~
-fct_collapse()
+surveys$scientificName <- fct_explicit_na(surveys$scientificName)
+surveys$scientificName <- fct_collapse(surveys$scientificName,
+            "Ammospermophilus harrisi"=c("Ammospermophilus harrisi",
+                                         "Ammospermophilis harrisi",
+                                         "Ammospermophilus harrisii"),
+            "Amphespiza bilineata" = c("Amphispiza bilineatus",
+                                       "Amphispiza cilineata",
+                                       "Amphispizo bilineata"))
+~~~
+{: .language-r}
+
+We can see the change by looking at the count again.
+
+
+~~~
+surveys%>%
+  count(scientificName)
 ~~~
 {: .language-r}
 
 
 
 ~~~
-Error in fct_recode(.f, !!!levs): argument ".f" is missing, with no default
+# A tibble: 22 x 2
+   scientificName                      n
+   <fct>                           <int>
+ 1 Amphispiza bilineata              291
+ 2 Ammodramus savannarum               2
+ 3 Ammospermophilus harrisi          437
+ 4 Amphespiza bilineata               10
+ 5 Baiomys taylori                    46
+ 6 Calamospiza melanocorys             1
+ 7 Callipepla squamata                 1
+ 8 Campylorhynchus brunneicapillus     1
+ 9 Chaetodipus baileyi                 2
+10 Cnemidophorus tigris                1
+# … with 12 more rows
 ~~~
-{: .error}
+{: .output}
 
-
-### Extra white space
-
-~~~
-str_trim()
-~~~
-{: .language-r}
-
-
-
-~~~
-Error in stri_trim_both(string): argument "string" is missing, with no default
-~~~
-{: .error}
-
-
-
-~~~
-str_pad()
-~~~
-{: .language-r}
-
-
-
-~~~
-Error in stri_pad_left(string, width, pad = pad): argument "string" is missing, with no default
-~~~
-{: .error}
-
-
-
-~~~
-str_trunc()
-~~~
-{: .language-r}
-
-
-
-~~~
-Error in str_trunc(): argument "string" is missing, with no default
-~~~
-{: .error}
-
-
-
-~~~
-str_to_upper()
-~~~
-{: .language-r}
-
-
-
-~~~
-Error in stri_trans_toupper(string, locale = locale): argument "string" is missing, with no default
-~~~
-{: .error}
-
-
-
-~~~
-str_to_lower()
-~~~
-{: .language-r}
-
-
-
-~~~
-Error in stri_trans_tolower(string, locale = locale): argument "string" is missing, with no default
-~~~
-{: .error}
-
-
-
-~~~
-str_to_title()
-~~~
-{: .language-r}
-
-
-
-~~~
-Error in stri_trans_totitle(string, opts_brkiter = stri_opts_brkiter(locale = locale)): argument "string" is missing, with no default
-~~~
-{: .error}
 
 ## Splitting Variables
 
+Next we may want to split the scientific names into genus and species columns
+as we have seen in the cleaned version of the data.
+
+
 ~~~
-#after fixing, separate scientificName into genus and species
-separate()
+surveys <- separate(surveys, scientificName, c("genusName", "speciesName"), sep="\\s", remove = FALSE)
 ~~~
 {: .language-r}
 
 
 
 ~~~
-Error in separate_(data, col = col, into = into, sep = sep, remove = remove, : argument "data" is missing, with no default
+Warning: Expected 2 pieces. Missing pieces filled with `NA` in 15370 rows
+[16923, 16924, 16925, 16926, 16927, 16928, 16929, 16930, 16931, 16932,
+16933, 16934, 16935, 16936, 16937, 16938, 16939, 16940, 16941, 16942, ...].
 ~~~
 {: .error}
 
 ## Joining Variables
 
 ### Maybe join lat and long?
-
-### Make a Scientific Name column from genus+species
 
 In some of our plots we may want to label with the full scientific name.
 To do so we can add a new column which joins two strings together.
@@ -760,23 +764,18 @@ str_c("Hi my name is ", name)
 ~~~
 {: .output}
 
-We can similarly use this on vectors.
+We can similarly use this on vectors. We can make one column that has the 
+latitude and longitude.
 
 
 ~~~
-surveys$sci_name <- str_c(surveys$genus, " ",  surveys$species)
+surveys$latnlong <- str_c(surveys$decimalLatitude, " ",  surveys$decimalLongitude)
 ~~~
 {: .language-r}
 
-
-
-~~~
-Warning: Unknown or uninitialised column: 'genus'.
-~~~
-{: .error}
-
-Now we could make a plot and have it labeled by the full scientific name.
 Another function that you could have used here is `paste()`
+
+<!--- edits up to above here -->
 
 
 ## Stringr functions
@@ -921,45 +920,8 @@ Error in type(pattern): argument "pattern" is missing, with no default
 {: .error}
 
 
-
-## Make a Scientific Name column from genus+species
-
-In some of our plots we may want to label with the full scientific name.
-To do so we can add a new column which joins two strings together.
-Before we get into vectors lets try an example with two strings
-
-~~~
-name = "Sarah"
-str_c("Hi my name is ", name)
-~~~
-{: .language-r}
-
-
-
-~~~
-[1] "Hi my name is Sarah"
-~~~
-{: .output}
-
-We can similarly use this on vectors.
-
-
-~~~
-surveys$sci_name <- str_c(surveys$genus, " ",  surveys$species)
-~~~
-{: .language-r}
-
-
-
-~~~
-Warning: Unknown or uninitialised column: 'genus'.
-~~~
-{: .error}
-
-Now we could make a plot and have it labeled by the full scientific name.
-Another function that you could have used here is `paste()`
-
 ## Remove leading/trailing whitespace
+<!--- need -->
 
 For this example, let's read in a messy version of the data.
 Conveniently, there are some white space issues in the first few entries of `scientificName`.
@@ -967,112 +929,74 @@ Let's take a look.
 
 
 ~~~
-messy_surveys <- read.csv("data/Portal_rodents_19772002_scinameUUIDs.csv")
-head(messy_surveys)
+head(surveys)
 ~~~
 {: .language-r}
 
 
 
 ~~~
-                             survey_id recordID mo dy   yr period
-1 491ec41b-0a80-4ce9-b754-2983c6f38e71     6545  9 18 1982     62
-2 f280bade-4e9b-447d-afe0-9e6d45e6bfb0     5220  1 24 1982     54
-3 2b1b4a8a-c3e9-4781-a5f9-18b081383876    18932  8  7 1991    162
-4 e98e66c4-514b-45f7-9d95-336c05a72b21    20588  1 24 1993    179
-5 768cdd0d-93bc-4c74-9dcd-d1ed48b7501e     7020 11 21 1982     63
-6 13851c71-013d-4989-bd49-7d7a65af7709     7645  4 16 1983     67
-                               plot_id plot note1 stake species
-1 4dc16022-f28d-4b9d-9062-c7bc3ad43362   13    13    36      AB
-2 dcbbd373-c22e-46ef-ae8b-ad88f5cf7475   20    13    27      AB
-3 1e87b11b-4795-4f41-bdff-2d5c4412be25   19    13    33      AS
-4 91829d58-c12e-47e8-ae31-185f46be21d2   12    13    41      AS
-5 f24f2db6-eadd-4de9-9d2f-95aea376c013   24    13    72      AH
-6 f24f2db6-eadd-4de9-9d2f-95aea376c013   24    13    21      AH
-            scientificName
-1     Amphispiza bilineata
-2   Amphispiza bilineata  
-3    Ammodramus savannarum
-4    Ammodramus savannarum
-5 Ammospermophilis harrisi
-6 Ammospermophilus harrisi
-                                                                                                                                                         locality
-1                                                                                                                                    Winterthur Gardens, Delaware
-2                                                                                                                                    Winterthur Gardens, Delaware
-3 FL; Highlands Co.; near parking area and nature trail at Archbold Biological Research Station, ca. 6 air mi S of Lake Placid. T38S, R30E, SE1/4 of SE1/4 Sec 7.
-4                                                                                                                      Swampy woodland, 2 miles E of Tallahassee.
-5                                                                                                                               Muscogee-Rerdido [Perdido] River.
-6                                                                                                                                              near Lake Lindsey.
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                JSON
-1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
-2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
-3                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
-4                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             {\n"engineVersion" : "GLC:4.94|U:1.01374|eng:1.0",\n"numResults" : 1,\n"executionTimems" : 1248.0022,\n"resultSet" : { "type": "FeatureCollection",\n"features": [\n{ "type": "Feature",\n"geometry": {"type": "Point", "coordinates": [-84.247155, 30.438056]},\n"properties": {\n"parsePattern" : "Distance East of TALLAHASSEE",\n"precision" : "High",\n"score" : 86,\n"uncertaintyRadiusMeters" : 20330,\n"uncertaintyPolygon" : "Unavailable",\n"displacedDistanceMiles" : 2,\n"displacedHeadingDegrees" : 90,\n"debug" : ":GazPartMatch=False|:inAdm=True|:Adm=LEON|:orig_d=2 MI|:NPExtent=29301|:NP=TALLAHASSEE|:KFID=FL:ppl:4006|TALLAHASSEE"\n}\n}\n ],\n"crs": { "type" : "EPSG", "properties" : { "code" : 4326 }}\n}\n}\n
-5                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              {\n"engineVersion" : "GLC:4.94|U:1.01374|eng:1.0",\n"numResults" : 2,\n"executionTimems" : 187.2004,\n"resultSet" : { "type": "FeatureCollection",\n"features": [\n{ "type": "Feature",\n"geometry": {"type": "Point", "coordinates": [-87.38167, 30.44972]},\n"properties": {\n"parsePattern" : "PERDIDO RIVER",\n"precision" : "Low",\n"score" : 43,\n"uncertaintyRadiusMeters" : 210,\n"uncertaintyPolygon" : "Unavailable",\n"displacedDistanceMiles" : 0,\n"displacedHeadingDegrees" : 0,\n"debug" : ":GazPartMatch=False|:inAdm=True|:Adm=ESCAMBIA|:NPExtent=350|:NP=PERDIDO RIVER|:KFID=|PERDIDO RIVER"\n}\n},\n{ "type": "Feature",\n"geometry": {"type": "Point", "coordinates": [-87.39667, 30.60556]},\n"properties": {\n"parsePattern" : "MUSCOGEE",\n"precision" : "Low",\n"score" : 38,\n"uncertaintyRadiusMeters" : 3036,\n"uncertaintyPolygon" : "Unavailable",\n"displacedDistanceMiles" : 0,\n"displacedHeadingDegrees" : 0,\n"debug" : ":GazPartMatch=False|:inAdm=True|:Adm=ESCAMBIA|:NPExtent=5040|:NP=MUSCOGEE|:KFID=|MUSCOGEE"\n}\n}\n ],\n"crs": { "type" : "EPSG", "properties" : { "code" : 4326 }}\n}\n}\n
-6 {\n"engineVersion" : "GLC:4.94|U:1.01374|eng:1.0",\n"numResults" : 3,\n"executionTimems" : 156.0003,\n"resultSet" : { "type": "FeatureCollection",\n"features": [\n{ "type": "Feature",\n"geometry": {"type": "Point", "coordinates": [-82.35944, 28.63444]},\n"properties": {\n"parsePattern" : "Near LAKE LINDSEY",\n"precision" : "Medium",\n"score" : 57,\n"uncertaintyRadiusMeters" : 3036,\n"uncertaintyPolygon" : "Unavailable",\n"displacedDistanceMiles" : 0,\n"displacedHeadingDegrees" : 0,\n"debug" : ":GazPartMatch=False|:inAdm=True|:Adm=HERNANDO|:NPExtent=5040|:NP=LAKE LINDSEY|:KFID=|LAKE LINDSEY"\n}\n},\n{ "type": "Feature",\n"geometry": {"type": "Point", "coordinates": [-82.36194, 28.63417]},\n"properties": {\n"parsePattern" : "Near LAKE LINDSEY",\n"precision" : "Medium",\n"score" : 57,\n"uncertaintyRadiusMeters" : 240,\n"uncertaintyPolygon" : "Unavailable",\n"displacedDistanceMiles" : 0,\n"displacedHeadingDegrees" : 0,\n"debug" : ":GazPartMatch=False|:inAdm=True|:Adm=HERNANDO|:NPExtent=400|:NP=LAKE LINDSEY|:KFID=FL:ppl:3654|LAKE LINDSEY"\n}\n},\n{ "type": "Feature",\n"geometry": {"type": "Point", "coordinates": [-82.36583, 28.63028]},\n"properties": {\n"parsePattern" : "Near LAKE LINDSEY",\n"precision" : "Medium",\n"score" : 57,\n"uncertaintyRadiusMeters" : 587,\n"uncertaintyPolygon" : "Unavailable",\n"displacedDistanceMiles" : 0,\n"displacedHeadingDegrees" : 0,\n"debug" : ":GazPartMatch=False|:inAdm=True|:Adm=HERNANDO|:NPExtent=975|:NP=LAKE LINDSEY|:KFID=|LAKE LINDSEY"\n}\n}\n ],\n"crs": { "type" : "EPSG", "properties" : { "code" : 4326 }}\n}\n}\n
-  decimalLatitude decimalLongitude   county   state
-1              NA               NA     NULL    NULL
-2              NA               NA     NULL    NULL
-3              NA               NA     NULL    NULL
-4        30.43806        -84.24716     Leon Florida
-5        30.44972        -87.38167 Escambia Florida
-6        28.63444        -82.35944 Hernando Florida
-                   country sex age reprod testes vagina pregnant nipples
-1            UNITED STATES                                              
-2            UNITED STATES                                              
-3            UNITED STATES                                              
-4 United States of America                                              
-5 United States of America                                              
-6 United States of America                                              
-  lactation hfl wgt tag note2 ltag note3 prevrt prevlet nestdir neststk
-1            NA  NA                                  NA              NA
-2            NA  NA                                  NA              NA
-3            NA  NA                                  NA              NA
-4            NA  NA                                  NA              NA
-5            NA  NA                                  NA              NA
-6            NA  NA                                  NA              NA
-  note4 note5
-1            
-2            
-3           D
-4            
-5            
-6            
+# A tibble: 6 x 44
+  survey_id recordID    mo    dy    yr period plot_id plot  note1 stake
+  <chr>     <chr>    <int> <int> <int>  <dbl> <fct>   <fct> <chr> <chr>
+1 491ec41b… 6545         9    18  1982     62 4dc160… 13    13    36   
+2 f280bade… 5220         1    24  1982     54 dcbbd3… 20    13    27   
+3 2b1b4a8a… 18932        8     7  1991    162 1e87b1… 19    13    33   
+4 e98e66c4… 20588        1    24  1993    179 91829d… 12    13    41   
+5 768cdd0d… 7020        11    21  1982     63 f24f2d… 24    13    72   
+6 13851c71… 7645         4    16  1983     67 f24f2d… 24    13    21   
+# … with 34 more variables: species <fct>, scientificName <fct>,
+#   genusName <chr>, speciesName <chr>, locality <chr>, JSON <chr>,
+#   decimalLatitude <dbl>, decimalLongitude <dbl>, county <fct>,
+#   state <fct>, country <fct>, sex <fct>, age <fct>, reprod <chr>,
+#   testes <chr>, vagina <chr>, pregnant <chr>, nipples <chr>,
+#   lactation <chr>, hfl <dbl>, wgt <dbl>, tag <chr>, note2 <chr>,
+#   ltag <chr>, note3 <chr>, prevrt <chr>, prevlet <int>, nestdir <chr>,
+#   neststk <int>, note4 <chr>, note5 <chr>, mo_abbv <fct>, mo_full <fct>,
+#   latnlong <chr>
 ~~~
 {: .output}
 
 
 
 ~~~
-messy_surveys$scientificName %>% head()
+surveys$scientificName[1:10]
 ~~~
 {: .language-r}
 
 
 
 ~~~
-[1]   Amphispiza bilineata     Amphispiza bilineata  
-[3] Ammodramus savannarum    Ammodramus savannarum   
-[5] Ammospermophilis harrisi Ammospermophilus harrisi
-29 Levels:    Amphispiza bilineata ... Onychomys\xa0sp.
+ [1] Amphispiza bilineata     Amphispiza bilineata    
+ [3] Ammodramus savannarum    Ammodramus savannarum   
+ [5] Ammospermophilus harrisi Ammospermophilus harrisi
+ [7] Ammospermophilus harrisi Ammospermophilus harrisi
+ [9] Ammospermophilus harrisi Ammospermophilus harrisi
 ~~~
 {: .output}
+
+
+
+~~~
+Error in nchar(lev, "w"): invalid multibyte string, element 17
+~~~
+{: .error}
 
 The spacing here shows us that there is probably something.  It is a little easier
 to see if we view it as a character vector instead of a factor in this case.
 
 
 ~~~
-messy_surveys$scientificName %>% as.character() %>% head()
+surveys$scientificName %>% as.character() %>% head()
 ~~~
 {: .language-r}
 
 
 
 ~~~
-[1] "  Amphispiza bilineata"   "  Amphispiza bilineata  "
+[1] "Amphispiza bilineata"     "Amphispiza bilineata"    
 [3] "Ammodramus savannarum"    "Ammodramus savannarum"   
-[5] "Ammospermophilis harrisi" "Ammospermophilus harrisi"
+[5] "Ammospermophilus harrisi" "Ammospermophilus harrisi"
 ~~~
 {: .output}
 
@@ -1090,11 +1014,9 @@ messy_surveys$scientificName %>% str_trim(side="both") %>% head()
 
 
 ~~~
-[1] "Amphispiza bilineata"     "Amphispiza bilineata"    
-[3] "Ammodramus savannarum"    "Ammodramus savannarum"   
-[5] "Ammospermophilis harrisi" "Ammospermophilus harrisi"
+Error in eval(lhs, parent, parent): object 'messy_surveys' not found
 ~~~
-{: .output}
+{: .error}
 
 Let's replace this column in our messy data set to clean it up a little.
 Note we don't want to use `head()` this time.
@@ -1106,9 +1028,86 @@ messy_surveys$scientificName <- messy_surveys$scientificName %>% str_trim(side="
 {: .language-r}
 
 
+
+~~~
+Error in eval(lhs, parent, parent): object 'messy_surveys' not found
+~~~
+{: .error}
+
+
 ## Regular expressions
 
+### Extra white space
 
+~~~
+str_trim()
+~~~
+{: .language-r}
+
+
+
+~~~
+Error in stri_trim_both(string): argument "string" is missing, with no default
+~~~
+{: .error}
+
+
+
+~~~
+str_trunc()
+~~~
+{: .language-r}
+
+
+
+~~~
+Error in str_trunc(): argument "string" is missing, with no default
+~~~
+{: .error}
+
+
+
+~~~
+str_to_upper()
+~~~
+{: .language-r}
+
+
+
+~~~
+Error in stri_trans_toupper(string, locale = locale): argument "string" is missing, with no default
+~~~
+{: .error}
+
+
+
+~~~
+str_to_lower()
+~~~
+{: .language-r}
+
+
+
+~~~
+Error in stri_trans_tolower(string, locale = locale): argument "string" is missing, with no default
+~~~
+{: .error}
+
+
+
+~~~
+str_to_title()
+~~~
+{: .language-r}
+
+
+
+~~~
+Error in stri_trans_totitle(string, opts_brkiter = stri_opts_brkiter(locale = locale)): argument "string" is missing, with no default
+~~~
+{: .error}
+
+<!--- 
 ## Left pad the months, for data consistency
 
 In the past we've seen cases where sorting on number characters/factors 
@@ -1173,7 +1172,7 @@ head(surveys)
 
 
 ~~~
-# A tibble: 6 x 41
+# A tibble: 6 x 44
   survey_id recordID    mo    dy    yr period plot_id plot  note1 stake
   <chr>     <chr>    <int> <int> <int>  <dbl> <fct>   <fct> <chr> <chr>
 1 491ec41b… 6545         9    18  1982     62 4dc160… 13    13    36   
@@ -1182,14 +1181,15 @@ head(surveys)
 4 e98e66c4… 20588        1    24  1993    179 91829d… 12    13    41   
 5 768cdd0d… 7020        11    21  1982     63 f24f2d… 24    13    72   
 6 13851c71… 7645         4    16  1983     67 f24f2d… 24    13    21   
-# … with 31 more variables: species <fct>, scientificName <chr>,
-#   locality <chr>, JSON <chr>, decimalLatitude <dbl>,
-#   decimalLongitude <dbl>, county <fct>, state <fct>, country <fct>,
-#   sex <fct>, age <fct>, reprod <chr>, testes <chr>, vagina <chr>,
-#   pregnant <chr>, nipples <chr>, lactation <chr>, hfl <dbl>, wgt <dbl>,
-#   tag <chr>, note2 <chr>, ltag <chr>, note3 <chr>, prevrt <chr>,
-#   prevlet <int>, nestdir <chr>, neststk <int>, note4 <chr>, note5 <chr>,
-#   mo_abbv <fct>, sci_name <chr>
+# … with 34 more variables: species <fct>, scientificName <fct>,
+#   genusName <chr>, speciesName <chr>, locality <chr>, JSON <chr>,
+#   decimalLatitude <dbl>, decimalLongitude <dbl>, county <fct>,
+#   state <fct>, country <fct>, sex <fct>, age <fct>, reprod <chr>,
+#   testes <chr>, vagina <chr>, pregnant <chr>, nipples <chr>,
+#   lactation <chr>, hfl <dbl>, wgt <dbl>, tag <chr>, note2 <chr>,
+#   ltag <chr>, note3 <chr>, prevrt <chr>, prevlet <int>, nestdir <chr>,
+#   neststk <int>, note4 <chr>, note5 <chr>, mo_abbv <fct>, mo_full <fct>,
+#   latnlong <chr>
 ~~~
 {: .output}
 
@@ -1208,6 +1208,7 @@ head(surveys)
 > {: .solution}
 {: .challenge}
 
+-->
 
 
 ## Write back to a csv file

@@ -62,7 +62,8 @@ library(stringr)
 library(forcats)
 library(ggplot2)
 library(dplyr)
-library(rlang)
+library(readr)
+library(tidyr)
 
 surveys<-read_csv(file = "data/Portal_rodents_19772002_scinameUUIDs.csv")
 ```
@@ -161,7 +162,7 @@ surveys<-read_csv(file = "data/Portal_rodents_19772002_scinameUUIDs.csv",
                                 col_character(), #note1
                                 col_character(), #stake
                                 col_factor(), #species
-                                col_character(), #scientificName
+                                col_factor(), #scientificName
                                 col_character(), #locality
                                 col_character(), #JSON
                                 col_double(), #decimalLatitude
@@ -248,14 +249,14 @@ month.abb[surveys$mo] %>% head()
 >
 > > ## Solution to Challenge
 > > ```{r}
-> > surveys$mo_abbv <- surveys$mo %>% as.factor() %>% 
+> > surveys$mo_full <- surveys$mo %>% as.factor() %>% 
 > >   fct_recode(January='1', Febuary='2', March='3', April='4', May='5', 
 > >              June='6', July='7', August='8', September='9', October='10',
 > >              November='11', December='12')
 > > ```
 > > OR
 > > ```{r, answer=TRUE, eval=FALSE, purl=FALSE}
-> > surveys$month_full <- month.name[surveys$month]
+> > surveys$mo_full <- month.name[surveys$mo]
 > > ```
 > {: .solution}
 {: .challenge}
@@ -274,15 +275,41 @@ surveys %>% filter(!is.na(hfl)) %>%
   geom_boxplot()
 ```
 
-#### Ordered by number
+#### Ordered by number and left pad
 
 Let's put the plots in order by their number using the `fct_relevel` function.
+<!--- ORIGINAL VERSION
 ```{r}
 order <- surveys$plot %>% 
   levels() %>% 
   as.integer() %>% 
   sort() %>% 
   as.character()
+surveys$plot <- fct_relevel(surveys$plot, order)
+levels(surveys$plot)
+surveys %>% filter(!is.na(hfl)) %>% 
+  ggplot(aes(x=plot, y=hfl)) +
+  geom_boxplot()
+```
+-->
+```{r}
+surveys$plot %>% 
+  levels() %>% 
+  sort()
+```
+This sort is sorting alphabetically and by place. To fix the sorting, we can 
+add a leading zero and 'left pad' the names using a string method. 
+
+```{r}
+str_pad(surveys$plot, width = 2, side = "left", pad="0") %>% head(10)
+```
+
+
+```{r}
+surveys$plot <- str_pad(surveys$plot, width = 2, side = "left", pad="0") %>% as_factor()
+order <- surveys$plot %>% 
+  levels() %>%
+  sort() 
 surveys$plot <- fct_relevel(surveys$plot, order)
 levels(surveys$plot)
 surveys %>% filter(!is.na(hfl)) %>% 
@@ -343,45 +370,46 @@ aren't easy to see with the human eye, but are important to the computer.
 One easy way to identify these small differences is the `count` function.
 
 ```{r}
-
 surveys%>%
   count(scientificName)
-
 ```
+
 
 You can see some very similar species names, for example: 
 "Ammospermophilis harrisi", "Ammospermophilus harrisi", "Ammospermophilus harrisii". 
 However one spelling has many more records than the others. How can we fix the spellings?
 
 ```{r}
-fct_collapse()
+surveys$scientificName <- fct_explicit_na(surveys$scientificName)
+surveys$scientificName <- fct_collapse(surveys$scientificName,
+            "Ammospermophilus harrisi"=c("Ammospermophilus harrisi",
+                                         "Ammospermophilis harrisi",
+                                         "Ammospermophilus harrisii"),
+            "Amphespiza bilineata" = c("Amphispiza bilineatus",
+                                       "Amphispiza cilineata",
+                                       "Amphispizo bilineata"))
 ```
 
+We can see the change by looking at the count again.
 
-### Extra white space
 ```{r}
-
-str_trim()
-str_pad()
-str_trunc()
-str_to_upper()
-str_to_lower()
-str_to_title()
-
+surveys%>%
+  count(scientificName)
 ```
+
 
 ## Splitting Variables
-```{r}
-#after fixing, separate scientificName into genus and species
-separate()
 
+Next we may want to split the scientific names into genus and species columns
+as we have seen in the cleaned version of the data.
+
+```{r}
+surveys <- separate(surveys, scientificName, c("genusName", "speciesName"), sep="\\s", remove = FALSE)
 ```
 
 ## Joining Variables
 
 ### Maybe join lat and long?
-
-### Make a Scientific Name column from genus+species
 
 In some of our plots we may want to label with the full scientific name.
 To do so we can add a new column which joins two strings together.
@@ -391,14 +419,16 @@ name = "Sarah"
 str_c("Hi my name is ", name)
 ```
 
-We can similarly use this on vectors.
+We can similarly use this on vectors. We can make one column that has the 
+latitude and longitude.
 
 ```{r}
-surveys$sci_name <- str_c(surveys$genus, " ",  surveys$species)
+surveys$latnlong <- str_c(surveys$decimalLatitude, " ",  surveys$decimalLongitude)
 ```
 
-Now we could make a plot and have it labeled by the full scientific name.
 Another function that you could have used here is `paste()`
+
+<!--- edits up to above here -->
 
 
 ## Stringr functions
@@ -421,43 +451,23 @@ str_replace()
 ```
 
 
-
-## Make a Scientific Name column from genus+species
-
-In some of our plots we may want to label with the full scientific name.
-To do so we can add a new column which joins two strings together.
-Before we get into vectors lets try an example with two strings
-```{r}
-name = "Sarah"
-str_c("Hi my name is ", name)
-```
-
-We can similarly use this on vectors.
-
-```{r}
-surveys$sci_name <- str_c(surveys$genus, " ",  surveys$species)
-```
-
-Now we could make a plot and have it labeled by the full scientific name.
-Another function that you could have used here is `paste()`
-
 ## Remove leading/trailing whitespace
+<!--- need -->
 
 For this example, let's read in a messy version of the data.
 Conveniently, there are some white space issues in the first few entries of `scientificName`.
 Let's take a look.
 
 ```{r}
-messy_surveys <- read.csv("data/Portal_rodents_19772002_scinameUUIDs.csv")
-head(messy_surveys)
-messy_surveys$scientificName %>% head()
+head(surveys)
+surveys$scientificName[1:10]
 ```
 
 The spacing here shows us that there is probably something.  It is a little easier
 to see if we view it as a character vector instead of a factor in this case.
 
 ```{r}
-messy_surveys$scientificName %>% as.character() %>% head()
+surveys$scientificName %>% as.character() %>% head()
 ```
 
 Now we can see that there are both leading and trailing spaces in these first view entries.
@@ -479,7 +489,18 @@ messy_surveys$scientificName <- messy_surveys$scientificName %>% str_trim(side="
 
 ## Regular expressions
 
+### Extra white space
+```{r}
 
+str_trim()
+str_trunc()
+str_to_upper()
+str_to_lower()
+str_to_title()
+
+```
+
+<!--- 
 ## Left pad the months, for data consistency
 
 In the past we've seen cases where sorting on number characters/factors 
@@ -521,6 +542,7 @@ head(surveys)
 > {: .solution}
 {: .challenge}
 
+-->
 
 
 ## Write back to a csv file
