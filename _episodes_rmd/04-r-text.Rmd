@@ -76,7 +76,7 @@ bottom of the notes columns which don't fit the type it guessed based on the fir
 whole column before it automatically chooses a type for that column.
 
 ```{r}
-surveys<-read_csv(file = "data/Portal_rodents_19772002_scinameUUIDs.csv", 
+surveys <- read_csv(file = "data/Portal_rodents_19772002_scinameUUIDs.csv", 
                   guess_max = 40000)
 ```
 
@@ -278,20 +278,7 @@ surveys %>% filter(!is.na(hfl)) %>%
 #### Ordered by number and left pad
 
 Let's put the plots in order by their number using the `fct_relevel` function.
-<!--- ORIGINAL VERSION
-```{r}
-order <- surveys$plot %>% 
-  levels() %>% 
-  as.integer() %>% 
-  sort() %>% 
-  as.character()
-surveys$plot <- fct_relevel(surveys$plot, order)
-levels(surveys$plot)
-surveys %>% filter(!is.na(hfl)) %>% 
-  ggplot(aes(x=plot, y=hfl)) +
-  geom_boxplot()
-```
--->
+
 ```{r}
 surveys$plot %>% 
   levels() %>% 
@@ -444,15 +431,13 @@ surveys$latnlong <- str_c(surveys$decimalLatitude, " ",  surveys$decimalLongitud
 
 Another function that you could have used here is `paste()`
 
-<!--- edits up to above here -->
-
 
 ## Other stringr functions
 
 Next, let's see if all our recordIDs are the same length.
 
 ```{r}
-str_length(surveys$recordID)
+str_length(surveys$recordID) %>%  head()
 ```
 
 We can see that they are not all the same length but it is hard
@@ -485,116 +470,58 @@ surveys <- surveys %>%  mutate(genusAbbv = str_sub(surveys$genusName, 1, 5))
 ```
 
 
-
-```
-str_dup()
-```
-
 ## Finding patterns
 
+[Rstudio Regular expression Cheatsheet](https://rstudio.com/wp-content/uploads/2016/09/RegExCheatsheet.pdf)
+[Rstudio stingr Cheatsheet](http://edrub.in/CheatSheets/cheatSheetStringr.pdf)
+
+Find the scientific names with punctuation in them.
+
 ```{r}
-str_detect()
-str_subset()
+str_detect(surveys$scientificName, "Dip") %>% head()
+str_detect(surveys$scientificName, "Dip") %>% unique()
+str_subset(surveys$scientificName, "Dip") %>% head()
+str_subset(surveys$scientificName, "Dip") %>% unique()
+str_subset(surveys$scientificName, "[[:punct:]]") %>% head()
+str_subset(surveys$scientificName, "[[:punct:]]") %>% unique()
+```
+
+Let's replace all the puntuation characters with a space for the moment.
+
+```{r}
+statement = "Sarah is the instructor"
+str_replace(statement, "a", "e")
+str_replace_all(statement, "a", "e")
+```
+
+
+```{r}
+surveys$scientificName <- str_replace_all(surveys$scientificName, "[[:punct:]]", " ")
+surveys %>% count(scientificName)
+```
+
+
+Other pattern matching commands that can be useful:
+```
+str_match()
 str_count()
 str_locate()
 str_extract()
-str_match()
-str_replace()
 ```
 
 
 ## Remove leading/trailing whitespace
-<!--- need read.csv version -->
 
-For this example, let's read in a messy version of the data.
-Conveniently, there are some white space issues in the first few entries of `scientificName`.
-Let's take a look.
+Now we have some extra whitespace to remove from the scientificName column.
+We can use the `str_trim` function
 
 ```{r}
-head(surveys)
-surveys$scientificName[1:10]
+str_subset(surveys$scientificName, "Miss") %>%  head()
+str_subset(surveys$scientificName, "Miss")[1] %>% str_trim()
+str_trim(surveys$scientificName) %>% str_subset("Miss") %>%  head()
+surveys$scientificName <- str_trim(surveys$scientificName)
 ```
 
-The spacing here shows us that there is probably something.  It is a little easier
-to see if we view it as a character vector instead of a factor in this case.
-
-```{r}
-surveys$scientificName %>% as.character() %>% head()
-```
-
-Now we can see that there are both leading and trailing spaces in these first view entries.
-We can use `str_trim()` to trim off white space.  It takes two arguments, the character vector
-and `side` which indicates which side we want to trim.  We will use "both" since we have both
-leading and trailing white space.
-
-```{r}
-messy_surveys$scientificName %>% str_trim(side="both") %>% head()
-```
-
-Let's replace this column in our messy data set to clean it up a little.
-Note we don't want to use `head()` this time.
-
-```{r}
-messy_surveys$scientificName <- messy_surveys$scientificName %>% str_trim(side="both")
-```
-
-
-## Regular expressions
-
-### Extra white space
-```{r}
-
-str_trim()
-str_trunc()
-str_to_upper()
-str_to_lower()
-str_to_title()
-
-```
-
-<!--- 
-## Left pad the months, for data consistency
-
-In the past we've seen cases where sorting on number characters/factors 
-can behave differently than expected.
-If we want to avoid this we can add zero's on the left side and make our numbers
-a consistent length.
-
-```{r}
-samp_ids <- c("1", "10", "100", "200")
-```
-
-First we should look up the arguments for `str_pad` the function we need to use.
-
-From the help we can see that we need the character vector, and the following 
-additional arguments: `width`, `side`, and `pad`.
-
-```{r}
-str_pad(samp_ids, width = 3, side = "left", pad="0")
-```
-
-Now we can try this on our data set.
-
-```{r}
-surveys$month <- surveys$month %>% 
-  str_pad(width = 2, side = "left", pad='0')
-head(surveys)
-```
-
-> ## Challenge
->
->  Try the same thing with the `day` column.
-> 
->
-> > ## Solution to Challenge
-> > ```{r, answer=TRUE, eval=FALSE, purl=FALSE}
-> >  surveys$day <- surveys$day %>% 
-> >   str_pad(width = 2, side = "left", pad='0')
-> > ```
-> {: .solution}
-{: .challenge}
-
--->
 
 
 ## Write back to a csv file
