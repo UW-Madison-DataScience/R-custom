@@ -36,6 +36,11 @@ These packages are part of the `tidyverse`, meaning that they work well with `dp
 the `mutate` function. We will also cover options in the `read_csv` function that will allow you to
 choose what type the data are when they are imported.
 
+## Downlaod Data
+
+[Link to download the data](https://go.wisc.edu/968tj7)
+<!--- You shoud zip this at least! -->
+
 ## Factors
 
 Factors are categorical vectors in R.
