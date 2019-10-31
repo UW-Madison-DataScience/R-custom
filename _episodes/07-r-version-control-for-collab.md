@@ -18,13 +18,13 @@ In this lesson, we will learn how to suggest changes to a repository we don't ow
 First we will navigate to the github repository we want to make a suggestion to.
 In this case we will be adding a country to a group repository.
 
-![Upstream Countries Repo on Github](fig/01-upstream_contries_ghrepo.png]
+<img src="fig/01-upstream_contries_ghrepo.png" title="Upstream Countries Repo on Github" alt="Upstream Countries Repo on Github" style="display: block; margin: auto;" />
 
 The first ting we need to do is "fork" the repository.
 This means we will make a copy of this repo that we have access to modify.
 We will click the "Fork" button in the upper right hand of Github.
 
-![Forking the repository](fig/02-forking_repo.png]
+<img src="fig/02-forking_repo.png" title="Forking the repository" alt="Forking the repository" style="display: block; margin: auto;" />
 
 Next we need to get a copy of this repository on our local machine (and in Rstudio).
 We need to go back to the original repository, which is linked under the repo name.
