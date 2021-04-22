@@ -69,6 +69,7 @@ Good file organization practices are key to writing good code.
 {: .challenge}
 
 The RStudio interface is made up of 4 windows: 
+
 * The **script** window (upper right) is where you edit the text document that holds your code. The name of the file on the tab turns red when the file is not saved.
 * The **console** (lower left) is where the code gets executed and output, such as warnings and error messages, are displayed.
 * The **environment** tab (upper right) is shows the objects (ex: data) stored in the computer’s memory. You can also see what has been run in the console using the history tab.
@@ -77,6 +78,7 @@ The RStudio interface is made up of 4 windows:
 ## Scripts vs. the console
 
 You have probably noticed that we have two places that accept code as input: the script and console windows
+
 * Both of these windows will accept R commands
 * The Console runs the commands, but doesn’t save them permanently, though they appear in the history tab on the upper right
 * The script is where you save commands to run later. Once you type code in the script, you still need to send them to the console to be run.
@@ -84,21 +86,63 @@ You have probably noticed that we have two places that accept code as input: the
 
 # Operators and functions
 
-```{r}
+Now that we're familiar with the RStudio interface, let's get coding! R scripts are written as a combination of **operators** and **functions**. Operators are symbols that perform operations on the values to the left and right of the symbol. Functions are similar, but are represented by a name that takes varying numbers of inputs. Both produce output. Let's take a look at operators first. 
 
+## Types of operators
+
+There are four basic operator types that are common in R and other programming languages. This table lists the categories, what they do, and what symbols are included in the category. 
+
+Type|What it does|Symbol(s)
+---|---|---
+Arithmetic|Math on numbers|+ - * / ^
+Assignment|Creates or changes contents of objects |<-
+Extraction|Take out or replace part of an object|[ ] $ 
+Logical|Compares values, returns TRUE/FALSE|>   <   ==   !   %in%  &   |
+
+### Arithmetic operators
+
+Arithmetic operators allow R to do math like add, subtract, multiply, and divide on numbers or variables. 
+
+* These operators are useful with data because they allow us to compute unit conversion
+* By default, the result of the mathematical computations goes to the console.
+
+```{r}
+#Add: 
+2+2
+#Subtract: 
+3-1
+#Multiply: 
+4*4
+#Divide: 
+5/2
 ```
 
-> ## Challenge Format
-> The question goes here
->
-> Use more carats for new lines 
->
+But what if we want to save the results to use later? 
+
+### The assignment operator
+
+
+> ## Challenge: Operators
+> What are the values of each variable after each statement?
 > 
-> > ## Solution Goes here
+> ```r
+> mass <- 47.5                          # mass?
+> age  <- 122                           # age?
+> mass <- mass * 2.0                    # mass?
+> age  <- age - 20                      # age?
+> mass_index <- mass/age                # mass_index?
+> ```
+>
+> > ## Solution
 > > text like this
 > > ```r
-> > # r code goes here
+> > mass <- 47.5                      # mass is 47.5
+> > age  <- 122                       # age is 122
+> > mass <- mass * 2.0                # mass is 95
+> > age  <- age - 20                  # age age is 102
+> > mass_index <- mass/age            # mass_index is 0.9313725
 > > ```
+> >
 > {: .solution}
 {: .challenge}
 
