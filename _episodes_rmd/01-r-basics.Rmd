@@ -1,0 +1,97 @@
+---
+title: "R basics"
+author: "Tobin Magle, Sarah Stevens"
+teaching: 
+exercises: 
+questions:
+- 
+objectives:
+- 
+keypoints:
+- 
+source: Rmd
+---
+
+```{r setup, echo = FALSE, purl = FALSE, message = FALSE}
+library(knitr)
+library(tidyverse)
+source("../bin/chunk-options.R")
+```
+Based on http://www.datacarpentry.org/R-ecology-lesson/
+
+# Intro to R and RStudio
+
+> ## Challenge Format
+> The question goes here
+>
+> Use more carats for new lines 
+>
+> 
+> > ## Solution Goes here
+> > text like this
+> > ```r
+> > # r code goes here
+> > ```
+> {: .solution}
+{: .challenge}
+
+# Operators and functions
+
+```{r}
+
+```
+
+> ## Challenge Format
+> The question goes here
+>
+> Use more carats for new lines 
+>
+> 
+> > ## Solution Goes here
+> > text like this
+> > ```r
+> > # r code goes here
+> > ```
+> {: .solution}
+{: .challenge}
+
+# Data Types
+
+> ## Challenge Format
+> The question goes here
+>
+> Use more carats for new lines 
+>
+> 
+> > ## Solution Goes here
+> > text like this
+> > ```r
+> > # r code goes here
+> > ```
+> {: .solution}
+{: .challenge}
+
+# Loading data tables 
+
+
+> ## Challenge Format
+> The question goes here
+>
+> Use more carats for new lines 
+>
+> 
+> > ## Solution Goes here
+> > text like this
+> > ```r
+> > # r code goes here
+> > ```
+> {: .solution}
+{: .challenge}
+
+```{r}
+
+```
+
+<!--- HTML comment 
+Comments
+-->
