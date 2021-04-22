@@ -29,6 +29,7 @@ R and RStudio must be installed separately for this lesson. The Data Carpentry E
 ## Why learn R?
 
 Now that we have the software installed, let’s discuss why we might want to learn to code in R:
+
 * First, R is free, open source and cross platform, allowing you to take it to any organization you may work at in the future. 
 * R is also widely used for research computing. In fact, the R has over 10,000 extensions called packages, many of which were created by researchers.
 * These packages allow R to import a variety of data types, from tabular and geospatial data, to text and genomic sequences.
@@ -153,7 +154,7 @@ weight_lb <- 2.2*weight_kg
 > ```
 >
 > > ## Solution
-> > text like this
+> > 
 > > ```r
 > > mass <- 47.5                      # mass is 47.5
 > > age  <- 122                       # age is 122
@@ -164,6 +165,71 @@ weight_lb <- 2.2*weight_kg
 > >
 > {: .solution}
 {: .challenge}
+
+## Functions
+
+For more complicated tasks, R also comes pre-installed with a variety of **functions**. 
+* Functions are a sequence of steps that perform a specific task.
+* Each function has a name
+* They accept input in the form of arguments,
+and returns a value that can be assigned to a variable as output.
+
+Let's look at some example functions: `sqrt()` and `round()`.
+
+The square root function `sqrt()` takes a number as input (called an **argument**) and returns the square root of that number as output. 
+
+```{r square-root}
+sqrt(9)
+```
+
+Functions usually take at least one argument as input, but can take multiple. Let's look at the `round()` function as an example. 
+
+The `round()` function takes at minimum a number as input and returns a rounded number as output.
+
+```{r round-1}
+round(3.14159)
+```
+
+By default, the number is rounded to the nearest whole number. We can change this behavior by using additional arguments. But how do we know what they are? The quickest way to get to the documentation about a function that you know the exact name is to use the `?` operator, which opens the function's help file in the **Help** tab in the lower right pane.
+
+```{r round-help}
+?round
+```
+
+This help file has information for a group of functions that are related to `round()` (`ceiling()`, `floor()`, etc.). In the usage section, we can see an example of how to use the round function:
+
+> round(x, digits = 0)
+
+This line tells the user that round can take up to 2 arguments: `x` and `digits`. The **Arguments** section defines what these arguments are. 
+
+Argument name| Definition
+----|-----
+x	|a numeric vector. Or, for round and signif, a complex vector
+digits	|integer indicating the number of decimal places (round)
+
+We've been using the `x` argument implicitly: this is the number to be rounded. The `digits` argument has its default value set to 0, meaning that it will round to 0 decimal places. If we change this argument to 2, it will round to 2 decimal places. 
+
+```{r round-named-arguments}
+round(x = 3.14159, digits = 2)
+```
+
+You don't always need to name the arguments explicitly.
+
+```{r round-unnamed-arguments}
+round(3.14159, 2)
+```
+
+However, this can get confusing with functions that have many arguments. For example, if you put the arguments in the wrong order, you can get some unexpected results.  
+
+```{r backward-arguments}
+round(2, 3.14159)
+```
+
+In the previous example, `round()` is trying to round the number 2 to 3.14159 decimal places. You can put them in this order if you use their names though. 
+
+```{r named-backward-arguments}
+round(digits=2, x = 3.14159)
+```
 
 # Data Types
 
@@ -182,7 +248,6 @@ weight_lb <- 2.2*weight_kg
 {: .challenge}
 
 # Loading data tables 
-
 
 > ## Challenge Format
 > The question goes here
@@ -205,3 +270,20 @@ weight_lb <- 2.2*weight_kg
 <!--- HTML comment 
 Comments
 -->
+
+# Glossary
+* R
+* RStudio
+* open source
+* cross platform
+* packages
+* reproducibility
+* script
+* console
+* environment
+* working directory
+* operators
+* arithmetic operator
+* assignment operator
+* functions 
+* arguments
