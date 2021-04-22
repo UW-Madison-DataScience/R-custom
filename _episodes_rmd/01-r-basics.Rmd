@@ -106,7 +106,7 @@ Arithmetic operators allow R to do math like add, subtract, multiply, and divide
 * These operators are useful with data because they allow us to compute unit conversion
 * By default, the result of the mathematical computations goes to the console.
 
-```{r}
+```{r arithmetic-operators}
 #Add: 
 2+2
 #Subtract: 
@@ -121,6 +121,25 @@ But what if we want to save the results to use later?
 
 ### The assignment operator
 
+The assignment operator (`<-`)saves values into objects (named containers that store values) to the R environment (the upper right pane). 
+
+For example, we can assign the value 55 to the variable weight_kg.
+
+```{r assignment-operator}
+ weight_kg <- 55
+```
+
+The values in these variables can be overwritten by a second assignment operation, 
+```{r overwrite-assignment}
+weight_kg <- 66
+```
+
+The assignment operator can also can be combined with arithmetic operators.
+```{r assignment-arithmetic}
+
+weight_lb <- 2.2*weight_kg
+
+```
 
 > ## Challenge: Operators
 > What are the values of each variable after each statement?
