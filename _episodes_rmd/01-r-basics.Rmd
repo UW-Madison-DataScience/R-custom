@@ -1,6 +1,6 @@
 ---
 title: "R basics"
-author: "Tobin Magle, Sarah Stevens"
+author: "Tobin Magle"
 teaching: 
 exercises: 
 questions:
@@ -17,23 +17,70 @@ library(knitr)
 library(tidyverse)
 source("../bin/chunk-options.R")
 ```
-Based on http://www.datacarpentry.org/R-ecology-lesson/
+Based on (http://www.datacarpentry.org/R-ecology-lesson/)
 
 # Intro to R and RStudio
 
-> ## Challenge Format
-> The question goes here
+Many researchers use programming languages to automate the processing, analysis and visualization of their research data. **R** is a popular programming language that was initially designed as an open source statistical language. **RStudio** is a popular integrated development environment that makes working with R code easier. 
+
+## Installation
+R and RStudio must be installed separately for this lesson. The Data Carpentry Ecology lesson has excellent [setup instructions](https://datacarpentry.org/R-ecology-lesson/#setup_instructions)
+
+## Why learn R?
+
+Now that we have the software installed, let’s discuss why we might want to learn to code in R:
+* First, R is free, open source and cross platform, allowing you to take it to any organization you may work at in the future. 
+* R is also widely used for research computing. In fact, the R has over 10,000 extensions called packages, many of which were created by researchers.
+* These packages allow R to import a variety of data types, from tabular and geospatial data, to text and genomic sequences.
+* R also produces high quality, publication ready graphs. The code can be reused to make other graphs for similar data.
+* Finally, coding in any language will make the analysis that you do more reproducible. With R, you can share executable scripts with colleagues, providing an exact accounting of what you did.
+
+## Setting up your working directory
+
+Good file organization practices are key to writing good code. 
+
+> ## Hands on: Set up your project directory
+> Follow these steps to set up your project directory
 >
-> Use more carats for new lines 
+> * Open RStudio 
+> * File >  New project > New directory > Empty project
+> * Enter a name for this new folder: r-basics
+> * Choose a convenient location: ~/Desktop
+> * Click “Create project” 
 >
-> 
-> > ## Solution Goes here
-> > text like this
-> > ```r
-> > # r code goes here
-> > ```
+> > ## Outcome
+> > Your RStudio window should look like this:
+> > <insert the image with annotation>
+> > 
 > {: .solution}
 {: .challenge}
+
+> ## Hands on: Create an R Script
+> Follow these steps to set up your project directory
+>
+> * File > New File > R script
+> * Save it in your project directory
+> 
+> > ## Outcome
+> > Your RStudio window should look like this:
+> > <insert the image with annotation>
+> > 
+> {: .solution}
+{: .challenge}
+
+The RStudio interface is made up of 4 windows: 
+* The **script** window (upper right) is where you edit the text document that holds your code. The name of the file on the tab turns red when the file is not saved.
+* The **console** (lower left) is where the code gets executed and output, such as warnings and error messages, are displayed.
+* The **environment** tab (upper right) is shows the objects (ex: data) stored in the computer’s memory. You can also see what has been run in the console using the history tab.
+* The **files** tab (lower right) shows your *working directory* and the files are contained in that directory.
+
+## Scripts vs. the console
+
+You have probably noticed that we have two places that accept code as input: the script and console windows
+* Both of these windows will accept R commands
+* The Console runs the commands, but doesn’t save them permanently, though they appear in the history tab on the upper right
+* The script is where you save commands to run later. Once you type code in the script, you still need to send them to the console to be run.
+* You can send the code to the console by copying and pasting, or putting your cursor on the line that you want to run, and pressing control enter on PC and command enter on the mac, or by hitting the run button at the top of the script window
 
 # Operators and functions
 
