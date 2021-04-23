@@ -390,6 +390,45 @@ Value|Type|As  character|As numeric|As logical
 > {: .solution}
 {: .challenge}
 
+## Subsetting vectors
+When working with data, it's often useful to pull out a subset of a data set. Luckily, R has the subset operator ([] aka "square brackets"). This operator allows users to subset elements by their position or by their value.
+
+### Subsetting by position
+
+To select a vector element by its position:
+
+* name the vector you want to subset
+* follow the name by the subset operator `[]`
+* put the position number of the element you want inside the square brackets. Note: in R, the position of the first element is 1.
+
+Here's an example of how to subset the second element of the following vector. 
+
+```{r vector-subsetting-single}
+animals<-c('mouse', 'rat', 'dog')
+
+#Display second value
+animals[2]
+```
+
+The subset also allows you to select multiple elements at once using using the `c()` function. As we saw before, the `c()` function creates a vector object with the elements provided as input, in the order that they are provided. This vector is used by the subset operator to pull elements out by their position.
+
+```{r vector-subsetting-multiple}
+animals[c(3,2)] 
+
+#Display repeated values
+animals[c(1,2,3,2,1)]
+```
+
+If you want to select a sequential set of elements, you can use the **slice operator** (`:`). The slice operator creates a vector that starts with the integer before the operator and ends with the integer after the operator. For example, the slice `1:6` would create a vector with the values `1 2 3 4 5 6`. This vector can be used as input to the subset operator.
+
+```{r vector-subsetting-slice}
+animals[1:2] 
+```
+
+### Subsetting vectors by element values
+
+
+
 # Loading data tables 
 
 > ## Challenge Format
@@ -434,3 +473,6 @@ Comments
 * vector
 * element
 * coersion
+* subsetting
+* subset operator
+* slice operator
