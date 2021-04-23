@@ -427,6 +427,94 @@ animals[1:2]
 
 ### Subsetting vectors by element values
 
+With large datasets, the value of the elements are often more important than their position. The subset operator can takes a logical vector the same length as the subsetted vector as input. The operator goes through the length of these vectors and keeps the elements at the same positions as `TRUE` values in the logical vector and drops the ones at the same position as `FALSE` values.
+
+For example, the following code will keep 1 and 3 and drop 2.
+
+```{r subset-logical-vector}
+
+logical<-c(TRUE, FALSE, TRUE)
+to_subset<-c(1, 2, 3)
+
+to_subset[logical]
+```
+
+#### Using comparison operators
+Generating these logical vectors is often done using **comparison operators**. **Comparison operators** compare the value to the left of the operator to the value to the right of the operator and return either `TRUE` or `FALSE`. 
+
+##### Table of comparison operators
+Comparison Operator|Meaning|what it does
+---|---|---
+`>`|Greater than|`TRUE` if the value on the left is bigger than the value on the right
+`<`|Less than|`TRUE` if the value on the left is smaller than the value on the right
+`==`|Equal to|`TRUE` if the values are the same
+`!=`|Not equal to| `TRUE` if the values are different
+`%in%`|Contained in|`TRUE` if the value on the left is equal to any element of the vector on the right
+
+For example, if we wanted all of the animals with a weight greater than 50 grams, you'd use the following expressions
+
+```{r subset-greater-than}
+weight_g <- c(21, 34, 39, 54, 55) 
+
+weight_g>50
+```
+The last 2 values would be kept, because they're greater than 50. Let's save the logical vector and use it to subset
+
+```{r subset-greater-than-tf}
+weight_tf<-weight_g>50
+
+weight_g[weight_tf]
+```
+You can also skip making the weight_tf object if you put the expression directly inside the subset operator.
+
+```{r subset-greater-than-brief}
+weight_g[weight_g>50]
+```
+
+The less than (`<`), equal to (`==`) and not equal to (`!=`) operators work similarly with numeric values. 
+
+#### Using logical operators
+
+
+##### Table of logical operators
+
+Logical Operator|Meaning|what it does
+---|---|---
+`&`|and|`TRUE` if both values are `TRUE`
+`|`|or|`TRUE`either are `TRUE`
+`!`|not|flip `TRUE` to `FALSE` and `FALSE` to `TRUE`
+
+```{r logical-operators}
+#Weights under 30 or over 50:
+weight_g[weight_g < 30 | weight_g > 50]
+
+#Weights over 30 and under 50:
+weight_g[weight_g > 30 & weight_g < 50]
+
+```
+
+Comparison operators also work with character objects. The greater than (`>`) and less than (`<`) operators don't make as much sense with character objects, but `==` and `!=` work well for comparing character objects. 
+
+For example, let's try extracting all "cat" values from the vector animals using `==`.
+
+```{r keep-cats}
+animals <- c("cat","mouse", "rat", "dog", "cat")
+
+#Animals that are cats: 
+animals[animals == "cat"]
+```
+
+We can also exclude elements with the value 'cat' using `!=`.
+
+```{r drop-cats}
+animals <- c("cat","mouse", "rat", "dog", "cat")
+
+#Animals that are cats: 
+animals[animals != "cat"]
+```
+
+
+
 
 
 # Loading data tables 
@@ -476,3 +564,5 @@ Comments
 * subsetting
 * subset operator
 * slice operator
+* logical expressions
+* logical operators
