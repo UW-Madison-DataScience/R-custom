@@ -291,7 +291,7 @@ The usage of logical data is a bit complicated and makes more sense with more co
 
 So far, we’ve been dealing with rather simple data: one value stored in an object. But R has more complex data structures that make working with large datasets easier. The ones we’re going to be talking about today are Vectors and Data Frames.
 
-Let’s take a closer look at Vectors first.
+Let’s take a closer look at `vectors` first.
 
 ## Vectors
 
@@ -300,19 +300,93 @@ R can stores multiple values of the same type in a data type called a `vector`.
 * Like other objects, `vectors` are assigned values using the assignment operator
 * We use the c() or concatenate function to create vectors
 * Each value is separated by a comma
+* R assigns vectors a type based on the content
 
+Example: a list of weights
 
-> ## Challenge Format
+```{r numeric-vector}
+weight_g<-c(50, 60, 65, 82)
+class(weight_g)
+```
+
+Example: a list of species
+
+```{r character-vector}
+animals<-c('mouse', 'rat', 'dog')
+class(animals)
+```
+
+Vectors have a couple of notable characteristics: their length and what type of values are present.
+
+The `length()` function returns an integer representing the number of values in the vector object.
+
+```{r vector-length}
+length(weight_g)
+length(animals)
+```
+
+The `str()` or structure function tells you have the class, length and also lists the values found in the vector.
+
+```{r vector-structure}
+str(weight_g)       
+str(animals)
+```
+
+You can also add values to a vector using the `c()` function by using an existing vector as an argument. The elements will be added in the order that they appear as arguments to the `c()` function.
+
+```{r add-to-vector}
+#Add to the end of the vector:
+weight_g <- c(weight_g, 90)
+
+#Add to the beginning of the vector:
+weight_g <- c(30, weight_g)
+```
+
+## Class coercion
+
+We’ve said that vectors can only hold one data type. 
+So what happens if you try to make a vector with multiple data types? R uses **class coercion** to force all of the values to fit into the same type. 
+
+* R looks at the data elements as a whole and finds a data type that can accommodate all of the elements
+* R has ways to accommodate anything include making everything into a character or reading logical values `FALSE` and `TRUE` as 0 and 1 respectively.
+
+By default, it opts for the most permissive type, but you can force R to interpret values as a certain type by using functions like `as.numeric()`, `as.character()` and `as.logical()`. Here are general rules that R follows while converting between types:
+
+* R can put quotes around any value to represent it as string
+* R can interpret `TRUE` as the number 1 and `FALSE` as the number 0
+* Unless there is a number/`TRUE`/`FALSE` stored inside a string, R won't be able to interpret it as anything but a character
+* `NA`, which is a special object in R that represents missing data, means that R could not meaningfully convert between these types.
+
+Examples: 
+
+Value|Type|As  character|As numeric|As logical
+---|---|---|---
+`TRUE`|logical|"TRUE"|1|TRUE
+35|numeric|"35"|35|`NA`
+"badger"|character|“badger”|`NA`|`NA`
+"24"|character|"24"|24|`NA`
+"FALSE"|character|`NA`|`FALSE`
+
+> ## Challenge: class coercion
 > The question goes here
 >
-> Use more carats for new lines 
+> What types are these vectors?
 >
+> ```r
+> num_char <- c(1, 2, 3, "a")
+> num_logical <- c(1, 2, 3, TRUE)
+> char_logical <- c("a", "b", "c", TRUE)
+> tricky <- c(1, 2, 3, "4")
+> ```
+>
+> Hint: use class()
 > 
-> > ## Solution Goes here
-> > text like this
-> > ```r
-> > # r code goes here
-> > ```
+> > 
+> > class(num_char) is `character`
+> > class(num_logical) is `numeric`
+> > class(char_logical) is `character`
+> > class(tricky) is `character`
+> > 
 > {: .solution}
 {: .challenge}
 
@@ -359,3 +433,4 @@ Comments
 * data type
 * vector
 * element
+* coersion
