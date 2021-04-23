@@ -232,6 +232,75 @@ round(digits=2, x = 3.14159)
 ```
 
 # Data Types
+Now that we know how to use operators and functions to perform operations on values and objects using R, let's talk a bit about the data itself. When you save a value into an object using the assignment operator, R evaluates the value and assigns a **data type** to the object. 
+
+* Data type is important, because it determines what operators and functions you can use with the object
+* The basic data types in R are `numeric`, `character` and `logical`. We'll show examples of these types in this lesson
+* This type represents R's best guess at what type the data represents. It's usually pretty easy to tell what data type an object is if it has a single element.
+* You can use the `class()` function to check what type R thinks the data is
+
+R interprets numbers (both integers and decimal numbers) as `numeric` data. 
+
+```{r data-type-numeric}
+x <- 32
+class(x)
+```
+
+Numeric data works with the arithmetic operators and the `tound()` and `sqrt()` functions that we've already discussed. 
+
+```{r data-type-numeric-op-fun}
+x+x
+sqrt(x)
+```
+
+R interprets anything enclosed in quote marks (`''` or `""`) as the `character` data type. I
+
+```{r data-type-character}
+y <- "hi"
+class(y)
+```
+
+If you try to use a character object with arithmetic operators or functions that take numeric input, you will get an error message. 
+
+```{r data-type-character-op-fun, error = TRUE}
+y+y
+sqrt(y)
+```
+
+Character objects are used with other functions like `paste()`, which joins strings together, separated by a space by default.
+
+```{r data-type-character-paste}
+paste(y,y)
+```
+
+Use the `sep` argument to change the separator
+```{r data-type-character-paste-sep}
+paste(y,y, sep = '.')
+```
+
+R interprets the special values `TRUE` and `FALSE` (not in quotes) as logical data. 
+
+```{r data-type-logical}
+z <- TRUE
+class(z)
+```
+
+The usage of logical data is a bit complicated and makes more sense with more complex data structures, so we'll discuss this in more depth later. 
+
+# Data structures
+
+So far, we’ve been dealing with rather simple data: one value stored in an object. But R has more complex data structures that make working with large datasets easier. The ones we’re going to be talking about today are Vectors and Data Frames.
+
+Let’s take a closer look at Vectors first.
+
+## Vectors
+
+R can stores multiple values of the same type in a data type called a `vector`.
+
+* Like other objects, `vectors` are assigned values using the assignment operator
+* We use the c() or concatenate function to create vectors
+* Each value is separated by a comma
+
 
 > ## Challenge Format
 > The question goes here
@@ -287,3 +356,6 @@ Comments
 * assignment operator
 * functions 
 * arguments
+* data type
+* vector
+* element
