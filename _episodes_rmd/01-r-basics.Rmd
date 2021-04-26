@@ -575,6 +575,44 @@ animals[animals %in% catrat]
 
 # Missing values
 
+When collecting data in the real world, it's not always feasible to have a complete dataset. For example, if you're trapping animals in the wild, sometimes they get away from you before you can get an accurate weight measurement. It might seem intuitive to leave the data blank in this case, but blank data can lead to uncertainty. What if you forgot to enter a value? What if you hadn't filled that value in yet? What if you accidentally hit the delete button in that cell?
+
+This is why programming languages often have a marker for missing data. `NA` is the special value in R that represents missing data. This marker lets the user know when missing data exists, but also provides ways to ignore the missing values in appropriate situations
+
+For example, if you try to do math on a numeric vector that has a missing value designated by `NA`, the function will return `NA` as the results to let you know that there is missing data.
+
+```{r missing-data}
+heights <- c(2, 4, 4, NA, 6)
+
+# Mean of a vector with a missing value?
+mean(heights)
+```
+
+This behavior is good because if you weren't expecting missing data, you want to know that it's there before doing more calculations. If you were expecting missing data and want to ignore if for the purposes of a calculation, many mathematical functions have the argument `na.rm`, which stands for remove missing data. By default, `na.rm = FALSE` which tells R not to ignore the missing data. Setting `na.rm = TRUE` will calculate the mean while ignoring the missing data. 
+
+```{r missing-data-narm}
+# Remove the missing data
+mean(heights, na.rm = TRUE)
+```
+
+## Removing missing values from your data
+
+
+
+> ## Challenge: missing values
+> The question goes here
+>
+> Use more carats for new lines 
+>
+> 
+> > ## Solution Goes here
+> > text like this
+> > ```r
+> > # r code goes here
+> > ```
+> {: .solution}
+{: .challenge}
+
 # Loading data tables 
 
 > ## Challenge Format
