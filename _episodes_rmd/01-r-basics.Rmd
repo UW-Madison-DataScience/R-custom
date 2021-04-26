@@ -474,7 +474,7 @@ weight_g[weight_g>50]
 The less than (`<`), equal to (`==`) and not equal to (`!=`) operators work similarly with numeric values. 
 
 #### Using logical operators
-
+**Logical operators** allow you to create complex expressions by combining comparison statements. These  operators can be combined to specify complex conditions.
 
 ##### Table of logical operators
 
@@ -484,16 +484,26 @@ Logical Operator|Meaning|what it does
 `|`|or|`TRUE`either are `TRUE`
 `!`|not|flip `TRUE` to `FALSE` and `FALSE` to `TRUE`
 
-```{r logical-operators}
+For example, you can use the OR operator to select outliers, like weights under 30 or weights over 50
+
+```{r logical-operators-or}
 #Weights under 30 or over 50:
 weight_g[weight_g < 30 | weight_g > 50]
-
-#Weights over 30 and under 50:
-weight_g[weight_g > 30 & weight_g < 50]
-
 ```
 
-Comparison operators also work with character objects. The greater than (`>`) and less than (`<`) operators don't make as much sense with character objects, but `==` and `!=` work well for comparing character objects. 
+Or you can use the AND operator to get weights between 30 and 50 
+
+```{r logical-operators-and}
+#Weights over 30 and under 50:
+weight_g[weight_g > 30 & weight_g < 50]
+```
+
+#### Comparing character objects
+
+Comparison operators also work with character objects. 
+* `==` will return TRUE if the characters are the same
+* `!=` will return TRUE if the characters are not the same
+* The greater than (`>`) and less than (`<`) operators don't make as much sense with character objects, but will return a result based on the alphabetical order of the characters.  
 
 For example, let's try extracting all "cat" values from the vector animals using `==`.
 
@@ -507,15 +517,63 @@ animals[animals == "cat"]
 We can also exclude elements with the value 'cat' using `!=`.
 
 ```{r drop-cats}
-animals <- c("cat","mouse", "rat", "dog", "cat")
-
-#Animals that are cats: 
+#Animals that are not cats: 
 animals[animals != "cat"]
 ```
 
+You can also use logical operators to include multiple character values.
 
+```{r cats-or-rats}
+#Animals that are cats or rats: 
+animals[(animals == "cat") | (animals == "rat")]
+```
 
+This syntax works for a small number comparisons, but it can get very redundant when you have a long list to compare values to. For that situation, the `%in%` operator is more concise. 
+* this operator compares two vectors
+* for each element of the first vector (on the left), this operator returns `TRUE` when this element is found in the second vector and `FALSE` when it is not.
 
+The previous example can be written with the `%in%` operator instead of the `|` operator.
+
+```{r in-operator}
+
+catrat<-c("cat", "rat")
+#Animals that are cats: 
+animals[animals %in% catrat]
+```
+
+> ## Challenge: Conditional subsetting
+>
+> The following equal length vectors represent data from 8 observations from an experiment involving trapping animals in the wild and recording their species using a 2 digit id and their weight in grams.
+>
+> ```r
+> record_id <- c(1, 2, 3, 4, 5, 6, 7, 8)
+> weights <- c(51,63, 28, 32, 68, 55, 36, 41)
+> species_id <- c("AB","AB","AM","AM","AB","AB","AM","AM")
+> ```
+> 1. Write a comparison statement that includes weights>30
+> 2. Write a comparison statement that includes species ids "AB"
+> 3. Write a logical statement that returns the record IDs of animals that have weights greater than 30 and have the species id "AB".
+> 
+> > ## Solution
+> > 1. Subset the weights vector
+> > ```r
+> > weights[weights>30]
+> > ```
+> > 
+> > 2. Subset the species_id vector
+> > ```r
+> > species_id[species_id == "AM"]
+> > ```
+> > 
+> > 3. Subset the record_id vector
+> > ```r
+> > record_id[weights>30 & species_id == "AM"]
+> > ```
+> >
+> {: .solution}
+{: .challenge}
+
+# Missing values
 
 # Loading data tables 
 
@@ -564,5 +622,5 @@ Comments
 * subsetting
 * subset operator
 * slice operator
-* logical expressions
+* comparison operators
 * logical operators
