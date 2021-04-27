@@ -1027,40 +1027,25 @@ Two other functions rely on logical vectors and the subset operator to remove mi
 
 
 > ## Challenge: missing values
-> The question goes here
 >
-> Use more carats for new lines 
+> Given the following vector
 >
-> 
-> > ## Solution Goes here
-> > text like this
-> > ```r
-> > # r code goes here
-> > ```
+> ```r
+> ranks<-c(1,2,3,NA,"four")
+> ```
+> Which of the following statements would return a vector of length 3?
+>
+> ```1. na.omit(ranks)```
+> ```2. na.omit(as.numeric(ranks))```
+> ```3. ranks[complete.cases(ranks)]```
+> ```4. ranks[!is.na(ranks[ranks<4])]```
+>
+> > ## Solution
+> >
+> > 2
+> >
 > {: .solution}
 {: .challenge}
-
-# Loading data tables 
-
-> ## Challenge Format
-> The question goes here
->
-> Use more carats for new lines 
->
-> 
-> > ## Solution Goes here
-> > text like this
-> > ```r
-> > # r code goes here
-> > ```
-> {: .solution}
-{: .challenge}
-
-
-
-<!--- HTML comment 
-Comments
--->
 
 # Glossary
 * R
