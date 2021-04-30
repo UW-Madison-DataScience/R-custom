@@ -76,7 +76,8 @@ surveys<-read_csv(file = "data/Portal_rodents_19772002_scinameUUIDs.csv")
 
 
 ~~~
-Parsed with column specification:
+
+── Column specification ────────────────────────────────────────────────────────
 cols(
   .default = col_character(),
   recordID = col_double(),
@@ -98,13 +99,7 @@ cols(
   neststk = col_double(),
   note4 = col_logical()
 )
-~~~
-{: .output}
-
-
-
-~~~
-See spec(...) for full column specifications.
+ℹ Use `spec()` for the full column specifications.
 ~~~
 {: .output}
 
@@ -121,7 +116,7 @@ Warning: 674 parsing failures.
 .... ..... .................. ...... ...............................................
 See problems(...) for more details.
 ~~~
-{: .error}
+{: .warning}
 
 Note that there are a few parsing errors. This error happens becaues `read_csv`
 looks at the first 1000 rows of each column and guess which type that column
@@ -140,7 +135,8 @@ surveys <- read_csv(file = "data/Portal_rodents_19772002_scinameUUIDs.csv",
 
 
 ~~~
-Parsed with column specification:
+
+── Column specification ────────────────────────────────────────────────────────
 cols(
   .default = col_character(),
   recordID = col_double(),
@@ -158,13 +154,7 @@ cols(
   prevlet = col_double(),
   neststk = col_double()
 )
-~~~
-{: .output}
-
-
-
-~~~
-See spec(...) for full column specifications.
+ℹ Use `spec()` for the full column specifications.
 ~~~
 {: .output}
 
@@ -371,20 +361,19 @@ head(surveys)
 
 ~~~
 # A tibble: 6 x 40
-  survey_id recordID    mo    dy    yr period plot_id plot  note1 stake
-  <chr>     <chr>    <int> <int> <int>  <dbl> <fct>   <fct> <chr> <chr>
-1 491ec41b… 6545         9    18  1982     62 4dc160… 13    13    36   
-2 f280bade… 5220         1    24  1982     54 dcbbd3… 20    13    27   
-3 2b1b4a8a… 18932        8     7  1991    162 1e87b1… 19    13    33   
-4 e98e66c4… 20588        1    24  1993    179 91829d… 12    13    41   
-5 768cdd0d… 7020        11    21  1982     63 f24f2d… 24    13    72   
-6 13851c71… 7645         4    16  1983     67 f24f2d… 24    13    21   
-# … with 30 more variables: species <fct>, scientificName <fct>,
-#   locality <chr>, JSON <chr>, decimalLatitude <dbl>,
-#   decimalLongitude <dbl>, county <fct>, state <fct>, country <fct>,
-#   sex <fct>, age <fct>, reprod <chr>, testes <chr>, vagina <chr>,
-#   pregnant <chr>, nipples <chr>, lactation <chr>, hfl <dbl>, wgt <dbl>,
-#   tag <chr>, note2 <chr>, ltag <chr>, note3 <chr>, prevrt <chr>,
+  survey_id  recordID    mo    dy    yr period plot_id plot  note1 stake species
+  <chr>      <chr>    <int> <int> <int>  <dbl> <fct>   <fct> <chr> <chr> <fct>  
+1 491ec41b-… 6545         9    18  1982     62 4dc160… 13    13    36    AB     
+2 f280bade-… 5220         1    24  1982     54 dcbbd3… 20    13    27    AB     
+3 2b1b4a8a-… 18932        8     7  1991    162 1e87b1… 19    13    33    AS     
+4 e98e66c4-… 20588        1    24  1993    179 91829d… 12    13    41    AS     
+5 768cdd0d-… 7020        11    21  1982     63 f24f2d… 24    13    72    AH     
+6 13851c71-… 7645         4    16  1983     67 f24f2d… 24    13    21    AH     
+# … with 29 more variables: scientificName <fct>, locality <chr>, JSON <chr>,
+#   decimalLatitude <dbl>, decimalLongitude <dbl>, county <fct>, state <fct>,
+#   country <fct>, sex <fct>, age <fct>, reprod <chr>, testes <chr>,
+#   vagina <chr>, pregnant <chr>, nipples <chr>, lactation <chr>, hfl <dbl>,
+#   wgt <dbl>, tag <chr>, note2 <chr>, ltag <chr>, note3 <chr>, prevrt <chr>,
 #   prevlet <int>, nestdir <chr>, neststk <int>, note4 <chr>, note5 <chr>,
 #   mo_abbv <fct>
 ~~~
@@ -465,8 +454,8 @@ levels(surveys$plot)
 
 
 ~~~
- [1] "13" "20" "19" "12" "24" "15" "9"  "1"  "3"  "14" "2"  "16" "23" "7" 
-[15] "18" "22" "8"  "10" "17" "21" "6"  "4"  "11" "5" 
+ [1] "13" "20" "19" "12" "24" "15" "9"  "1"  "3"  "14" "2"  "16" "23" "7"  "18"
+[16] "22" "8"  "10" "17" "21" "6"  "4"  "11" "5" 
 ~~~
 {: .output}
 
@@ -496,8 +485,8 @@ surveys$plot %>%
 
 
 ~~~
- [1] "1"  "10" "11" "12" "13" "14" "15" "16" "17" "18" "19" "2"  "20" "21"
-[15] "22" "23" "24" "3"  "4"  "5"  "6"  "7"  "8"  "9" 
+ [1] "1"  "10" "11" "12" "13" "14" "15" "16" "17" "18" "19" "2"  "20" "21" "22"
+[16] "23" "24" "3"  "4"  "5"  "6"  "7"  "8"  "9" 
 ~~~
 {: .output}
 This sort is sorting alphabetically and by place. To fix the sorting, we can 
@@ -531,8 +520,8 @@ levels(surveys$plot)
 
 
 ~~~
- [1] "01" "02" "03" "04" "05" "06" "07" "08" "09" "10" "11" "12" "13" "14"
-[15] "15" "16" "17" "18" "19" "20" "21" "22" "23" "24"
+ [1] "01" "02" "03" "04" "05" "06" "07" "08" "09" "10" "11" "12" "13" "14" "15"
+[16] "16" "17" "18" "19" "20" "21" "22" "23" "24"
 ~~~
 {: .output}
 
@@ -569,7 +558,7 @@ surveys$plot <- surveys$plot %>% fct_relevel('2', after= Inf)
 ~~~
 Warning: Unknown levels in `f`: 2
 ~~~
-{: .error}
+{: .warning}
 
 Now if we plot the same box plot above, plot 2 is now on the far right.
 You can this to reorder the categories in other plots as well.
@@ -620,14 +609,6 @@ surveys%>%
   count(scientificName)
 ~~~
 {: .language-r}
-
-
-
-~~~
-Warning: Factor `scientificName` contains implicit NA, consider using
-`forcats::fct_explicit_na`
-~~~
-{: .error}
 
 
 
@@ -731,11 +712,479 @@ surveys <- separate(surveys, scientificName, c("genusName", "speciesName"), sep=
 
 
 ~~~
-Warning: Expected 2 pieces. Missing pieces filled with `NA` in 15370 rows
-[16923, 16924, 16925, 16926, 16927, 16928, 16929, 16930, 16931, 16932,
-16933, 16934, 16935, 16936, 16937, 16938, 16939, 16940, 16941, 16942, ...].
+Warning in gregexpr(pattern, x, perl = TRUE): PCRE error
+	'UTF-8 error: isolated byte with 0x80 bit set'
+	for element 16923
 ~~~
-{: .error}
+{: .warning}
+
+
+
+~~~
+Warning in gregexpr(pattern, x, perl = TRUE): PCRE error
+	'UTF-8 error: isolated byte with 0x80 bit set'
+	for element 16924
+~~~
+{: .warning}
+
+
+
+~~~
+Warning in gregexpr(pattern, x, perl = TRUE): PCRE error
+	'UTF-8 error: isolated byte with 0x80 bit set'
+	for element 16925
+~~~
+{: .warning}
+
+
+
+~~~
+Warning in gregexpr(pattern, x, perl = TRUE): PCRE error
+	'UTF-8 error: isolated byte with 0x80 bit set'
+	for element 16926
+~~~
+{: .warning}
+
+
+
+~~~
+Warning in gregexpr(pattern, x, perl = TRUE): PCRE error
+	'UTF-8 error: isolated byte with 0x80 bit set'
+	for element 16927
+~~~
+{: .warning}
+
+
+
+~~~
+Warning in gregexpr(pattern, x, perl = TRUE): PCRE error
+	'UTF-8 error: isolated byte with 0x80 bit set'
+	for element 16928
+~~~
+{: .warning}
+
+
+
+~~~
+Warning in gregexpr(pattern, x, perl = TRUE): PCRE error
+	'UTF-8 error: isolated byte with 0x80 bit set'
+	for element 16929
+~~~
+{: .warning}
+
+
+
+~~~
+Warning in gregexpr(pattern, x, perl = TRUE): PCRE error
+	'UTF-8 error: isolated byte with 0x80 bit set'
+	for element 16930
+~~~
+{: .warning}
+
+
+
+~~~
+Warning in gregexpr(pattern, x, perl = TRUE): PCRE error
+	'UTF-8 error: isolated byte with 0x80 bit set'
+	for element 16931
+~~~
+{: .warning}
+
+
+
+~~~
+Warning in gregexpr(pattern, x, perl = TRUE): PCRE error
+	'UTF-8 error: isolated byte with 0x80 bit set'
+	for element 16932
+~~~
+{: .warning}
+
+
+
+~~~
+Warning in gregexpr(pattern, x, perl = TRUE): PCRE error
+	'UTF-8 error: isolated byte with 0x80 bit set'
+	for element 16933
+~~~
+{: .warning}
+
+
+
+~~~
+Warning in gregexpr(pattern, x, perl = TRUE): PCRE error
+	'UTF-8 error: isolated byte with 0x80 bit set'
+	for element 16934
+~~~
+{: .warning}
+
+
+
+~~~
+Warning in gregexpr(pattern, x, perl = TRUE): PCRE error
+	'UTF-8 error: isolated byte with 0x80 bit set'
+	for element 16935
+~~~
+{: .warning}
+
+
+
+~~~
+Warning in gregexpr(pattern, x, perl = TRUE): PCRE error
+	'UTF-8 error: isolated byte with 0x80 bit set'
+	for element 16936
+~~~
+{: .warning}
+
+
+
+~~~
+Warning in gregexpr(pattern, x, perl = TRUE): PCRE error
+	'UTF-8 error: isolated byte with 0x80 bit set'
+	for element 16937
+~~~
+{: .warning}
+
+
+
+~~~
+Warning in gregexpr(pattern, x, perl = TRUE): PCRE error
+	'UTF-8 error: isolated byte with 0x80 bit set'
+	for element 16938
+~~~
+{: .warning}
+
+
+
+~~~
+Warning in gregexpr(pattern, x, perl = TRUE): PCRE error
+	'UTF-8 error: isolated byte with 0x80 bit set'
+	for element 16939
+~~~
+{: .warning}
+
+
+
+~~~
+Warning in gregexpr(pattern, x, perl = TRUE): PCRE error
+	'UTF-8 error: isolated byte with 0x80 bit set'
+	for element 16940
+~~~
+{: .warning}
+
+
+
+~~~
+Warning in gregexpr(pattern, x, perl = TRUE): PCRE error
+	'UTF-8 error: isolated byte with 0x80 bit set'
+	for element 16941
+~~~
+{: .warning}
+
+
+
+~~~
+Warning in gregexpr(pattern, x, perl = TRUE): PCRE error
+	'UTF-8 error: isolated byte with 0x80 bit set'
+	for element 16942
+~~~
+{: .warning}
+
+
+
+~~~
+Warning in gregexpr(pattern, x, perl = TRUE): PCRE error
+	'UTF-8 error: isolated byte with 0x80 bit set'
+	for element 16943
+~~~
+{: .warning}
+
+
+
+~~~
+Warning in gregexpr(pattern, x, perl = TRUE): PCRE error
+	'UTF-8 error: isolated byte with 0x80 bit set'
+	for element 16944
+~~~
+{: .warning}
+
+
+
+~~~
+Warning in gregexpr(pattern, x, perl = TRUE): PCRE error
+	'UTF-8 error: isolated byte with 0x80 bit set'
+	for element 16945
+~~~
+{: .warning}
+
+
+
+~~~
+Warning in gregexpr(pattern, x, perl = TRUE): PCRE error
+	'UTF-8 error: isolated byte with 0x80 bit set'
+	for element 16946
+~~~
+{: .warning}
+
+
+
+~~~
+Warning in gregexpr(pattern, x, perl = TRUE): PCRE error
+	'UTF-8 error: isolated byte with 0x80 bit set'
+	for element 16947
+~~~
+{: .warning}
+
+
+
+~~~
+Warning in gregexpr(pattern, x, perl = TRUE): PCRE error
+	'UTF-8 error: isolated byte with 0x80 bit set'
+	for element 16948
+~~~
+{: .warning}
+
+
+
+~~~
+Warning in gregexpr(pattern, x, perl = TRUE): PCRE error
+	'UTF-8 error: isolated byte with 0x80 bit set'
+	for element 16949
+~~~
+{: .warning}
+
+
+
+~~~
+Warning in gregexpr(pattern, x, perl = TRUE): PCRE error
+	'UTF-8 error: isolated byte with 0x80 bit set'
+	for element 16950
+~~~
+{: .warning}
+
+
+
+~~~
+Warning in gregexpr(pattern, x, perl = TRUE): PCRE error
+	'UTF-8 error: isolated byte with 0x80 bit set'
+	for element 16951
+~~~
+{: .warning}
+
+
+
+~~~
+Warning in gregexpr(pattern, x, perl = TRUE): PCRE error
+	'UTF-8 error: isolated byte with 0x80 bit set'
+	for element 16952
+~~~
+{: .warning}
+
+
+
+~~~
+Warning in gregexpr(pattern, x, perl = TRUE): PCRE error
+	'UTF-8 error: isolated byte with 0x80 bit set'
+	for element 16953
+~~~
+{: .warning}
+
+
+
+~~~
+Warning in gregexpr(pattern, x, perl = TRUE): PCRE error
+	'UTF-8 error: isolated byte with 0x80 bit set'
+	for element 16954
+~~~
+{: .warning}
+
+
+
+~~~
+Warning in gregexpr(pattern, x, perl = TRUE): PCRE error
+	'UTF-8 error: isolated byte with 0x80 bit set'
+	for element 16955
+~~~
+{: .warning}
+
+
+
+~~~
+Warning in gregexpr(pattern, x, perl = TRUE): PCRE error
+	'UTF-8 error: isolated byte with 0x80 bit set'
+	for element 16956
+~~~
+{: .warning}
+
+
+
+~~~
+Warning in gregexpr(pattern, x, perl = TRUE): PCRE error
+	'UTF-8 error: isolated byte with 0x80 bit set'
+	for element 16957
+~~~
+{: .warning}
+
+
+
+~~~
+Warning in gregexpr(pattern, x, perl = TRUE): PCRE error
+	'UTF-8 error: isolated byte with 0x80 bit set'
+	for element 16958
+~~~
+{: .warning}
+
+
+
+~~~
+Warning in gregexpr(pattern, x, perl = TRUE): PCRE error
+	'UTF-8 error: isolated byte with 0x80 bit set'
+	for element 16959
+~~~
+{: .warning}
+
+
+
+~~~
+Warning in gregexpr(pattern, x, perl = TRUE): PCRE error
+	'UTF-8 error: isolated byte with 0x80 bit set'
+	for element 16960
+~~~
+{: .warning}
+
+
+
+~~~
+Warning in gregexpr(pattern, x, perl = TRUE): PCRE error
+	'UTF-8 error: isolated byte with 0x80 bit set'
+	for element 16961
+~~~
+{: .warning}
+
+
+
+~~~
+Warning in gregexpr(pattern, x, perl = TRUE): PCRE error
+	'UTF-8 error: isolated byte with 0x80 bit set'
+	for element 16962
+~~~
+{: .warning}
+
+
+
+~~~
+Warning in gregexpr(pattern, x, perl = TRUE): PCRE error
+	'UTF-8 error: isolated byte with 0x80 bit set'
+	for element 20220
+~~~
+{: .warning}
+
+
+
+~~~
+Warning in gregexpr(pattern, x, perl = TRUE): PCRE error
+	'UTF-8 error: isolated byte with 0x80 bit set'
+	for element 20221
+~~~
+{: .warning}
+
+
+
+~~~
+Warning in gregexpr(pattern, x, perl = TRUE): PCRE error
+	'UTF-8 error: isolated byte with 0x80 bit set'
+	for element 20222
+~~~
+{: .warning}
+
+
+
+~~~
+Warning in gregexpr(pattern, x, perl = TRUE): PCRE error
+	'UTF-8 error: isolated byte with 0x80 bit set'
+	for element 20223
+~~~
+{: .warning}
+
+
+
+~~~
+Warning in gregexpr(pattern, x, perl = TRUE): PCRE error
+	'UTF-8 error: isolated byte with 0x80 bit set'
+	for element 20224
+~~~
+{: .warning}
+
+
+
+~~~
+Warning in gregexpr(pattern, x, perl = TRUE): PCRE error
+	'UTF-8 error: isolated byte with 0x80 bit set'
+	for element 20225
+~~~
+{: .warning}
+
+
+
+~~~
+Warning in gregexpr(pattern, x, perl = TRUE): PCRE error
+	'UTF-8 error: isolated byte with 0x80 bit set'
+	for element 20226
+~~~
+{: .warning}
+
+
+
+~~~
+Warning in gregexpr(pattern, x, perl = TRUE): PCRE error
+	'UTF-8 error: isolated byte with 0x80 bit set'
+	for element 20227
+~~~
+{: .warning}
+
+
+
+~~~
+Warning in gregexpr(pattern, x, perl = TRUE): PCRE error
+	'UTF-8 error: isolated byte with 0x80 bit set'
+	for element 20228
+~~~
+{: .warning}
+
+
+
+~~~
+Warning in gregexpr(pattern, x, perl = TRUE): PCRE error
+	'UTF-8 error: isolated byte with 0x80 bit set'
+	for element 20229
+~~~
+{: .warning}
+
+
+
+~~~
+Warning in gregexpr(pattern, x, perl = TRUE): PCRE error
+	'UTF-8 error: isolated byte with 0x80 bit set'
+	for element 20230
+~~~
+{: .warning}
+
+
+
+~~~
+Warning in gregexpr(pattern, x, perl = TRUE): PCRE error
+	'UTF-8 error: isolated byte with 0x80 bit set'
+	for element 20231
+~~~
+{: .warning}
+
+
+
+~~~
+Warning: Expected 2 pieces. Missing pieces filled with `NA` in 15370 rows
+[16923, 16924, 16925, 16926, 16927, 16928, 16929, 16930, 16931, 16932, 16933,
+16934, 16935, 16936, 16937, 16938, 16939, 16940, 16941, 16942, ...].
+~~~
+{: .warning}
 
 ## Joining Variables
 
@@ -976,18 +1425,18 @@ surveys %>% count(scientificName)
 
 ~~~
 # A tibble: 22 x 2
-   scientificName                      n
-   <chr>                           <int>
- 1 " Missing "                     15318
- 2 Ammodramus savannarum               2
- 3 Ammospermophilus harrisi          437
- 4 Amphespiza bilineata               10
- 5 Amphispiza bilineata              291
- 6 Baiomys taylori                    46
- 7 Calamospiza melanocorys             1
- 8 Callipepla squamata                 1
- 9 Campylorhynchus brunneicapillus     1
-10 Chaetodipus baileyi                 2
+   scientificName                        n
+   <chr>                             <int>
+ 1 " Missing "                       15318
+ 2 "Ammodramus savannarum"               2
+ 3 "Ammospermophilus harrisi"          437
+ 4 "Amphespiza bilineata"               10
+ 5 "Amphispiza bilineata"              291
+ 6 "Baiomys taylori"                    46
+ 7 "Calamospiza melanocorys"             1
+ 8 "Callipepla squamata"                 1
+ 9 "Campylorhynchus brunneicapillus"     1
+10 "Chaetodipus baileyi"                 2
 # … with 12 more rows
 ~~~
 {: .output}
