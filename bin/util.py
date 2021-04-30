@@ -11,14 +11,6 @@ except ImportError:
     sys.exit(1)
 
 
-# Things an image file's name can end with.
-IMAGE_FILE_SUFFIX = {
-    '.gif',
-    '.jpg',
-    '.png',
-    '.svg'
-}
-
 # Files that shouldn't be present.
 UNWANTED_FILES = [
     '.nojekyll'
@@ -105,7 +97,7 @@ def read_markdown(parser, path):
     """
 
     # Split and extract YAML (if present).
-    with open(path, 'r') as reader:
+    with open(path, 'r', encoding='utf-8') as reader:
         body = reader.read()
     metadata_raw, metadata_yaml, body = split_metadata(path, body)
 
@@ -115,9 +107,9 @@ def read_markdown(parser, path):
              for (i, line) in enumerate(body.split('\n'))]
 
     # Parse Markdown.
-    cmd = 'ruby {0}'.format(parser)
+    cmd = 'bundle exec ruby {0}'.format(parser)
     p = Popen(cmd, shell=True, stdin=PIPE, stdout=PIPE,
-              close_fds=True, universal_newlines=True)
+              close_fds=True, universal_newlines=True, encoding='utf-8')
     stdout_data, stderr_data = p.communicate(body)
     doc = json.loads(stdout_data)
 
@@ -144,7 +136,7 @@ def split_metadata(path, text):
         metadata_raw = pieces[1]
         text = pieces[2]
         try:
-            metadata_yaml = yaml.load(metadata_raw, Loader=yaml.FullLoader)
+            metadata_yaml = yaml.load(metadata_raw, Loader=yaml.SafeLoader)
         except yaml.YAMLError as e:
             print('Unable to parse YAML header in {0}:\n{1}'.format(
                 path, e), file=sys.stderr)
@@ -160,8 +152,8 @@ def load_yaml(filename):
     """
 
     try:
-        with open(filename, 'r') as reader:
-            return yaml.load(reader, Loader=yaml.FullLoader)
+        with open(filename, 'r', encoding='utf-8') as reader:
+            return yaml.load(reader, Loader=yaml.SafeLoader)
     except (yaml.YAMLError, IOError) as e:
         print('Unable to load YAML file {0}:\n{1}'.format(
             filename, e), file=sys.stderr)
