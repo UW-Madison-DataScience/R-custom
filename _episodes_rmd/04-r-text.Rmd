@@ -1,0 +1,537 @@
+---
+title: "R for text data"
+author: "Tobin Magle, Sarah Stevens"
+teaching: 
+exercises: 
+questions:
+- 
+objectives:
+- 
+keypoints:
+- 
+source: Rmd
+---
+
+```{r, echo = FALSE, purl = FALSE, message = FALSE}
+library(knitr)
+library(tidyverse)
+source("../bin/chunk-options.R")
+```
+<!--- Link to slides from Tobin's first try at teaching this stuff as "data cleaning": (https://docs.google.com/presentation/d/1iZYep0u5OPQjkchEzLxYencLcQhoKYsK_3FvfzojK5c/edit#slide=id.g2a7f47f09d_1_121) -->
+
+## Why do this in R?
+- Data is rarely clean and tidy
+- Misspellings
+- White space
+- Multiple variables per column
+- Inconsistent coding
+- Fixing it by hand takes forever
+
+## Types of text data
+Up until now, we've largely treated all text data the same as either all factors or all strings.
+However, the type of a text column in a tibble determines what you can do with the data.
+If you want to clean up misspellings or look for patterns in unstructured data, you can do that 
+in a string column. If you want to subset based on a catagory or combine categories, factors are more useful.
+
+This lesson will cover packages that make working with text data easier: `stringr` and `forcats`.
+These packages are part of the `tidyverse`, meaning that they work well with `dplyr`, specifically
+the `mutate` function. We will also cover options in the `read_csv` function that will allow you to
+choose what type the data are when they are imported.
+
+## Downlaod Data
+
+[Link to download the data](https://go.wisc.edu/968tj7)
+<!--- You shoud zip this at least! -->
+
+## Factors
+
+Factors are categorical vectors in R.
+While some of the operations you can do on them are the same as with character vectors, others differ.
+They also different in their underlying structure.
+Character vectors are stored as the characters in each vector.
+Factors assign a value to each category and then store the values instead of the characters for each item.
+Given that this reduces the size of your data set, many functions may run faster when categories 
+are set as factors instead of characters.
+
+## The data
+
+We will be using a messier version of the surveys data that were used in the dplyr and ggplot2 lessons. 
+
+## Importing the data
+
+Let's start by loading the libraries and importing the data with `read_csv`.
+```{r read_data}
+library(tidyverse)
+# OR
+library(stringr)
+library(forcats)
+library(ggplot2)
+library(dplyr)
+library(readr)
+library(tidyr)
+
+surveys<-read_csv(file = "data/Portal_rodents_19772002_scinameUUIDs.csv")
+```
+
+Note that there are a few parsing errors. This error happens becaues `read_csv`
+looks at the first 1000 rows of each column and guess which type that column
+should be based on those entries.  In our case there are a few entries at the
+bottom of the notes columns which don't fit the type it guessed based on the first
+1000 rows.  We will add the `guess_max` argument to have `read_csv` check the 
+whole column before it automatically chooses a type for that column.
+
+```{r}
+surveys <- read_csv(file = "data/Portal_rodents_19772002_scinameUUIDs.csv", 
+                  guess_max = 40000)
+```
+
+Because we imported the data using `read_csv`, all of the non-numeric columns were converted to the 
+`character` class. If we used `read.csv`, they would all be factors.
+
+> ## Challenge 1
+> Look at the data columns in the surveys dataset. Which columns should be 
+> converted to factors? Which should stay as text? Why?
+> 
+> Hint: should any numeric columns be factors?
+> 
+> > ## Solution to Challenge 1
+> > 
+> > 
+> > 
+> {: .solution}
+{: .challenge}
+
+<!---
+> ## Challenge
+>
+>  In the surveys data set we have read in, which columns are categories
+>  and might be better typed as factors?
+> 
+>
+> > ## Solution to Challenge
+> > `plot_type`, `plot_id`, `species_id`, `genus`, `species`, and `sex` are all categorical values
+> > though they are a mix of text or numeric values.  You are unlikely to want to do math on
+> > the `plot_id` column despite it having numbers in it which means we may want to treat 
+> > it as a factor instead. Along those same lines, the `day`, `month`, `year` columns
+> > are also numeric columns which we are unlikely to do math on. While the `day` column
+> > doesn't form groups as naturally, we may want to group by observations by `month` or `year`
+> > which is another indicator that these might be better as factors.
+> > 
+> > `weight` and `hindfoot_length` are true numberic observations and so we may want to perform
+> > mathematical functions on them so they can be left as integers.
+> > `record_id` is unique to each row so it also doesn't form categories and would be better as
+> > an integer or character vector.
+> {: .solution}
+{: .challenge}
+-->
+
+## Changing column classes
+
+```{r convert_text}
+#Create a text vector
+species<-c("AB", "AS", "AS", "AB")
+class(species)
+
+#convert it to factor
+species<-as_factor(species)
+species
+class(species)
+
+#convert back to character
+species<-as.character(species) 
+class(species)
+```
+
+```{r convert_text_tibble}
+surveys<- surveys%>%
+  mutate(species = as_factor(species))
+```
+OR
+
+```{r}
+surveys$scientificName <- as_factor(surveys$scientificName)
+```
+
+Or, you could specify the types of all of your columns upon reading.
+
+```{r read_data_coltypes}
+surveys<-read_csv(file = "data/Portal_rodents_19772002_scinameUUIDs.csv",
+                  col_types = cols(col_character(), #survey_id
+                                col_character(), #recordID
+                                col_integer(),    #Month
+                                col_integer(),    #day
+                                col_integer(),    #year
+                                col_double(),    #period
+                                col_factor(), #plot_id
+                                col_factor(), #plot
+                                col_character(), #note1
+                                col_character(), #stake
+                                col_factor(), #species
+                                col_factor(), #scientificName
+                                col_character(), #locality
+                                col_character(), #JSON
+                                col_double(), #decimalLatitude
+                                col_double(), #decimalLongitude
+                                col_factor(), #county
+                                col_factor(), #state
+                                col_factor(), #country
+                                col_factor(), #sex
+                                col_factor(), #age
+                                col_character(), #reprod
+                                col_character(), #testes
+                                col_character(), #vagina
+                                col_character(), #pregnant
+                                col_character(), #nippples
+                                col_character(), #lactation
+                                col_double(), #hfl
+                                col_double(), #wgt
+                                col_character(), #tag
+                                col_character(), #note2
+                                col_character(), #ltag
+                                col_character(), #note3
+                                col_character(), #prevrt
+                                col_integer(), #prevlet
+                                col_character(), #nestdir
+                                col_integer(), #neststk
+                                col_character(), #note4
+                                col_character() #note5
+                                )
+                  )
+```
+
+> ## Challenge 2
+> Convert the columns you identified in Challenge 1 to factors
+> 
+> > ## Solution to Challenge 2
+> > 
+> > 
+> > 
+> {: .solution}
+{: .challenge}
+
+
+## Fun with Factors
+
+- Recoding factors, `fct_recode()`
+- Reordering factors, `fct_relevel()`
+
+
+### Recoding factors
+
+One common function we may need to perform is recoding the factors.
+In this case we may want to use the month names, instead of their numbers.
+
+```{r}
+surveys$mo_abbv <- surveys$mo %>% as.factor() %>% 
+  fct_recode(Jan='1', Feb='2', Mar='3', Apr='4', May='5', 
+             Jun='6', Jul='7', Aug='8', Sep='9', Oct='10',
+             Nov='11', Dec='12')
+head(surveys)
+```
+
+#### Easier way to do this.
+
+Getting the month abbreviations recoded more easily.
+First let's look at the first 6 months.
+
+````{r}
+surveys$mo %>% head()
+```
+
+Now we can use the `month.abb[]` to get back the abbreviated names.
+(Still looking at only the first 6)
+```{r}
+month.abb[surveys$mo] %>% head()
+```
+
+
+> ## Challenge
+>
+>  Add a new column called `mo_full` onto the `surveys` data 
+>  from that includes the full month name.
+> 
+> Shortcut hint: Check out what `month.name[]` does.
+>
+> > ## Solution to Challenge
+> > ```{r}
+> > surveys$mo_full <- surveys$mo %>% as.factor() %>% 
+> >   fct_recode(January='1', Febuary='2', March='3', April='4', May='5', 
+> >              June='6', July='7', August='8', September='9', October='10',
+> >              November='11', December='12')
+> > ```
+> > OR
+> > ```{r, answer=TRUE, eval=FALSE, purl=FALSE}
+> > surveys$mo_full <- month.name[surveys$mo]
+> > ```
+> {: .solution}
+{: .challenge}
+
+
+### Reorder factors
+
+If we use the ggplot skills we learned in the last session.
+We see that the factors for `plot_type` display in the order of their 
+levels, which are in alphabetical order by default.
+
+```{r}
+levels(surveys$plot)
+surveys %>% filter(!is.na(hfl)) %>% 
+  ggplot(aes(x=plot, y=hfl)) +
+  geom_boxplot()
+```
+
+#### Ordered by number and left pad
+
+Let's put the plots in order by their number using the `fct_relevel` function.
+
+```{r}
+surveys$plot %>% 
+  levels() %>% 
+  sort()
+```
+This sort is sorting alphabetically and by place. To fix the sorting, we can 
+add a leading zero and 'left pad' the names using a string method. 
+
+```{r}
+str_pad(surveys$plot, width = 2, side = "left", pad="0") %>% head(10)
+```
+
+
+```{r}
+surveys$plot <- str_pad(surveys$plot, width = 2, side = "left", pad="0") %>% as_factor()
+order <- surveys$plot %>% 
+  levels() %>%
+  sort() 
+surveys$plot <- fct_relevel(surveys$plot, order)
+levels(surveys$plot)
+surveys %>% filter(!is.na(hfl)) %>% 
+  ggplot(aes(x=plot, y=hfl)) +
+  geom_boxplot()
+```
+
+
+We can also reorder only a subset of the levels without having to specify 
+all of the levels by using the `after=` argument
+We can say 1 (after the first level) to Inf (after everything) instead of
+typing out each of the levels in order.
+
+We know from other information that the levels 
+'2', '4', '8', '11', '12', '17', '22' are the control plots.
+Let's try putting the level '2' at the end so we can see all
+the controls to the right.
+
+```{r}
+surveys$plot <- surveys$plot %>% fct_relevel('2', after= Inf)
+```
+
+Now if we plot the same box plot above, plot 2 is now on the far right.
+You can this to reorder the categories in other plots as well.
+
+```{r}
+surveys %>% 
+  filter(!is.na(hfl)) %>% 
+  ggplot(aes(x=plot, y=hfl)) +
+  geom_boxplot()
+```
+
+> ## Challenge
+>
+>  Reorder the `plot`'s in the boxplot above so all the control plots 
+>  are on the right.
+>
+> > ## Solution to Challenge
+> > ```{r, answer=TRUE, eval=FALSE, purl=FALSE}
+> > surveys$plot<- surveys$plot %>% fct_relevel('2', '4', '8', '11', '12', '17', '22', after= Inf)
+> > surveys %>% 
+> >     filter(!is.na(hfl)) %>% 
+> >     ggplot(aes(x=plot, y=hfl)) +
+> >     geom_boxplot()
+> > ```
+> {: .solution}
+{: .challenge}
+
+<!--- alt challenge, reorder months in plot? 
+surveys %>% filter(!is.na(wgt)) %>% ggplot(aes(x=mo_abbv, y=wgt)) + geom_boxplot()
+-->
+
+
+## Cleaning up text data
+
+When text data is entered by hand, small differences can be introduced that 
+aren't easy to see with the human eye, but are important to the computer. 
+One easy way to identify these small differences is the `count` function.
+
+```{r}
+surveys%>%
+  count(scientificName)
+```
+
+
+You can see some very similar species names, for example: 
+"Ammospermophilis harrisi", "Ammospermophilus harrisi", "Ammospermophilus harrisii". 
+However one spelling has many more records than the others. How can we fix the spellings?
+
+```{r}
+surveys$scientificName <- fct_explicit_na(surveys$scientificName)
+surveys$scientificName <- fct_collapse(surveys$scientificName,
+            "Ammospermophilus harrisi"=c("Ammospermophilus harrisi",
+                                         "Ammospermophilis harrisi",
+                                         "Ammospermophilus harrisii"),
+            "Amphespiza bilineata" = c("Amphispiza bilineatus",
+                                       "Amphispiza cilineata",
+                                       "Amphispizo bilineata"))
+```
+
+We can see the change by looking at the count again.
+
+```{r}
+surveys%>%
+  count(scientificName)
+```
+
+
+> ## Challenge
+>
+>  1. Find all the possible variants on the country name "United States""
+>  2. Change them all to the most common variant.
+>
+> > ## Solution to Challenge
+> > ```{r, answer=TRUE, eval=FALSE, purl=FALSE}
+> > surveys %>% count(country)
+> > # We can see that "United States of America", "UNITED STATES", and "US"
+> > # Are possible options with "UNITED STATES" being the most common.
+> > surveys$country <- fct_collapse(surveys$country, 
+> >              "UNITED STATES" = c("United States of America",
+> >                                  "US"))
+> > ```
+> {: .solution}
+{: .challenge}
+
+
+## Splitting Variables
+
+Next we may want to split the scientific names into genus and species columns
+as we have seen in the cleaned version of the data.
+
+```{r}
+surveys <- separate(surveys, scientificName, c("genusName", "speciesName"), sep="\\s", remove = FALSE)
+```
+
+## Joining Variables
+
+In some of our plots we may want to label with the full scientific name.
+To do so we can add a new column which joins two strings together.
+Before we get into vectors lets try an example with two strings
+```{r}
+name = "Sarah"
+str_c("Hi my name is ", name)
+```
+
+We can similarly use this on vectors. We can make one column that has the 
+latitude and longitude.
+
+```{r}
+surveys$latnlong <- str_c(surveys$decimalLatitude, " ",  surveys$decimalLongitude)
+```
+
+Another function that you could have used here is `paste()`
+
+
+## Other stringr functions
+
+Next, let's see if all our recordIDs are the same length.
+
+```{r}
+str_length(surveys$recordID) %>%  head()
+```
+
+We can see that they are not all the same length but it is hard
+to see what the different lengths are lets see the different 
+lengths using the `unique()` function.
+
+```{r}
+str_length(surveys$recordID) %>% unique()
+```
+
+> ## Challenge
+>
+>  Use the use stringr function we learned earlier to make all the
+>  recordIDs the same length.
+>
+> > ## Solution to Challenge
+> > ```{r, answer=TRUE, eval=FALSE, purl=FALSE}
+> > surveys$recordID<- surveys$recordID %>%  str_pad(width = 5, side = "left", pad = "0")
+> > ```
+> {: .solution}
+{: .challenge}
+
+Another string function we can use is to get a subset of a string.
+We can use that function, `str_sub()` to create abbvs for the genera.
+We can then add those abbrvs as their own column
+
+```{r}
+str_sub(surveys$genusName, 1, 5) %>%  head()
+surveys <- surveys %>%  mutate(genusAbbv = str_sub(surveys$genusName, 1, 5))
+```
+
+
+## Finding patterns
+
+[Rstudio Regular expression Cheatsheet](https://rstudio.com/wp-content/uploads/2016/09/RegExCheatsheet.pdf)
+[Rstudio stingr Cheatsheet](http://edrub.in/CheatSheets/cheatSheetStringr.pdf)
+
+Find the scientific names with punctuation in them.
+
+```{r}
+str_detect(surveys$scientificName, "Dip") %>% head()
+str_detect(surveys$scientificName, "Dip") %>% unique()
+str_subset(surveys$scientificName, "Dip") %>% head()
+str_subset(surveys$scientificName, "Dip") %>% unique()
+str_subset(surveys$scientificName, "[[:punct:]]") %>% head()
+str_subset(surveys$scientificName, "[[:punct:]]") %>% unique()
+```
+
+Let's replace all the puntuation characters with a space for the moment.
+
+```{r}
+statement = "Sarah is the instructor"
+str_replace(statement, "a", "e")
+str_replace_all(statement, "a", "e")
+```
+
+
+```{r}
+surveys$scientificName <- str_replace_all(surveys$scientificName, "[[:punct:]]", " ")
+surveys %>% count(scientificName)
+```
+
+
+Other pattern matching commands that can be useful:
+```
+str_match()
+str_count()
+str_locate()
+str_extract()
+```
+
+
+## Remove leading/trailing whitespace
+
+Now we have some extra whitespace to remove from the scientificName column.
+We can use the `str_trim` function
+
+```{r}
+str_subset(surveys$scientificName, "Miss") %>%  head()
+str_subset(surveys$scientificName, "Miss")[1] %>% str_trim()
+str_trim(surveys$scientificName) %>% str_subset("Miss") %>%  head()
+surveys$scientificName <- str_trim(surveys$scientificName)
+```
+
+
+
+## Write back to a csv file
+
+```
+write_csv(surveys, "cleaned_surveys_20191005_slr.csv") 
+```
+
