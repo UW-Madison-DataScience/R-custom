@@ -1,14 +1,14 @@
 ---
 title: "R for text data"
-author: "Tobin Magle, Sarah Stevens"
-teaching: 
-exercises: 
+author: "Tobin Magle", "Sarah Stevens"
+teaching: FIXME
+exercises: FIXME
 questions:
-- 
+- FIXME
 objectives:
-- 
+- FIXME
 keypoints:
-- 
+- FIXME
 source: Rmd
 ---
 
