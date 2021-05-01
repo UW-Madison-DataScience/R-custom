@@ -1,6 +1,5 @@
 ---
 title: "R for text data"
-author: ["Tobin Magle", "Sarah Stevens"]
 teaching: FIXME
 exercises: FIXME
 questions:
