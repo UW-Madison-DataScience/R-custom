@@ -1,0 +1,50 @@
+---
+title: "Version Control with Git and RStudio"
+teaching: FIXME
+exercises: FIXME
+questions:
+- FIXME
+objectives:
+- FIXME
+keypoints:
+- FIXME
+source: Rmd
+---
+
+```{r, echo = FALSE, purl = FALSE, message = FALSE}
+library(knitr)
+library(tidyverse)
+source("../bin/chunk-options.R")
+```
+
+## Prerequisites and Setup
+
+- Download [RStudio](https://www.rstudio.com/products/rstudio/download/) and [R](https://www.r-project.org/)
+- [Create a GitHub account](https://github.com/signup?user_email=&source=form-home-signup)
+- [Install Git](https://git-scm.com/downloads)
+- This workshop is aimed at people who have some knowledge of R and RStudio, but you don't have to be an expert.
+
+## Motivation
+
+## Setup: Summer Project
+- create local folder
+- create analysis script, just comments, no code.
+- [generating key and adding it to the ssh agent](https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent) [adding new ssh key to gh account](https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account)
+
+## Working locally with Git
+- stage and commit
+- changes, stage, commit again
+- git log
+- checkout of some sort (is there a way to do this interactively?)
+- gitignore (use the interactive gui)
+
+## Connecting to GitHub
+- Kaija will do some digging to look at setting up GitHub secondarily--if it's complicated, we'll just do it first. 
+- push/pull
+
+## Basic branching and merging
+- making a new branch
+- local vs. remote branch
+
+## Dealing with merge conflicts
+- make same change on same line to two different branches
