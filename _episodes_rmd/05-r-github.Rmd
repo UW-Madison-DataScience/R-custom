@@ -46,7 +46,7 @@ So for our new summer project we will create a new folder and R project to work 
 
 Click on the new R project button in the upper left-hand side of Rstudio. 
 
-![New R Project Icon](FIXME)
+![New R Project Icon](../fig/05-Rproj_setup_newprojbutton.png){: .image-with-shadow }
 
 > ## Other ways to start a new project
 >
@@ -54,7 +54,7 @@ Click on the new R project button in the upper left-hand side of Rstudio.
 > 
 > 1. You can click the Project drop down menu and choose the "New Project..." option.
 > 
-> ![R Project Menu with New Project option highlighted](FIXME)
+> ![R Project Menu with New Project option highlighted](../fig/05-Rproj_setup_proj_dropdown.png){: .image-with-shadow }
 > 
 > 2. Alternatively, you can click the "File" menu and choose the "New Project..." option
 > 
@@ -63,13 +63,13 @@ Click on the new R project button in the upper left-hand side of Rstudio.
 Next the "New Project Wizard" will pop up in Rstudio.
 Since we are starting this project from scratch we will choose the "New Directory" option.
 
-![New project wizard with the new project option highlighted](FIXME)
+![New project wizard with the new directory option highlighted](../fig/05-Rproj_setup_new_dir.png){: .image-with-shadow }
 
 
 Next the New Project Wizard asks us to chose a project type.
 We will choose the "New Project" option again.
 
-![New project wizard with the new project type highlighted](FIXME)
+![New project wizard with the new project type highlighted](../fig/05-Rproj_setup_new_proj.png){: .image-with-shadow }
 
 Finally the New Project Wizard asks us what to name our new project folder, where to put it,
 and some other options (including if we should make this a git repository).
@@ -80,7 +80,7 @@ The name is a bit long but will be useful for identifying it when you find it on
 We also want to be sure the "Create a git repository" option is checked.
 If you don't see this option, you may need to check that you have git installed.
 
-![New project wizard with directory name and location](FIXME)
+![New project wizard with directory name and location](../fig/05-rproj_setup_name.png){: .image-with-shadow }
 
 Finally we can click the "Create Project" button.
 
@@ -113,6 +113,8 @@ You may now notice that in the Environment Pane (upper right-hand pane of defaul
 This tab is where we can keep track of our files using git.
 If we click on the tab, we will see it lists a couple of files.
 
+![Rstudio with the git tab showing](../fig/05-Rstudio_git_tab.png){: .image-with-shadow }
+
 First we see the `.gitignore` file.
 This is a file that was created when we set up the project/repo.
 It contains a list of files that we don't want git to try to track.
@@ -121,6 +123,61 @@ because these are commonly files that we don't want to track with git.
 For example it ignores the `.Rhistory` file which keeps track of the history of commands run in the console, 
 which you can see by clicking on the "History" tab in the  environment pane.
 That isn't a file that we need to track in our version history but is useful for Rstudio to keep while we are working with it.
+
+The second file listed is our `example_git_summer_project.Rproj` file.
+
+Both of these are files (`.gitignore` and `example_git_summer_project.Rproj`) we would like to have git track the history of.
+In the git pane, you can see it currently shows two `?` in the "Status" column.
+This means that git has yet to track any versions of these files in it's history.
+
+The next thing we will do is add a version of these files to the git history.
+This is the most common action you will do with files.
+Whenever you add a new file you want to keep track of or a new version you want to record in the git history (so you could go back to it later),
+you will follow this process.
+
+First you will tell git which files you want to add to this point in history by clicking the checkboxes under the "Staged" column.
+This adds the files to the stage, which tells git that these are a version of the files we'd like to include or *commit* to our git history.
+
+![Git panel with two files added to stage](../fig/05-first_staged_files.png){: .image-with-shadow }
+
+Notice that the "Status" column changed for both of the files as we clicked on it to showing an `A` instead of two `?`.
+This indicates that the files have been *added* to the stage.
+
+The next step we want to do is actually *commit* these changes to our history of changes in git.
+
+To do so we will click the "Commit" button.
+
+![Git panel with two files staged and the commit button circled in red](../fig/05-first_staged_files_with_commit_circle.png){: .image-with-shadow }
+
+This will pop up a new window for making the commit.
+This window has a lot of information in it and options you can do with it.
+For now we will ignore most of the information and focus on the "Commit message" window.
+
+Check that both of the files we want to include are checked and have the Status `A` still.
+Then type `first commit of gitignore and rproj` in the  "Commit messsage" box.
+This message goes into your history and can be useful for figure out what version of the files you committed in the past.
+They are typically kept short but you can create longer messages if needed, this is typically done as a short message on the first line
+and then a longer message on the third line.
+
+![commit window with commit message](../fig/05-first_commit_message.png){: .image-with-shadow }
+
+Finally we will press the "Commit" button.  This actually adds the versions of the files to your repository.
+This then pops up a message that summarizes the commit: which files were included, how they changed, the commit message, 
+and the uninque identifier (called "commit hash").
+
+![commit summary window](../fig/05-first_commit_summary.png){: .image-with-shadow }
+
+We can then click the "Close" button on this commit.
+Now the commit window is empty because all the changes to the files in repository have been commited or saved to the repository.
+
+![empty commit window](../fig/05-empty_commit_window.png){: .image-with-shadow }
+
+We can also exit out of the commit window and see that our git pane is also empty.
+
+![empty git pane](../fig/05-empty_git_pane.png){: .image-with-shadow }
+
+
+
 
 
 
