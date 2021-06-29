@@ -99,13 +99,31 @@ Finally we can click the "Create Project" button.
 > > we also created a hidden folder where git stores information called `.git/`.
 > > We probably won't need to interact with this folder directly but it is where git will be storing the
 > > history of your files in this project.
-> > It is hidden by default in most file viewers so we can't accidently make changes to it.
+> > The folder is hidden by default in most file viewers so we can't accidently make changes to it.
 > > See the following links if you'd like to try to see the hidden `.git/` folder
 > > - [Windows](https://support.microsoft.com/en-us/windows/view-hidden-files-and-folders-in-windows-10-97fbc472-c603-9d90-91d0-1166d1d9f4b5#:~:text=Open%20File%20Explorer%20from%20the,folders%2C%20and%20drives%20and%20OK.)
-> > - [Mac] - you can use <kbd>Shift</kbd> + <kbd>Cmd</kbd>Cmd + <kbd>.</kbd>.
+> > - Mac - type <kbd>Shift</kbd> + <kbd>cmd</kbd> + <kbd>.</kbd> to toggle the hidden files showing in finder.
+> >  
+> >  Note: All files that start with `.` are hidden unless you turn on the option to see them.
 > > 
 > {: .solution}
 {: .challenge}
+
+You may now notice that in the Environment Pane (upper right-hand pane of default Rstudio), there is now a "Git" tab.
+This tab is where we can keep track of our files using git.
+If we click on the tab, we will see it lists a couple of files.
+
+First we see the `.gitignore` file.
+This is a file that was created when we set up the project/repo.
+It contains a list of files that we don't want git to try to track.
+When you set up a R project with git, the new project wizard added some R files to the `.gitignore` file 
+because these are commonly files that we don't want to track with git.
+For example it ignores the `.Rhistory` file which keeps track of the history of commands run in the console, 
+which you can see by clicking on the "History" tab in the  environment pane.
+That isn't a file that we need to track in our version history but is useful for Rstudio to keep while we are working with it.
+
+
+
 
 - create local folder
 - create analysis script, just comments, no code.
