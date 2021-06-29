@@ -3,7 +3,9 @@ title: "Version Control with Git and RStudio"
 teaching: FIXME
 exercises: FIXME
 questions:
-- FIXME
+- "What is the difference between git and GitHub?"
+- "How can I use git to version control files through Rstudio?"
+- "How can I use Rstudio to connect to and sync a git repo on GitHub?"
 objectives:
 - FIXME
 keypoints:
@@ -23,11 +25,19 @@ knitr_fig_path("05-")
 - Download [RStudio](https://www.rstudio.com/products/rstudio/download/) and [R](https://www.r-project.org/)
 - [Create a GitHub account](https://github.com/signup?user_email=&source=form-home-signup)
 - [Install Git](https://git-scm.com/downloads)
-- This workshop is aimed at people who have some knowledge of R and RStudio, but you don't have to be an expert.
+- This episode is aimed at people who have some knowledge of R and RStudio, but you don't have to be an expert.
 
 ## Motivation
 
 ## Setup: Summer Project
+
+For this lesson you can imagine you are working on a summer project at a research station.
+While there you will collect data and analyze it using R.
+You brought an old laptop from the lab to do your field work to avoid loosing or damaging your other computer.
+You decide to use git to track your file changes so you can return to old versions of files.
+Using git will also allow you to host your project folder in a repository on [GitHub][github], 
+so if your computer gets damaged you will still have your files and can get the project on your other computer later.
+
 - create local folder
 - create analysis script, just comments, no code.
 - [generating key and adding it to the ssh agent](https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent) [adding new ssh key to gh account](https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account)
@@ -49,3 +59,7 @@ knitr_fig_path("05-")
 
 ## Dealing with merge conflicts
 - make same change on same line to two different branches
+
+
+
+[github]: https://github.com/
