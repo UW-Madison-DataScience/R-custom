@@ -1,15 +1,15 @@
 # -*- encoding: utf-8 -*-
-# stub: dnsruby 1.61.6 ruby lib
+# stub: dnsruby 1.61.7 ruby lib
 
 Gem::Specification.new do |s|
   s.name = "dnsruby".freeze
-  s.version = "1.61.6"
+  s.version = "1.61.7"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0".freeze) if s.respond_to? :required_rubygems_version=
   s.metadata = { "bug_tracker_uri" => "https://github.com/alexdalitz/dnsruby/issues", "changelog_uri" => "https://github.com/alexdalitz/dnsruby/blob/master/RELEASE_NOTES.md", "documentation_uri" => "https://www.rubydoc.info/gems/dnsruby/", "homepage_uri" => "https://github.com/alexdalitz/dnsruby", "source_code_uri" => "https://github.com/alexdalitz/dnsruby", "yard.run" => "yard" } if s.respond_to? :metadata=
   s.require_paths = ["lib".freeze]
   s.authors = ["Alex Dalitz".freeze]
-  s.date = "2021-06-20"
+  s.date = "2021-06-22"
   s.description = "Dnsruby is a pure Ruby DNS client library which implements a\nstub resolver. It aims to comply with all DNS RFCs, including\nDNSSEC NSEC3 support.".freeze
   s.email = "alex@caerkettontech.com".freeze
   s.extra_rdoc_files = ["DNSSEC".freeze, "EXAMPLES".freeze, "README.md".freeze, "EVENTMACHINE".freeze]

@@ -15,6 +15,7 @@ source: Rmd
 library(knitr)
 library(tidyverse)
 source("../bin/chunk-options.R")
+knitr_fig_path("05-")
 ```
 
 ## Prerequisites and Setup

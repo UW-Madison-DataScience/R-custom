@@ -62,14 +62,14 @@ TESTS.each { |test| require_relative "tc_#{test}.rb" }
 
 def have_open_ssl?
   have_open_ssl = true
-  begin
-    require "openssl"
-    OpenSSL::HMAC.digest(OpenSSL::Digest::MD5.new, "key", "data")
-    key = OpenSSL::PKey::RSA.new
-    key.e = 111
-  rescue
-    have_open_ssl = false
-  end
+#  begin
+#    require "openssl"
+#    OpenSSL::HMAC.digest(OpenSSL::Digest::MD5.new, "key", "data")
+#    key = OpenSSL::PKey::RSA.new
+#    key.e = 111
+#  rescue
+#    have_open_ssl = false
+#  end
   have_open_ssl
 end
 

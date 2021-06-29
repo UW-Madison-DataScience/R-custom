@@ -73,6 +73,7 @@ module Faraday
       @options = options.request
       @ssl = options.ssl
       @default_parallel_manager = options.parallel_manager
+      @manual_proxy = nil
 
       @builder = options.builder || begin
         # pass an empty block to Builder so it doesn't assume default middleware
@@ -519,9 +520,8 @@ module Faraday
     # @return [URI]
     def build_exclusive_url(url = nil, params = nil, params_encoder = nil)
       url = nil if url.respond_to?(:empty?) && url.empty?
-      base = url_prefix
+      base = url_prefix.dup
       if url && base.path && base.path !~ %r{/$}
-        base = base.dup
         base.path = "#{base.path}/" # ensure trailing slash
       end
       url = url && URI.parse(url.to_s).opaque ? url.to_s.gsub(':', '%3A') : url
