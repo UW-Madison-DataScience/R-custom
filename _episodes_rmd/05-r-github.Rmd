@@ -32,11 +32,13 @@ knitr_fig_path("05-")
 ## Setup: Summer Project
 
 For this lesson you can imagine you are working on a summer project at a research station.
-While there you will collect data and analyze it using R.
+While there, you will collect data and analyze it using R.
 You brought an old laptop from the lab to do your field work to avoid loosing or damaging your other computer.
-You decide to use git to track your file changes so you can return to old versions of files.
+You decide to use git to track your file changes so you can return to old versions of your scripts if needed.
 Using git will also allow you to host your project folder in a repository on [GitHub][github], 
-so if your computer gets damaged you will still have your files and can get the project on your other computer later.
+so if your laptop does get damaged you will still have your files and can work on the project on your other computer later.
+
+
 
 - create local folder
 - create analysis script, just comments, no code.
