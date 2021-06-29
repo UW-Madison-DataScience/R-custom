@@ -38,7 +38,74 @@ You decide to use git to track your file changes so you can return to old versio
 Using git will also allow you to host your project folder in a repository on [GitHub][github], 
 so if your laptop does get damaged you will still have your files and can work on the project on your other computer later.
 
+### Create an R Project
 
+A git repository is a folder that is under version control with git. 
+Best practice is that the repository (also called repo) is the scale of a project.
+So for our new summer project we will create a new folder and R project to work in.
+
+Click on the new R project button in the upper left-hand side of Rstudio. 
+
+![New R Project Icon](FIXME)
+
+> ## Other ways to start a new project
+>
+> While clicking the New R Project Icon is the one step way to start a project, there are a couple other options.
+> 
+> 1. You can click the Project drop down menu and choose the "New Project..." option.
+> 
+> ![R Project Menu with New Project option highlighted](FIXME)
+> 
+> 2. Alternatively, you can click the "File" menu and choose the "New Project..." option
+> 
+{: .callout}
+
+Next the "New Project Wizard" will pop up in Rstudio.
+Since we are starting this project from scratch we will choose the "New Directory" option.
+
+![New project wizard with the new project option highlighted](FIXME)
+
+
+Next the New Project Wizard asks us to chose a project type.
+We will choose the "New Project" option again.
+
+![New project wizard with the new project type highlighted](FIXME)
+
+Finally the New Project Wizard asks us what to name our new project folder, where to put it,
+and some other options (including if we should make this a git repository).
+
+We will call the folder "example_git_summer_project" and put it on the `Desktop`.
+You may need to click "Browse..." to navigate to your Desktop folder.
+The name is a bit long but will be useful for identifying it when you find it on your desktop or GitHub account later.
+We also want to be sure the "Create a git repository" option is checked.
+If you don't see this option, you may need to check that you have git installed.
+
+![New project wizard with directory name and location](FIXME)
+
+Finally we can click the "Create Project" button.
+
+> ## Find the Project on Your Computer
+> 
+> Use Finder(mac) or File Explorer(windows) to find the project folder on your computer.
+> *What files are in the project folder?*
+> 
+> > ## Solution
+> > 
+> > Your folder likely only shows one file in it, `example_git_summer_project.Rproj`.
+> > If you close the project in Rstudio (using the project dropdown menu on the upper right-hand side),
+> > you can click on this file and it will reopen this project in Rstudio.
+> > 
+> > You probably can't see it in your file viewr but when we set up the project,
+> > we also created a hidden folder where git stores information called `.git/`.
+> > We probably won't need to interact with this folder directly but it is where git will be storing the
+> > history of your files in this project.
+> > It is hidden by default in most file viewers so we can't accidently make changes to it.
+> > See the following links if you'd like to try to see the hidden `.git/` folder
+> > - [Windows](https://support.microsoft.com/en-us/windows/view-hidden-files-and-folders-in-windows-10-97fbc472-c603-9d90-91d0-1166d1d9f4b5#:~:text=Open%20File%20Explorer%20from%20the,folders%2C%20and%20drives%20and%20OK.)
+> > - [Mac] - you can use <kbd>Shift</kbd> + <kbd>Cmd</kbd>Cmd + <kbd>.</kbd>.
+> > 
+> {: .solution}
+{: .challenge}
 
 - create local folder
 - create analysis script, just comments, no code.
