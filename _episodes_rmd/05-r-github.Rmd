@@ -109,6 +109,8 @@ Finally we can click the "Create Project" button.
 > {: .solution}
 {: .challenge}
 
+## Working Locally With Git
+
 You may now notice that in the Environment Pane (upper right-hand pane of default Rstudio), there is now a "Git" tab.
 This tab is where we can keep track of our files using git.
 If we click on the tab, we will see it lists a couple of files.
@@ -180,33 +182,39 @@ We can also exit out of the commit window and see that our git pane is also empt
 ![empty git pane](../fig/05-empty_git_pane.png){: .image-with-shadow }
 
 -->
+- Make a script and pretend to setup and import data + add and commit
+- Exercise: Add and commit the Rproj file
+- Modify the script (add a new line of pretend code) and then see the modify icon
+- Add and commit the changes - (showing the diff in the commit window)
+- Look at the history/log button - 
+    * Show the filter by file option (with Rproj)
+- RStudio Revert (softly hit that `git revert` is different - maybe a call out about limited capabilities of Rstudio git)
+- Make Data folder and files 
+- see that those files are in the git pane (click around on the folder and then uncheck files)
+- BUT we don't want to actually commit the data files (talking about why)
+- Explain gitignore and add and commit it
+- Exercise: MAYBE HERE
 
-
-
-
-
-- create local folder
-- create analysis script, just comments, no code.
-- [generating key and adding it to the ssh agent](https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent) [adding new ssh key to gh account](https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account)
-
-## Working locally with Git
-- stage and commit
-- changes, stage, commit again
-- git log
-- checkout of some sort (is there a way to do this interactively?)
-- gitignore (use the interactive gui)
 
 ## Connecting to GitHub
-- Kaija will do some digging to look at setting up GitHub secondarily--if it's complicated, we'll just do it first. 
-- push/pull
 
-## Basic branching and merging
-- making a new branch
-- local vs. remote branch
+- SETUP: [generating key and adding it to the ssh agent](https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent) [adding new ssh key to gh account](https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account)
+
+- creating the repo on github
+- add to local repo
+- push (and see that the remote updates)
+- make `home_computer` -> clone remote repo in...(with different name - reated to home_computer - we explain that they can have the same name we are naming seperately for clarity)
+- make changes in home computer copy and push
+- then switch back to the original one..see changes not there and then pull
+
 
 ## Dealing with merge conflicts
-- make same change on same line to two different branches
-
+- make changes to one of the two clones and then switch and not pull and make change on same line
+- add commit and push (get conflict)
+- pull and fix conflict
+- push to update conflict
+- Switch back and pull
+- Exercise: Think about how often or after what activities you want to commit or push? - answer: thinking about avoiding conflict but also having past versions to go back to...(good discussion of other git options, outside of RStudio and what common things you might want to do are)
 
 
 [github]: https://github.com/
