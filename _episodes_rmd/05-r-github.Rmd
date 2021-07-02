@@ -115,6 +115,9 @@ If we click on the tab, we will see it lists a couple of files.
 
 ![Rstudio with the git tab showing](../fig/05-Rstudio_git_tab.png){: .image-with-shadow }
 
+
+<!--- EDIT THIS TO DESCRIBE THE GITIGNORE AND THE RPROJ AND THEN WAIT TO ACTUALLY ADD AND COMMIT THEM
+
 First we see the `.gitignore` file.
 This is a file that was created when we set up the project/repo.
 It contains a list of files that we don't want git to try to track.
@@ -176,7 +179,7 @@ We can also exit out of the commit window and see that our git pane is also empt
 
 ![empty git pane](../fig/05-empty_git_pane.png){: .image-with-shadow }
 
-
+-->
 
 
 
