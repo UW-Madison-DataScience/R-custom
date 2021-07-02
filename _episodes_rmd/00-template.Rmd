@@ -1,0 +1,47 @@
+---
+title: "Lesson Title"
+author: "who wrote it"
+teaching: 
+exercises: 
+questions:
+- 
+objectives:
+- 
+keypoints:
+- 
+source: Rmd
+---
+
+```{r setup, echo = FALSE, purl = FALSE, message = FALSE}
+library(knitr)
+library(tidyverse)
+source("../bin/chunk-options.R")
+```
+Based on http://www.datacarpentry.org/R-ecology-lesson/
+
+## Why do this in R?
+
+> ## Challenge Format
+> The question goes here
+>
+> Use more carats for new lines 
+>
+> 
+> > ## Solution Goes here
+> > text like this
+> > ```r
+> > # r code goes here
+> > ```
+> {: .solution}
+{: .challenge}
+
+```{r}
+
+```
+
+
+### Reorder factors
+
+<!--- HTML comment 
+Comments
+-->
