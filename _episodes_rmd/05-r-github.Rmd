@@ -176,7 +176,52 @@ The last line is info about the file system permissions for the script we create
 
 ![Git commit pane with the info about first commit](../fig/05-git-first-commit.png){: .image-with-shadow }
 
+Now that we've committed, we can close this pane by clicking the "Close" button.
+Back in the other RStudio git window, we can see that the data cleaning script is no longer listed in the 
+"changes" window on the upper-left, only the `.gitignore` and `.Rproj` files are listed since they have untracked changes.
+Since all the changes for the data cleaning script are committed to our git repo, it is no longer listed.
 
+Let's close this window and make more changes to our script.  Let's add a line to load the libraries we want to use.
+While we are learning git in this lesson, we will write comments instead of actual R code.
+
+![Data cleaning script with a new comment to import packages](../fig/05-load-libraries.png){: .image-with-shadow }
+
+Once we save the new addition to the file, we can see that in the git pane the data cleaning script appears again.
+This time the status shows as `M`, which means the file has been modified since the last time it was committed to the git history.
+
+![git pane showing data cleaning script as modified](../fig/05-modified-script.png){: .image-with-shadow }
+
+We can follow the same process and add these changes to the stage and and commit this version of the file to our git history.
+Notice when we check the "Staged" option the `M` moves from the right side of the status column to the left?
+This is because those two sides idicate the status in the stage and outside the stage.
+So the `M` on the left shows us that we had modified the file but it was unstaged.
+When we clicked the "Staged" checkbox it moved the `M` to the left side to indicate the modified file was in the stage.
+Reminder, the two `?` for the other files is because git has not yet tracked them at all, outside or within the stage.
+
+<!--- extra image, just in case
+![Git pane with data cleaning script modified but not staged](../fig/05-modified-script.png){: .image-with-shadow }
+-->
+![Git pane with data cleaning script modified and staged](../fig/05-modified-staged-script.png){: .image-with-shadow }
+
+In this commit, notice the bottom of the git window.  This section shows the *diff*, in this case it is showing us the differences
+between the last time we committed and the new staged version of the file.
+It highlights in green that we added two new lines.  It would show changed lines in yellow and removed lines in red.
+In addition to the colors, we can use the line numbers to see which lines are changed, added, and removed.
+The numbers on the left are the old lines and the ones on the right are the new lines.
+Once we've previewed the *dff*, we can again click the commit button, write a commit message, and click commit.
+
+![Git window with loaded packages commit message](../fig/05-git-commit-packages.png){: .image-with-shadow }
+
+Then we get see the same summary window as before with info about our commit.
+
+![Git commit window summary of packages loaded commit](../fig/05-git-commit-packages-summary.png){: .image-with-shadow }
+
+> ## Try it yourself!
+> 
+> You will be creating/modifying files, adding, and committing them a lot when using git.
+> Try adding and committing again, this time adding a comment about loading the data.
+> 
+{: .challenge}
 
 
 
@@ -244,10 +289,7 @@ We can also exit out of the commit window and see that our git pane is also empt
 ![empty git pane](../fig/05-empty_git_pane.png){: .image-with-shadow }
 
 -->
-- Make a script and pretend to setup and import data + add and commit
 - Exercise: Add and commit the Rproj file
-- Modify the script (add a new line of pretend code) and then see the modify icon
-- Add and commit the changes - (showing the diff in the commit window)
 - Look at the history/log button - 
     * Show the filter by file option (with Rproj)
 - RStudio Revert (softly hit that `git revert` is different - maybe a call out about limited capabilities of Rstudio git)
