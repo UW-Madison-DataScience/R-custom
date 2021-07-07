@@ -117,6 +117,68 @@ If we click on the tab, we will see it lists a couple of files.
 
 ![Rstudio with the git tab showing](../fig/05-Rstudio_git_tab.png){: .image-with-shadow }
 
+Both the `.gitignore` and the `example_git_summer_project.Rproj` file have two `?` in the status columns.
+This means that git recognizes they have changes that are untracked by git.
+
+We will come back to these files later when we talk about the `.gitignore` file.
+For now we will ignore them ourselves.
+
+Let's make a new Rscript for our summer project analysis.
+So anyone who finds our script/repo later knows what the script is for and how to contact us, lets add our name, a script desciption, the date, and our email address to the top of the script.
+
+![New script pane with comments that include name, description, date and email](../fig/05-Rstudio-new-script.png){: .image-with-shadow }
+
+Next we will save the file to a new name.
+This first script will be our data cleaning script, so let's call it `01-data_cleaning.R`.
+
+![Save File window with data cleaning script name](../fig/05-save-new-script.png){: .image-with-shadow }
+
+Now in the git pane we can see that it shows the new `01-data_cleaning.R` script with the two yellow `?` around it.
+This means it recognizes the new file is in the repository and has yet to be tracked.
+
+![Git pane with new data cleaning script](../fig/05-new-script-git-pane.png){: .image-with-shadow }
+
+To tell git we want to keep this version of the `01-data_cleaning.R` script, we first click the checkbox in the "Staged" column
+of the git pane. This adds the file to the *stage* so git knows to include it in this point of our git history.
+Once checked the two `?`'s turn into an `A`, for *added*.
+
+![git pane with data cleaning script added to the stage](../fig/05-git-pane-script-added.png){: .image-with-shadow }
+
+Next we will click the commit button in the git pane (highlighted with a red circle in the image above).
+When we **commit** to the repository we add a version of the files that are staged to the git history.
+Once we click the "Commit" button, a new window pops up to allow for more git interaction.
+We can see on the left-hand side the same info that we've staged the data cleaning script.
+On the right-hand side we have the opportunity to type a *commit message*.
+This message is a note about what was changed in this version of the files committed.
+We will type `Started script for data cleaning` as our commit message.
+
+> ## What Makes a Good Commit Message?
+> 
+> The commit message is a great opportunity to leave yourself (or future collaborators)
+> useful information about the history of the repository.
+> While there are other tools to let you see what exactly changed, your commit message
+> can address the motivation for the changes, the "why".  For large changes,
+> it is also a great chance to summarize.
+> Read more about some suggestions for helpful commit messages in [this blog post](https://chris.beams.io/posts/git-commit/).
+{: .callout}
+
+![Rstudio git commit window with data cleaning script added](../fig/05-git-commit-window.png){: .image-with-shadow }
+
+Once we've added a commit message, we can click the commit button below the message window.
+This action actually makes a point in our git history with this version of the file.
+Once we clicke this button we will see another small window pop up with info about the commit we just made.
+The first line is the command that Rstudio ran for us to commit the file using git.
+The 2nd line gives a lot of information: the branch name (you can have multiple branches for experiments or collaboration,
+that this is the first commit (root_commit), the first 7 digits of the *commit hash* - a unique identifer label for each commit,
+and the commit message we wrote.
+The 3rd line is a summary of the number of files and lines changed.
+The last line is info about the file system permissions for the script we created, which we can mostly ignore here.
+
+![Git commit pane with the info about first commit](../fig/05-git-first-commit.png){: .image-with-shadow }
+
+
+
+
 
 <!--- EDIT THIS TO DESCRIBE THE GITIGNORE AND THE RPROJ AND THEN WAIT TO ACTUALLY ADD AND COMMIT THEM
 
