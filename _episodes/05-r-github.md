@@ -6,8 +6,8 @@ teaching: FIXME
 exercises: FIXME
 questions:
 - "What is the difference between git and GitHub?"
-- "How can I use git to version control files through Rstudio?"
-- "How can I use Rstudio to connect to and sync a git repo on GitHub?"
+- "How can I use git to version control files through RStudio?"
+- "How can I use RStudio to connect to and sync a git repo on GitHub?"
 objectives:
 - FIXME
 keypoints:
@@ -57,7 +57,7 @@ Click on the new R project button in the upper left-hand side of Rstudio.
 > 
 {: .callout}
 
-Next the "New Project Wizard" will pop up in Rstudio.
+Next the "New Project Wizard" will pop up in RStudio.
 Since we are starting this project from scratch we will choose the "New Directory" option.
 
 ![New project wizard with the new directory option highlighted](../fig/05-Rproj_setup_new_dir.png){: .image-with-shadow }
@@ -89,8 +89,8 @@ Finally we can click the "Create Project" button.
 > > ## Solution
 > > 
 > > Your folder likely only shows one file in it, `example_git_summer_project.Rproj`.
-> > If you close the project in Rstudio (using the project dropdown menu on the upper right-hand side),
-> > you can click on this file and it will reopen this project in Rstudio.
+> > If you close the project in RStudio (using the project dropdown menu on the upper right-hand side),
+> > you can click on this file and it will reopen this project in RStudio.
 > > 
 > > You probably can't see it in your file viewr but when we set up the project,
 > > we also created a hidden folder where git stores information called `.git/`.
@@ -108,11 +108,11 @@ Finally we can click the "Create Project" button.
 
 ## Working Locally With Git
 
-You may now notice that in the Environment Pane (upper right-hand pane of default Rstudio), there is now a "Git" tab.
+You may now notice that in the Environment Pane (upper right-hand pane of default RStudio), there is now a "Git" tab.
 This tab is where we can keep track of our files using git.
 If we click on the tab, we will see it lists a couple of files.
 
-![Rstudio with the git tab showing](../fig/05-Rstudio_git_tab.png){: .image-with-shadow }
+![RStudio with the git tab showing](../fig/05-Rstudio_git_tab.png){: .image-with-shadow }
 
 Both the `.gitignore` and the `example_git_summer_project.Rproj` file have two `?` in the status columns.
 This means that git recognizes they have changes that are untracked by git.
@@ -120,7 +120,7 @@ This means that git recognizes they have changes that are untracked by git.
 We will come back to these files later when we talk about the `.gitignore` file.
 For now we will ignore them ourselves.
 
-Let's make a new Rscript for our summer project analysis.
+Let's make a new R script for our summer project analysis.
 So anyone who finds our script/repo later knows what the script is for and how to contact us, lets add our name, a script desciption, the date, and our email address to the top of the script.
 
 ![New script pane with comments that include name, description, date and email](../fig/05-Rstudio-new-script.png){: .image-with-shadow }
@@ -159,12 +159,12 @@ We will type `Started script for data cleaning` as our commit message.
 > Read more about some suggestions for helpful commit messages in [this blog post](https://chris.beams.io/posts/git-commit/).
 {: .callout}
 
-![Rstudio git commit window with data cleaning script added](../fig/05-git-commit-window.png){: .image-with-shadow }
+![RStudio git commit window with data cleaning script added](../fig/05-git-commit-window.png){: .image-with-shadow }
 
 Once we've added a commit message, we can click the commit button below the message window.
 This action actually makes a point in our git history with this version of the file.
-Once we clicke this button we will see another small window pop up with info about the commit we just made.
-The first line is the command that Rstudio ran for us to commit the file using git.
+Once we click this button, we will see another small window pop up with info about the commit we just made.
+The first line is the command that RStudio ran for us to commit the file using git.
 The 2nd line gives a lot of information: the branch name (you can have multiple branches for experiments or collaboration,
 that this is the first commit (root_commit), the first 7 digits of the *commit hash* - a unique identifer label for each commit,
 and the commit message we wrote.
@@ -331,7 +331,7 @@ Now we can see that the data and results files no longer show up in the git pane
 > 
 > > ## Solution
 > > 
-> > Those files still aren't show in the git pane since they match paterns in the .gitignore file.
+> > Those files still aren't shown in the git pane since they match paterns in the .gitignore file.
 > > If later you want to track a single file that matches that pattern, you can add a line to the
 > > `.gitignore` file that has the file name with a `!` in front of it to unignore that individual
 > > file but ignore the rest of those that match the pattern.
@@ -346,7 +346,7 @@ Now we can see that the data and results files no longer show up in the git pane
 > to your repo.  Knowing which files you were ignoring on a different machine can be useful if you sync
 > this repo elsewhere later.  You will want to have the Rproj setup on the other computer as well.
 > 
-> Add and committ these two files at the same time (with the same commit) to your repo.
+> Add and commit these two files at the same time (with the same commit) to your repo.
 > 
 
 > ## Look at History for a Single File
@@ -368,9 +368,49 @@ Now we can see that the data and results files no longer show up in the git pane
 
 ## Connecting to GitHub
 
-- SETUP: [generating key and adding it to the ssh agent](https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent) [adding new ssh key to gh account](https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account)
+### Creating and Using an SSH Key
 
-- creating the repo on github
+So far, we've been using Git to version control our files locally. But now we're going to connect our local repository to a 'remote'. A 'remote' is any git repository that is hosted on the internet, not just on a local computer. In our case, the remote is going to be hosted on GitHub.
+
+Pretty soon, we're going to create a repo on GitHub and establish a connection between that repo and the local Git repo that we've been working with up until this point. But first, we need to create and use some login credentials that will show GitHub that we are who we say we are. This is required so that GitHub repos can only be modified by the people who created or are allowed to access them. 
+
+We're going to use a method of authentication called SSH, which stands for 'secure shell' protocol. Basically, SSH is a way for two computers (our local computer and the GitHub server) to communicate, with all information transfer encrypted for security. It operates through public and private 'keys', which are strings of numbers and letters.
+
+To connect Git to GitHub, we have to generate a new SSH key. To do that, we'll follow the instructions in [this article](https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent) to check for an existing SSH key, generate a new key, and save the key (protected by a passphrase).
+
+If you're on a Windows computer, use Git Bash to run these commands. On a Mac, use the Terminal.
+
+Now that we've created a public/private key pair, we're going to copy the public key and add it to our GitHub account. To do that, we'll follow the instructions in [this article](https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account).
+
+### Creating a GitHub repository
+
+Now, we'll go to GitHub and sign in.
+
+![Signing in to your GitHub account](../fig/05-github-signin.png){: .image-with-shadow }
+
+Signing in takes us to a dashboard page, showing all of our activity and listing some of our repositories. On the lefthand side of the page, there's a toolbar with a heading, under your profile icon, that says **Repositories**. We'll click on the green button labeled 'New'.
+
+![Creating a new GitHub repository](../fig/05-github-new-repo.png){: .image-with-shadow }
+
+The first thing that we'll be asked to do is to name our repo. To make things as clear and consistent as possible, we're going to go ahead and name it the same thing as the local repo that we already created: 'example_git_summer_project'. If you want, you can briefly describe the repository. Maybe add a note about the context in which you created this repo?
+
+Next, you have the option to choose whether the repository is public or private. If you make it public, anyone on the internet can go to your GitHub account and see this repository. You'll still be able to manage edit access (so, random people can't just come in and change your code without your approval). If you keep the repository private, people won't be able to see it unless you specifically invite them as collaborators.
+
+> ## Public and Private Repositories
+> 
+> Before January 2019, free GitHub accounts didn't come with private repositories--
+> you had to have a paid account for that. As of 2019, free accounts include unlimited
+> private repositories, each with up to 3 collaborators, according to [this announcement]().
+> This is an exciting change that's great for working on private projects!
+>
+> You should choose whatever repository visibility works for you. If your project includes
+> data or code that you don't want to share, a private repo might be a good option.
+> But if you keep it public, others can more easily learn from and contribute to
+> your work!
+> 
+{: .callout}
+
+
 - add to local repo
 - push (and see that the remote updates)
 - make `home_computer` -> clone remote repo in...(with different name - reated to home_computer - we explain that they can have the same name we are naming seperately for clarity)
