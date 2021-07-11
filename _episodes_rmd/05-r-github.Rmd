@@ -533,6 +533,8 @@ that we entered. The most recent commit message for each file displays immediate
 
 ### Working on a Different Computer
 
+We mentioned before that one reason 
+
 - make `home_computer` -> clone remote repo in...(with different name - reated to home_computer - we explain that they can have the same name we are naming seperately for clarity)
 - make changes in home computer copy and push
 - then switch back to the original one..see changes not there and then pull
