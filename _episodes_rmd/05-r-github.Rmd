@@ -393,6 +393,9 @@ If you're on a Windows computer, use Git Bash to run these commands. On a Mac, u
 Now that we've created a public/private key pair, we're going to copy the public key and add it to our GitHub account. 
 To do that, we'll follow the instructions in [this article](https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account).
 
+**Note:** This process may seem really complicated and intimidating. Luckily, you only have to do it once, or at least only once per computer
+you want to set up Git on. You **don't** have to set up a new SSH key every time you want to make edits to your project!
+
 ### Creating a GitHub repository
 
 Now, we'll go to GitHub and sign in.
@@ -471,7 +474,11 @@ boxes and a white square. Click on that icon.
 
 A 'New Branch' dialog window will pop up, including a small button that says 'Add remote'. Click on that button.
 
-![The branch dialog, with the option to add a remote](../fig/05-branch-add-remote.png){: .image-with-shadow }
+![The branch dialog, with the option to add a remote](../fig/05-new-branch.png){: .image-with-shadow }
+
+Now you will see a new 'Add remote' dialog that looks like this.
+
+![The 'Add Remote' dialog](../fig/05-add-remote.png){: .image-with-shadow }
 
 In the 'Remote URL' field, paste the SSH URL that you just finished copying from your newly-created GitHub repo.
 In the 'Remote Name' field, type 'origin'.
@@ -480,13 +487,52 @@ Now click 'Add'.
 Now you should be back in the 'New Branch' window (if you're not, click on the 'two purple boxes and a white square' icon again).
 We want to make sure that the main branch of the local repo corresponds to the main branch of the remote repo on GitHub. So let's
 enter 'main' as the Branch Name, and make sure that 'Sync branch with remote' is checked. Click 'create'. This may seem a little
-weird, since the 'main' branch already exists in the local repo by default, but do it anyway. In the next dialog that pops up,
-choose 'overwrite'.
+weird, since the 'main' branch already exists in the local repo by default, but do it anyway. 
+
+![Back to the 'New Branch' dialog, with an option to sync](../fig/05-new-branch-again.png){: .image-with-shadow }
+
+Because we're adding a branch that already exists, we'll see one more dialog, asking if we want to overwrite the existing
+branch (the 'main' branch in the local repo). Click 'Overwrite' here (**not** the default option, 'Checkout').
+
+![Overwrite the local 'main' branch with the new one](../fig/05-overwrite.png){: .image-with-shadow }
 
 What we're doing here is making sure that the local and remote branches are all synced up, so that it will go smoothly when we 
 push and pull our changes later on.
 
-- push (and see that the remote updates)
+### Pushing changes
+
+Okay, now we have our local and remote repos connected. Now, we want to *push* the changes we made locally to the remote,
+so that they'll show up on GitHub.
+
+In the top of the Git pane in RStudio, you'll see two arrows: a blue one pointing down and a green one pointing up.
+
+!['push' and 'pull' arrows at the top of the Git pane](../fig/05-push-pull-arrows.png){: .image-with-shadow }
+
+The blue arrow is for 'pulling' changes from the remote to your local repo. The green arrow is for 'pushing'
+changes from your local repo to the remote.
+
+> ## Pushing vs. Pulling
+> 
+> If the up and down arrows don't intuitively match to the concepts of 'pushing' and 'pulling' for you,
+> it might help to think of your local computer sitting on a table, communicating with the remote repo
+> on the internet, or 'in the cloud'. If we continue that metaphor, 'the cloud' is high up somewhere in the 
+> sky, so we *pull downward* from the cloud to our computer and *push upward* from our computer to the cloud.
+> 
+{: .callout}
+
+Let's go ahead and click the green 'Push' arrow to push our changes to GitHub. 
+
+Now, open a browser window and let's go view our GitHub repo online. If you named your remote repo 'example_git_summer_project', then
+the url will be **https://github.com/yourusername/example_git_summer_project**.
+
+Opening up the main page of the repo should show us a familiar collection of files. We can see our .gitignore, our 
+.Rproj file, and the '01-data_cleaning.r' script that we created and edited. We can also recognize the commit messages
+that we entered. The most recent commit message for each file displays immediately to the right of the file name.
+
+![After the first push, the repo contains the .Rproj, the .gitignore, and one R script.](../fig/05-github-after-push.png){: .image-with-shadow }
+
+### Working on a Different Computer
+
 - make `home_computer` -> clone remote repo in...(with different name - reated to home_computer - we explain that they can have the same name we are naming seperately for clarity)
 - make changes in home computer copy and push
 - then switch back to the original one..see changes not there and then pull
