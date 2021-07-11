@@ -533,7 +533,12 @@ that we entered. The most recent commit message for each file displays immediate
 
 ### Working on a Different Computer
 
-We mentioned before that one reason 
+It's useful to store changes on GitHub for many reasons, but one use case is working on the same project from a different computer.
+When you were doing field work over the summer, you used a laptop, but once the summer's over, you might want to work on the same
+analysis from your desktop computer at home. Since all your analyses are saved on GitHub now, you'll be able to create a repository on the 
+home computer and connect it to the remote to access those files.
+
+So, let's pretend you're now working on your home computer.
 
 - make `home_computer` -> clone remote repo in...(with different name - reated to home_computer - we explain that they can have the same name we are naming seperately for clarity)
 - make changes in home computer copy and push
