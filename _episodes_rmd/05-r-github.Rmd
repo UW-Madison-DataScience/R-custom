@@ -44,7 +44,7 @@ A git repository is a folder that is under version control with git.
 Best practice is that the repository (also called repo) is the scale of a project.
 So for our new summer project we will create a new folder and R project to work in.
 
-Click on the new R project button in the upper left-hand side of Rstudio. 
+Click on the new R project button in the upper left-hand side of RStudio. 
 
 ![New R Project Icon](../fig/05-Rproj_setup_newprojbutton.png){: .image-with-shadow }
 
@@ -208,7 +208,7 @@ between the last time we committed and the new staged version of the file.
 It highlights in green that we added two new lines.  It would show changed lines in yellow and removed lines in red.
 In addition to the colors, we can use the line numbers to see which lines are changed, added, and removed.
 The numbers on the left are the old lines and the ones on the right are the new lines.
-Once we've previewed the *dff*, we can again click the commit button, write a commit message, and click commit.
+Once we've previewed the *diff*, we can again click the commit button, write a commit message, and click commit.
 
 ![Git window with loaded packages commit message](../fig/05-git-commit-packages.png){: .image-with-shadow }
 
@@ -230,7 +230,7 @@ Then we get see the same summary window as before with info about our commit.
 > Click on the button in the git pane that looks like a clock.
 > Then you will be able to see the history of the repository.
 > Click through and look at the diffs.
-> How can you see the full hash for each commit?
+> How can you see the full *hash* for each commit?
 > 
 > > ## Solution
 > > 
@@ -373,17 +373,25 @@ Now we can see that the data and results files no longer show up in the git pane
 
 ### Creating and Using an SSH Key
 
-So far, we've been using Git to version control our files locally. But now we're going to connect our local repository to a 'remote'. A 'remote' is any git repository that is hosted on the internet, not just on a local computer. In our case, the remote is going to be hosted on GitHub.
+So far, we've been using Git to version control our files locally. But now we're going to connect our local repository to a 'remote'. 
+A 'remote' is any git repository that is hosted on the internet, not just on a local computer. 
+In our case, the remote is going to be hosted on GitHub.
 
-Pretty soon, we're going to create a repo on GitHub and establish a connection between that repo and the local Git repo that we've been working with up until this point. But first, we need to create and use some login credentials that will show GitHub that we are who we say we are. This is required so that GitHub repos can only be modified by the people who created or are allowed to access them. 
+Pretty soon, we're going to create a repo on GitHub and establish a connection between that repo and the local Git repo 
+that we've been working with up until this point. But first, we need to create and use some login credentials that will show GitHub 
+that we are who we say we are. This is required so that GitHub repos can only be modified by the people who created or are allowed to access them. 
 
-We're going to use a method of authentication called SSH, which stands for 'secure shell' protocol. Basically, SSH is a way for two computers (our local computer and the GitHub server) to communicate, with all information transfer encrypted for security. It operates through public and private 'keys', which are strings of numbers and letters.
+We're going to use a method of authentication called SSH, which stands for 'secure shell' protocol. Basically, SSH is 
+a way for two computers (our local computer and the GitHub server) to communicate, with all information transfer encrypted 
+for security. It operates through public and private 'keys', which are strings of numbers and letters.
 
-To connect Git to GitHub, we have to generate a new SSH key. To do that, we'll follow the instructions in [this article](https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent) to check for an existing SSH key, generate a new key, and save the key (protected by a passphrase).
+To connect Git to GitHub, we have to generate a new SSH key. To do that, we'll follow the instructions in [this article](https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent) 
+to check for an existing SSH key, generate a new key, and save the key (protected by a passphrase).
 
 If you're on a Windows computer, use Git Bash to run these commands. On a Mac, use the Terminal.
 
-Now that we've created a public/private key pair, we're going to copy the public key and add it to our GitHub account. To do that, we'll follow the instructions in [this article](https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account).
+Now that we've created a public/private key pair, we're going to copy the public key and add it to our GitHub account. 
+To do that, we'll follow the instructions in [this article](https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account).
 
 ### Creating a GitHub repository
 
@@ -391,13 +399,22 @@ Now, we'll go to GitHub and sign in.
 
 ![Signing in to your GitHub account](../fig/05-github-signin.png){: .image-with-shadow }
 
-Signing in takes us to a dashboard page, showing all of our activity and listing some of our repositories. On the lefthand side of the page, there's a toolbar with a heading, under your profile icon, that says **Repositories**. We'll click on the green button labeled 'New'.
+Signing in takes us to a dashboard page, showing all of our activity and listing some of our repositories. 
+On the lefthand side of the page, there's a toolbar with a heading, under your profile icon, that says **Repositories**. 
+We'll click on the green button labeled 'New'.
 
 ![Creating a new GitHub repository](../fig/05-github-new-repo.png){: .image-with-shadow }
 
-The first thing that we'll be asked to do is to name our repo. To make things as clear and consistent as possible, we're going to go ahead and name it the same thing as the local repo that we already created: 'example_git_summer_project'. If you want, you can briefly describe the repository. Maybe add a note about the context in which you created this repo?
+The first thing that we'll be asked to do is to name our repo. To make things as clear and consistent as possible, 
+we're going to go ahead and name it the same thing as the local repo that we already created: 'example_git_summer_project'. 
+If you want, you can briefly describe the repository. Maybe add a note about the context in which you created this repo?
 
-Next, you have the option to choose whether the repository is public or private. If you make it public, anyone on the internet can go to your GitHub account and see this repository. You'll still be able to manage edit access (so, random people can't just come in and change your code without your approval). If you keep the repository private, people won't be able to see it unless you specifically invite them as collaborators.
+Next, you have the option to choose whether the repository is public or private. If you make it public, anyone on the 
+internet can go to your GitHub account and see this repository. You'll still be able to manage edit access (so, random 
+people can't just come in and change your code without your approval). If you keep the repository private, people won't 
+be able to see it unless you specifically invite them as collaborators.
+
+![Entering information to create the new repo](../fig/05-github-creating-repo.png){: .image-with-shadow }
 
 > ## Public and Private Repositories
 > 
@@ -413,8 +430,62 @@ Next, you have the option to choose whether the repository is public or private.
 > 
 {: .callout}
 
+Finally, there are a few more checkboxes, asking you whether you want to add a README, a .gitignore file, or a license.
+These checkboxes should be un-checked by default. We're going to leave them that way.
+Adding a README is a good idea in general and you would probably want to add one eventually if this was a real project,
+but adding one at this stage can complicate the process of joining the local and remote repos.
+We already have a .gitignore file in our local repo--that's the document that we added lines to so that Git wouldn't 
+track our data and output files. If we create a new one in this remote repo, once again, the process of
+joining the local and remote repos will get complicated.
+A license can be a good idea depending on your project--but that's beyond the scope of this lesson.
 
-- add to local repo
+![Checkbox options to add a README, a gitignore, or a license, with all boxes not checked](../fig/05-github-initialize-repo-with.png){: .image-with-shadow }
+
+Click the green 'Create Repository' button, and your repository has been created!
+
+The next page you see will look something like this. In the box labeled **Quick setup — if you’ve done this kind of thing before**, 
+you'll notice a toggle where you can choose either HTTPS or SSH, with a box directly to the right that contains a URL. That URL is 
+the web address of the remote repo that you just created. We're going to use that address to tell our local computer how to connect
+to the remote. The default is HTTPS, but because we set up authentication with SSH keys, we're going to choose the SSH option. 
+When you pick that option, you'll see the URL in the box change slightly.
+
+![Instructions for connecting this repo to a local repo](../fig/05-github-connecting-instructions.png){: .image-with-shadow }
+
+Copy that URL to your clipboard, either by clicking the small clipboard icon at the right, or by highlighting it and copying
+it manually.
+
+![The clipboard icon](../fig/05-github-clipboard-icon.png){: .image-with-shadow }
+
+### Connecting the Local and Remote Repositories
+
+Now, we're going to connect our local Git repository to this newly-created 'remote' repository. This means that we'll
+be able to take changes we make locally and 'push' them to the remote repo, where they will be visible and accessible
+online. As you might imagine, this is very useful for collaborating on a project with other people. But as we'll see
+in a little while, it's also very useful for collaborating with *yourself*. If you move to a new computer, or if you
+want to work on the same project from two computers or locations, it will be easy to access your changes from anywhere.
+
+Go back to RStudio, and look at the Git pane. Along the top edge, you should see an icon that looks like two purple
+boxes and a white square. Click on that icon.
+
+![The 'two purple boxes and a white square' icon](../fig/05-two-purple-boxes.png){: .image-with-shadow }
+
+A 'New Branch' dialog window will pop up, including a small button that says 'Add remote'. Click on that button.
+
+![The branch dialog, with the option to add a remote](../fig/05-branch-add-remote.png){: .image-with-shadow }
+
+In the 'Remote URL' field, paste the SSH URL that you just finished copying from your newly-created GitHub repo.
+In the 'Remote Name' field, type 'origin'.
+Now click 'Add'.
+
+Now you should be back in the 'New Branch' window (if you're not, click on the 'two purple boxes and a white square' icon again).
+We want to make sure that the main branch of the local repo corresponds to the main branch of the remote repo on GitHub. So let's
+enter 'main' as the Branch Name, and make sure that 'Sync branch with remote' is checked. Click 'create'. This may seem a little
+weird, since the 'main' branch already exists in the local repo by default, but do it anyway. In the next dialog that pops up,
+choose 'overwrite'.
+
+What we're doing here is making sure that the local and remote branches are all synced up, so that it will go smoothly when we 
+push and pull our changes later on.
+
 - push (and see that the remote updates)
 - make `home_computer` -> clone remote repo in...(with different name - reated to home_computer - we explain that they can have the same name we are naming seperately for clarity)
 - make changes in home computer copy and push
@@ -428,6 +499,3 @@ Next, you have the option to choose whether the repository is public or private.
 - push to update conflict
 - Switch back and pull
 - Exercise: Think about how often or after what activities you want to commit or push? - answer: thinking about avoiding conflict but also having past versions to go back to...(good discussion of other git options, outside of RStudio and what common things you might want to do are)
-
-
-[github]: https://github.com/
