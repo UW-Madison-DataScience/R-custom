@@ -114,83 +114,256 @@ If we click on the tab, we will see it lists a couple of files.
 
 ![Rstudio with the git tab showing](../fig/05-Rstudio_git_tab.png){: .image-with-shadow }
 
+Both the `.gitignore` and the `example_git_summer_project.Rproj` file have two `?` in the status columns.
+This means that git recognizes they have changes that are untracked by git.
 
-<!--- EDIT THIS TO DESCRIBE THE GITIGNORE AND THE RPROJ AND THEN WAIT TO ACTUALLY ADD AND COMMIT THEM
+We will come back to these files later when we talk about the `.gitignore` file.
+For now we will ignore them ourselves.
 
-First we see the `.gitignore` file.
-This is a file that was created when we set up the project/repo.
-It contains a list of files that we don't want git to try to track.
-When you set up a R project with git, the new project wizard added some R files to the `.gitignore` file 
-because these are commonly files that we don't want to track with git.
-For example it ignores the `.Rhistory` file which keeps track of the history of commands run in the console, 
-which you can see by clicking on the "History" tab in the  environment pane.
-That isn't a file that we need to track in our version history but is useful for Rstudio to keep while we are working with it.
+Let's make a new Rscript for our summer project analysis.
+So anyone who finds our script/repo later knows what the script is for and how to contact us, lets add our name, a script desciption, the date, and our email address to the top of the script.
 
-The second file listed is our `example_git_summer_project.Rproj` file.
+![New script pane with comments that include name, description, date and email](../fig/05-Rstudio-new-script.png){: .image-with-shadow }
 
-Both of these are files (`.gitignore` and `example_git_summer_project.Rproj`) we would like to have git track the history of.
-In the git pane, you can see it currently shows two `?` in the "Status" column.
-This means that git has yet to track any versions of these files in it's history.
+Next we will save the file to a new name.
+This first script will be our data cleaning script, so let's call it `01-data_cleaning.R`.
 
-The next thing we will do is add a version of these files to the git history.
-This is the most common action you will do with files.
-Whenever you add a new file you want to keep track of or a new version you want to record in the git history (so you could go back to it later),
-you will follow this process.
+![Save File window with data cleaning script name](../fig/05-save-new-script.png){: .image-with-shadow }
 
-First you will tell git which files you want to add to this point in history by clicking the checkboxes under the "Staged" column.
-This adds the files to the stage, which tells git that these are a version of the files we'd like to include or *commit* to our git history.
+Now in the git pane we can see that it shows the new `01-data_cleaning.R` script with the two yellow `?` around it.
+This means it recognizes the new file is in the repository and has yet to be tracked.
 
-![Git panel with two files added to stage](../fig/05-first_staged_files.png){: .image-with-shadow }
+![Git pane with new data cleaning script](../fig/05-new-script-git-pane.png){: .image-with-shadow }
 
-Notice that the "Status" column changed for both of the files as we clicked on it to showing an `A` instead of two `?`.
-This indicates that the files have been *added* to the stage.
+To tell git we want to keep this version of the `01-data_cleaning.R` script, we first click the checkbox in the "Staged" column
+of the git pane. This adds the file to the *stage* so git knows to include it in this point of our git history.
+Once checked the two `?`'s turn into an `A`, for *added*.
 
-The next step we want to do is actually *commit* these changes to our history of changes in git.
+![git pane with data cleaning script added to the stage](../fig/05-git-pane-script-added.png){: .image-with-shadow }
 
-To do so we will click the "Commit" button.
+Next we will click the commit button in the git pane (highlighted with a red circle in the image above).
+When we **commit** to the repository we add a version of the files that are staged to the git history.
+Once we click the "Commit" button, a new window pops up to allow for more git interaction.
+We can see on the left-hand side the same info that we've staged the data cleaning script.
+On the right-hand side we have the opportunity to type a *commit message*.
+This message is a note about what was changed in this version of the files committed.
+We will type `Started script for data cleaning` as our commit message.
 
-![Git panel with two files staged and the commit button circled in red](../fig/05-first_staged_files_with_commit_circle.png){: .image-with-shadow }
+> ## What Makes a Good Commit Message?
+> 
+> The commit message is a great opportunity to leave yourself (or future collaborators)
+> useful information about the history of the repository.
+> While there are other tools to let you see what exactly changed, your commit message
+> can address the motivation for the changes, the "why".  For large changes,
+> it is also a great chance to summarize.
+> Read more about some suggestions for helpful commit messages in [this blog post](https://chris.beams.io/posts/git-commit/).
+{: .callout}
 
-This will pop up a new window for making the commit.
-This window has a lot of information in it and options you can do with it.
-For now we will ignore most of the information and focus on the "Commit message" window.
+![Rstudio git commit window with data cleaning script added](../fig/05-git-commit-window.png){: .image-with-shadow }
 
-Check that both of the files we want to include are checked and have the Status `A` still.
-Then type `first commit of gitignore and rproj` in the  "Commit messsage" box.
-This message goes into your history and can be useful for figure out what version of the files you committed in the past.
-They are typically kept short but you can create longer messages if needed, this is typically done as a short message on the first line
-and then a longer message on the third line.
+Once we've added a commit message, we can click the commit button below the message window.
+This action actually makes a point in our git history with this version of the file.
+Once we clicke this button we will see another small window pop up with info about the commit we just made.
+The first line is the command that Rstudio ran for us to commit the file using git.
+The 2nd line gives a lot of information: the branch name (you can have multiple branches for experiments or collaboration,
+that this is the first commit (root_commit), the first 7 digits of the *commit hash* - a unique identifer label for each commit,
+and the commit message we wrote.
+The 3rd line is a summary of the number of files and lines changed.
+The last line is info about the file system permissions for the script we created, which we can mostly ignore here.
 
-![commit window with commit message](../fig/05-first_commit_message.png){: .image-with-shadow }
+![Git commit pane with the info about first commit](../fig/05-git-first-commit.png){: .image-with-shadow }
 
-Finally we will press the "Commit" button.  This actually adds the versions of the files to your repository.
-This then pops up a message that summarizes the commit: which files were included, how they changed, the commit message, 
-and the uninque identifier (called "commit hash").
+Now that we've committed, we can close this pane by clicking the "Close" button.
+Back in the other RStudio git window, we can see that the data cleaning script is no longer listed in the 
+"changes" window on the upper-left, only the `.gitignore` and `.Rproj` files are listed since they have untracked changes.
+Since all the changes for the data cleaning script are committed to our git repo, it is no longer listed.
 
-![commit summary window](../fig/05-first_commit_summary.png){: .image-with-shadow }
+Let's close this window and make more changes to our script.  Let's add a line to load the libraries we want to use.
+While we are learning git in this lesson, we will write comments instead of actual R code.
 
-We can then click the "Close" button on this commit.
-Now the commit window is empty because all the changes to the files in repository have been commited or saved to the repository.
+![Data cleaning script with a new comment to import packages](../fig/05-load-libraries.png){: .image-with-shadow }
 
-![empty commit window](../fig/05-empty_commit_window.png){: .image-with-shadow }
+Once we save the new addition to the file, we can see that in the git pane the data cleaning script appears again.
+This time the status shows as `M`, which means the file has been modified since the last time it was committed to the git history.
 
-We can also exit out of the commit window and see that our git pane is also empty.
+![git pane showing data cleaning script as modified](../fig/05-modified-script.png){: .image-with-shadow }
 
-![empty git pane](../fig/05-empty_git_pane.png){: .image-with-shadow }
+We can follow the same process and add these changes to the stage and and commit this version of the file to our git history.
+Notice when we check the "Staged" option the `M` moves from the right side of the status column to the left?
+This is because those two sides idicate the status in the stage and outside the stage.
+So the `M` on the left shows us that we had modified the file but it was unstaged.
+When we clicked the "Staged" checkbox it moved the `M` to the left side to indicate the modified file was in the stage.
+Reminder, the two `?` for the other files is because git has not yet tracked them at all, outside or within the stage.
 
+<!--- extra image, just in case
+![Git pane with data cleaning script modified but not staged](../fig/05-modified-script.png){: .image-with-shadow }
 -->
-- Make a script and pretend to setup and import data + add and commit
-- Exercise: Add and commit the Rproj file
-- Modify the script (add a new line of pretend code) and then see the modify icon
-- Add and commit the changes - (showing the diff in the commit window)
-- Look at the history/log button - 
-    * Show the filter by file option (with Rproj)
-- RStudio Revert (softly hit that `git revert` is different - maybe a call out about limited capabilities of Rstudio git)
-- Make Data folder and files 
-- see that those files are in the git pane (click around on the folder and then uncheck files)
-- BUT we don't want to actually commit the data files (talking about why)
-- Explain gitignore and add and commit it
-- Exercise: MAYBE HERE
+![Git pane with data cleaning script modified and staged](../fig/05-modified-staged-script.png){: .image-with-shadow }
+
+In this commit, notice the bottom of the git window.  This section shows the *diff*, in this case it is showing us the differences
+between the last time we committed and the new staged version of the file.
+It highlights in green that we added two new lines.  It would show changed lines in yellow and removed lines in red.
+In addition to the colors, we can use the line numbers to see which lines are changed, added, and removed.
+The numbers on the left are the old lines and the ones on the right are the new lines.
+Once we've previewed the *dff*, we can again click the commit button, write a commit message, and click commit.
+
+![Git window with loaded packages commit message](../fig/05-git-commit-packages.png){: .image-with-shadow }
+
+Then we get see the same summary window as before with info about our commit.
+
+![Git commit window summary of packages loaded commit](../fig/05-git-commit-packages-summary.png){: .image-with-shadow }
+
+> ## Try it yourself!
+> 
+> You will be creating/modifying files, adding, and committing them a lot when using git.
+> Try adding and committing again, this time adding a comment about loading the data.
+> 
+{: .challenge}
+
+
+> ## Exploring your Git History
+> 
+> Now that we've made 2-3 commits in our history, let's take a look at the history so far.
+> Click on the button in the git pane that looks like a clock.
+> Then you will be able to see the history of the repository.
+> Click through and look at the diffs.
+> How can you see the full hash for each commit?
+> 
+> > ## Solution
+> > 
+> > You can see the full has by clicking on a commit and looking under SHA.
+> > SHA is another name for the commit hash, the unique id for each commit.
+> > It stand for **S**ecure **H**ash **A**lgorithm.
+> > Often times you can use the shorter version of a hash (as long as it is unique in a repo)
+> > to refer to older versions of files.
+> > 
+> {: .solution}
+{: .challenge}
+
+One of the advantages to using git to version control your project is to get back to an older version of a file.
+This is possible in a variety of ways from the terminal for other usages.
+RStudio provides one way to get an old version of a file in a specfic instance, when we've not yet commited the new changes.
+
+Lets add a new line to our script `# Broken Analysis`.  This line represents hours spend on a function that doesn't work and we want
+to get back to the old version of our script. (In this case we could delete that function but we can pretend there is an old version
+of the analysis we want to get back to.)
+
+![Script with the broken analysis line added](../fig/05-broken-analysis.png){: .image-with-shadow }
+
+To get back to our old version of the script, we can click the gear/cog icon in the git pane and then click the "Revert..." button.
+It will then warn us because we have not committed this version so once we revert the only option to get it back would be to code it again.
+In our case we are sure so we will click "Yes".  Now the script no longer has the broken analysis and is back 
+to the version we last committed.  It also is no longer listed as having changes in the git pane.
+
+> ## Other Ways to Get Old Versions
+> 
+> In other situations you might want to keep the broken version in your
+> history by committing first and then getting back an old version.
+> This is possible but would typically be done in the terminal or git bash
+> and would be done with the `git checkout` or `git revert` commands.
+> 
+> Note: The `git revert` action acts differently than the revert we did in 
+> RStudio.
+> 
+{: .callout}
+
+
+### Ignoring Files
+
+So far we've been ignoring the `.gitignore` file and the `.Rproj` file in the git pane.
+Long term this would get tiresome and we would probably prefer to commit these files to the repository.
+However there are files we wouldn't want to commit to the repo.
+Common files you might want to ignore include:
+- data files (since they shouldn't change much),
+- larger files (as these will make your repo get large fast and some hosting services have size limits),
+- files that aren't plain text (you might actually want to commit some of these but they won't show nice diffs and will take
+up more space because git will keep a full copy of the file each time it is commited)
+
+Lets create some fake data files and results to ignore in our folder.
+
+- In the Files pane, click "New Folder", creat a new folder called `results`
+- Click the New File button and choose "Text file"
+- Save the file as `a.dat`
+- Repeat this process until you have the following files in the project folder:
+    * `a.dat`
+    * `b.dat`
+    * `c.dat`
+- Repeat this process and creat the following files in the `results` folder:
+    * `a.out`
+    * `b.out`
+
+Now our git pane will show the new folders and files.
+
+![Git pane with the dat files and results folder showing](../fig/05-git-data-files.png){: .image-with-shadow }
+
+Note that we can only see the one listing for the `results` folder.
+Git will try to track any file in our repository, including the directories within subdirectories (though not actually the folder itself).
+If we try to add the `results` directory to the stage, it will then let us choose if we want to add all the files or some of the files within that folder.
+However, we don't want to add these files the repo, the ones that end in `.dat` are data files that won't change and the `.out` files are
+the results from an analysis and are rather large (in our imagination).
+
+Instead we can tell git it shouldn't try to track these files by adding their names to the `.gitignore` file.
+Let's open it and take a look.  Double click on the `.gitignore` file in the Files pane and it will 
+open in the source pane.  We can see it actually already has some files included!
+These files all start with `.` so we don't typically see them in our file folders.
+However, they are important files for R to keep track of the history and other data it uses.
+RStudio added them to the `.gitignore` file when we created this project because these are files that are commonly
+not included in git repositories.
+
+![Git ignore file with several R files already included](../fig/05-first-gitignore.png){: .image-with-shadow }
+
+Let's add a couple lines to the `.gitignore` file so git will ignore our data and results files.
+We will add a line using a line that says `*.dat` to ignore any file that ends in `.dat`.
+We will also add a line for the whole `results/` folder.
+
+Once you've saved, you might notice that nothing changed in the git pane! 
+This is because we need to refresth by clicking the arrow circle button on the right-hand side of the git pane.
+
+![Arrow circle button from git pane](../fig/05-refresh-circle.png){: .image-with-shadow }
+
+Now we can see that the data and results files no longer show up in the git pane.
+
+![git pane with only the rproj and gitignore file](05-after-ignore.png){: .image-with-shadow }
+
+> ## Adding New Result/Output files
+> 
+> What happens if you add a new `d.dat` file or `results/c.out` file?  Try it out!
+> 
+> > ## Solution
+> > 
+> > Those files still aren't show in the git pane since they match paterns in the .gitignore file.
+> > If later you want to track a single file that matches that pattern, you can add a line to the
+> > `.gitignore` file that has the file name with a `!` in front of it to unignore that individual
+> > file but ignore the rest of those that match the pattern.
+> > 
+> {: .solution}
+{: .challenge}
+
+> ## Should We Ignore the `.Rproj` and `.gitignore` file?
+> 
+> We could add `.gitignore` and `example_git_summer_proj.Rproj` to the gitignore and then we wouldn't see them
+> listed in the git pane all the time.  However these are files that it is good to commit
+> to your repo.  Knowing which files you were ignoring on a different machine can be useful if you sync
+> this repo elsewhere later.  You will want to have the Rproj setup on the other computer as well.
+> 
+> Add and committ these two files at the same time (with the same commit) to your repo.
+> 
+
+> ## Look at History for a Single File
+> 
+> Take a look at your git history, try to figure out how to see only the history for the `01-data_cleaning.R` file.
+> 
+> > ## Solution
+> > 
+> > - Click the History Button in the git pane (looks like a clock)
+> > - Click the "(all commits)" Drop down menu at the top of the commit window
+> > - Choose "Filter by File..."
+> > - Choose `01-data_cleaning.R`.
+> > - Now you will not see the commits that don't include the `01-data_cleaning.R` file.
+> > 
+> {: .solution}
+{: .challenge}
+
 
 
 ## Connecting to GitHub
