@@ -540,10 +540,110 @@ home computer and connect it to the remote to access those files.
 
 So, let's pretend you're now working on your home computer.
 
-- make `home_computer` -> clone remote repo in...(with different name - reated to home_computer - we explain that they can have the same name we are naming seperately for clarity)
-- make changes in home computer copy and push
-- then switch back to the original one..see changes not there and then pull
+The first step to *cloning* (aka copying) the remote repo from GitHub to your home computer is to create a new R project.
+We're going to do the sequence of events a little differently here. 
 
+First, go to the main page of your 'example_git_summer_project' repository on GitHub. Click the green 'Code' download
+button. A small window will open up with a field that shows the SSH URL (similar to what we saw before). Go ahead and copy that
+URL to your clipboard, either using the small clipboard icon to its right, or by copying manually.
+
+![Accessing the repo's SSH URL from the green 'Code' button](../fig/05-clone-download-ssh.png){: .image-with-shadow }
+
+Now, go back to RStudio. Using any of the several methods that we saw before, choose New Project. But then, in the New 
+Project Wizard, instead of choosing 'New Directory', pick the 'Version Control' option.
+
+![In the New Project Wizard, create a project with Version Control](../fig/05-new-project-version-control.png){: .image-with-shadow }
+
+The next window will have you choose which version control software you're using. Choose 'Git'. (Subversion is another
+version control system).
+
+![Choose version control with Git](../fig/05-version-control-git.png){: .image-with-shadow }
+
+Okay, now we can paste in the URL we copied from GitHub, into the 'Repository URL' field. The 'Project directory name' field will
+automatically populate. 
+
+Now, here's the weird part. If we were **really** working on a new computer, we would be all set here. We could just click 
+'Create Project' and our new project would be created. But since right now we're working on the same computer as before
+and just pretending that this is a new, home computer, doing that would create two local repos with the exact same name, which
+would cause problems. So, let's change the 'Project directory name' to 'summer_project_home_computer' or something similar.
+
+![Renaming the project to avoid a conflict](../fig/05-summer-project-home-computer.png){: .image-with-shadow }
+
+Okay, **now** we can choose 'Create Project'.
+RStudio will clone all of the files from the remote repo on GitHub into the newly-created 'summer_project_home_computer' 
+local repo, and will automatically open up a new, fresh, RStudio session. As before, you should see a Git tab in the pane
+next to your History and Environment.
+
+The Files pane should also look familiar now, with our .Rproj, .gitignore, and 01-data_cleaning.R script. But there's a
+problem. If you tried to run your analyses right now, on this new computer, you wouldn't be able to. Why?
+
+> ## Setting Up a Project on a New Computer
+> 
+> What other steps might you need to take to get this project ready to run, so you could seamlessly replicate the
+> analyses you ran on your field computer?
+> 
+> > ## Solution
+> > 
+> > Because we added our data and output files to the .gitignore, Git doesn't track them. That means they don't
+> > show up on the remote GitHub repo, which in turn means that when we clone/download the data and code from the
+> > remote to our home computer, the data and output files don't come along.
+> > So, if you wanted to re-run your analyses and have everything work, you would have to manually transfer your data
+> > files from the other computer to this one. Then, you could re-create those output files by running the R scripts
+> > that read in the raw data.
+> > 
+> > So, this is one of the weaknesses of relying on version control: you still need a system for managing your data.
+> > Let's talk about possible ways to store and manage data, depending on whether it needs to be private or not.
+> > What are some strategies or workflows you've used in the past or might use in the future for storing data
+> > in tandem with version-controlled workflows?
+> > 
+> {: .solution}
+{: .challenge}
+
+Okay, so now we have our project set up on the home computer. Let's go ahead and do a little work! Make a change
+to the 01-data_cleaning.R script, and commit it, writing a commit message.
+
+{What questions do you have about making and committing a change? Do you remember how we did it before?}
+
+Now, let's pretend you switched computers back to the laptop you used in the field. So we want to switch back to
+our 'example_git_summer_project' local repo (again, pretending that we are actually *switching computers*). 
+
+There are a couple ways to do this.
+1) You can navigate to the 'example_git_summer_project' directory wherever you stored it on your computer, using
+Finder/File Explorer.
+2) At the top of your 'summer_project_home_computer' session of RStudio, there's an R Project icon that shows the name
+of the current project. Clicking that brings up a dropdown menu that we've seen before, with the option to create
+a new project *or* select one of the recent projects you've been working on. 
+
+![Navigating back to 'example_git_summer_project'](../fig/05-project-selector.png){: .image-with-shadow }
+
+Either way, open up that project. Now open the '01-data_cleaning.R' script. The change you just made on your home
+computer isn't there. Why? How can we fix this?
+
+> ## Syncing Changes Between Local Repos
+> 
+> Why doesn't the change you made on your home computer show up in the repository on your laptop? How can we
+> get it to show up there?
+> 
+> > ## Solution
+> > 
+> > We made a change to the local copy of the script saved on the home computer, but we didn't *Push* that change,
+> > so it won't show up on GitHub. 
+> > If we go ahead and click 'Push' in the home computer repo, now the change will show up on GitHub (you can 
+> > navigate to the repository page and refresh it to be sure).
+> > But if you navigate back to the 'summer_project_home_computer' project, that change *still* doesn't show up!
+> > That's because we also need to *Pull* the change down from GitHub to this other local repository. 
+> > So, syncing the repositories is a two step process: After making local changes, *Push* them to GitHub so they
+> > can be accessed, and then in the new local repo, *Pull* down from GitHub to make sure your copy of the repo is
+> > up to date before starting to work.
+> > It's always a good idea to *Pull* changes before you begin to work in a remote repo, especially if you're
+> > collaborating with other people who may have made changes while you weren't working, but even if it's just
+> > you and you have multiple clones of the same repo in different locations.
+> > 
+> {: .solution}
+{: .challenge}
+
+This process of pushing and pulling to keep things up to date is very important. In the next section, we're going to explore
+the conflicts that can come up if you forget to push/pull, and how to deal with them.
 
 ## Dealing with merge conflicts
 - make changes to one of the two clones and then switch and not pull and make change on same line
