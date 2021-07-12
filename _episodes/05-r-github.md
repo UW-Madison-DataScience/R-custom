@@ -643,6 +643,18 @@ This process of pushing and pulling to keep things up to date is very important.
 the conflicts that can come up if you forget to push/pull, and how to deal with them.
 
 ## Dealing with merge conflicts
+
+So, what if we forget to push and pull? Here's a scenario that has happened to me in the past.
+1) I open up my project on my home computer, and start writing some modeling code. I commit the change and push it.
+2) A couple days later, I happen to be working from my field laptop again, and I want to work on my project.
+I open the same script to continue working on my model, and I don't see it. "Huh," I think to myself.
+"That's funny. I could have sworn I already wrote this model, but I don't see it here. But sometimes
+I can be scatterbrained, so maybe I just forgot to save it. Ah well--it was a pretty simple model, so I'll just
+re-write it!"
+
+And then I go ahead and re-write the model in the field laptop version of the script.
+I commit my changes. I push. My push gets rejected because 
+
 - make changes to one of the two clones and then switch and not pull and make change on same line
 - add commit and push (get conflict)
 - pull and fix conflict
