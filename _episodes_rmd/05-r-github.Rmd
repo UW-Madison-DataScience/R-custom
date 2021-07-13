@@ -284,14 +284,14 @@ up more space because git will keep a full copy of the file each time it is comm
 
 Lets create some fake data files and results to ignore in our folder.
 
-- In the Files pane, click "New Folder", creat a new folder called `results`
+- In the Files pane, click "New Folder", create a new folder called `results`
 - Click the New File button and choose "Text file"
 - Save the file as `a.dat`
 - Repeat this process until you have the following files in the project folder:
     * `a.dat`
     * `b.dat`
     * `c.dat`
-- Repeat this process and creat the following files in the `results` folder:
+- Repeat this process and create the following files in the `results` folder:
     * `a.out`
     * `b.out`
 
