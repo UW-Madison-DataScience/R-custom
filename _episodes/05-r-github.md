@@ -364,8 +364,6 @@ Now we can see that the data and results files no longer show up in the git pane
 > {: .solution}
 {: .challenge}
 
-
-
 ## Connecting to GitHub
 
 ### Creating and Using an SSH Key
@@ -644,20 +642,52 @@ the conflicts that can come up if you forget to push/pull, and how to deal with 
 
 ## Dealing with merge conflicts
 
-So, what if we forget to push and pull? Here's a scenario that has happened to me in the past.
-1) I open up my project on my home computer, and start writing some modeling code. I commit the change and push it.
-2) A couple days later, I happen to be working from my field laptop again, and I want to work on my project.
-I open the same script to continue working on my model, and I don't see it. "Huh," I think to myself.
-"That's funny. I could have sworn I already wrote this model, but I don't see it here. But sometimes
-I can be scatterbrained, so maybe I just forgot to save it. Ah well--it was a pretty simple model, so I'll just
-re-write it!"
+So, what if we forget to push and pull? Let's act out this scenario so we can see what happens.
 
-And then I go ahead and re-write the model in the field laptop version of the script.
-I commit my changes. I push. My push gets rejected because 
+First, open up the 'summer_project_home_computer' project (i.e. open the project 'on your home computer').
+Make a change to the 01-data_cleaning.R script, on line 3 (you can just add a comment). Commit your change,
+and push it.
 
-- make changes to one of the two clones and then switch and not pull and make change on same line
-- add commit and push (get conflict)
-- pull and fix conflict
-- push to update conflict
-- Switch back and pull
-- Exercise: Think about how often or after what activities you want to commit or push? - answer: thinking about avoiding conflict but also having past versions to go back to...(good discussion of other git options, outside of RStudio and what common things you might want to do are)
+Great. Now, let's imagine that you're working on the project temporarily from your field laptop again, and you
+want to do some coding. Open up 'example_github_summer_project' (i.e. open the project 'on the field laptop').
+**Don't** pull.
+
+You want to add a data cleaning step to line 3. You're a little confused, because you're pretty sure
+you already added that step the other day, but you don't see it here. "Huh", you think. "That's funny.
+Oh well, I guess I must have forgotten to save my work!" It's no big deal, since you remember what you wrote.
+Go ahead and make your change (a comment, for our purposes) on line 3 of the script.
+
+Commit your changes and push. Uh oh! The push gets rejected. You get a big scary error message.
+
+![Changes you attempted to push got rejected](../fig/05-push-rejected.png){: .image-with-shadow }
+
+But if we read the error message, it's actually pretty informative. It says "Updates were rejected
+because the remote contains work that you do not have locally. This is usually caused by another
+repository pushing t the same ref. You may want to first integrate the remote changes (e.g., 'git
+pull ...') before pushing again."
+
+So, this tells us what our mistake was: we should have pulled changes from the remote before 
+pushing new changes.
+
+We have created a *merge conflict*. Merge conflicts happen when there are two changes made
+to the same line of the same file, and Git doesn't know which one to keep. If we look back at the 
+staged/status window, we see a new icon, a U. The diff window shows that both the old change and the new change to this file are present, and we also see some lines of = signs and < > signs.
+
+![A merge conflict](../fig/05-merge-conflict.png){: .image-with-shadow }
+
+So, how do we fix this?
+
+Open up the file and decide which of the changes you want to keep. Manually delete the <<<< and 
+===== and >>>> lines, as well as deleting the change that you want to get rid of.
+
+Now, stage and commit this fix. Your commit message could be something like 'resolving merge conflict'.
+
+![Resolved the merge conflict](../fig/05-resolved-merge-conflict.png){: .image-with-shadow }
+
+And now push your changes. Ta-da! The repository is all fixed.
+
+> ## Committing and Pushing
+> 
+> How often, or after what activities, might you want to commit and/or push? What are the tradeoffs?
+> 
+{: .discussion}
