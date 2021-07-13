@@ -51,7 +51,7 @@ Click on the new R project button in the upper left-hand side of RStudio.
 > 
 > 1. You can click the Project drop down menu and choose the "New Project..." option.
 > 
-> ![R Project Menu with New Project option highlighted](../fig/05-Rproj_setup_proj_dropdown.png){: .image-with-shadow width="200px" }
+> ![R Project Menu with New Project option highlighted](../fig/05-Rproj_setup_proj_dropdown.png){: .image-with-shadow width="400px" }
 > 
 > 2. Alternatively, you can click the "File" menu and choose the "New Project..." option
 > 
@@ -60,13 +60,13 @@ Click on the new R project button in the upper left-hand side of RStudio.
 Next the "New Project Wizard" will pop up in RStudio.
 Since we are starting this project from scratch we will choose the "New Directory" option.
 
-![New project wizard with the new directory option highlighted](../fig/05-Rproj_setup_new_dir.png){: .image-with-shadow width="200px" }
+![New project wizard with the new directory option highlighted](../fig/05-Rproj_setup_new_dir.png){: .image-with-shadow width="400px" }
 
 
 Next the New Project Wizard asks us to chose a project type.
 We will choose the "New Project" option again.
 
-![New project wizard with the new project type highlighted](../fig/05-Rproj_setup_new_proj.png){: .image-with-shadow width="200px" }
+![New project wizard with the new project type highlighted](../fig/05-Rproj_setup_new_proj.png){: .image-with-shadow width="400px" }
 
 Finally the New Project Wizard asks us what to name our new project folder, where to put it,
 and some other options (including if we should make this a git repository).
@@ -77,7 +77,7 @@ The name is a bit long but will be useful for identifying it when you find it on
 We also want to be sure the "Create a git repository" option is checked.
 If you don't see this option, you may need to check that you have git installed.
 
-![New project wizard with directory name and location](../fig/05-rproj_setup_name.png){: .image-with-shadow width="200px" }
+![New project wizard with directory name and location](../fig/05-rproj_setup_name.png){: .image-with-shadow width="400px" }
 
 Finally we can click the "Create Project" button.
 
@@ -123,17 +123,17 @@ For now we will ignore them ourselves.
 Let's make a new R script for our summer project analysis.
 So anyone who finds our script/repo later knows what the script is for and how to contact us, lets add our name, a script desciption, the date, and our email address to the top of the script.
 
-![New script pane with comments that include name, description, date and email](../fig/05-Rstudio-new-script.png){: .image-with-shadow width="200px" }
+![New script pane with comments that include name, description, date and email](../fig/05-Rstudio-new-script.png){: .image-with-shadow width="400px" }
 
 Next we will save the file to a new name.
 This first script will be our data cleaning script, so let's call it `01-data_cleaning.R`.
 
-![Save File window with data cleaning script name](../fig/05-save-new-script.png){: .image-with-shadow width="200px" }
+![Save File window with data cleaning script name](../fig/05-save-new-script.png){: .image-with-shadow width="400px" }
 
 Now in the git pane we can see that it shows the new `01-data_cleaning.R` script with the two yellow `?` around it.
 This means it recognizes the new file is in the repository and has yet to be tracked.
 
-![Git pane with new data cleaning script](../fig/05-new-script-git-pane.png){: .image-with-shadow width="200px" }
+![Git pane with new data cleaning script](../fig/05-new-script-git-pane.png){: .image-with-shadow width="400px" }
 
 To tell git we want to keep this version of the `01-data_cleaning.R` script, we first click the checkbox in the "Staged" column
 of the git pane. This adds the file to the *stage* so git knows to include it in this point of our git history.
@@ -159,7 +159,7 @@ We will type `Started script for data cleaning` as our commit message.
 > Read more about some suggestions for helpful commit messages in [this blog post](https://chris.beams.io/posts/git-commit/).
 {: .callout}
 
-![RStudio git commit window with data cleaning script added](../fig/05-git-commit-window.png){: .image-with-shadow width="400px" }
+![RStudio git commit window with data cleaning script added](../fig/05-git-commit-window.png){: .image-with-shadow width="900px" }
 
 Once we've added a commit message, we can click the commit button below the message window.
 This action actually makes a point in our git history with this version of the file.
@@ -171,7 +171,7 @@ and the commit message we wrote.
 The 3rd line is a summary of the number of files and lines changed.
 The last line is info about the file system permissions for the script we created, which we can mostly ignore here.
 
-![Git commit pane with the info about first commit](../fig/05-git-first-commit.png){: .image-with-shadow width="200px" }
+![Git commit pane with the info about first commit](../fig/05-git-first-commit.png){: .image-with-shadow width="400px" }
 
 Now that we've committed, we can close this pane by clicking the "Close" button.
 Back in the other RStudio git window, we can see that the data cleaning script is no longer listed in the 
@@ -181,12 +181,12 @@ Since all the changes for the data cleaning script are committed to our git repo
 Let's close this window and make more changes to our script.  Let's add a line to load the libraries we want to use.
 While we are learning git in this lesson, we will write comments instead of actual R code.
 
-![Data cleaning script with a new comment to import packages](../fig/05-load-libraries.png){: .image-with-shadow width="300px" }
+![Data cleaning script with a new comment to import packages](../fig/05-load-libraries.png){: .image-with-shadow width="400px" }
 
 Once we save the new addition to the file, we can see that in the git pane the data cleaning script appears again.
 This time the status shows as `M`, which means the file has been modified since the last time it was committed to the git history.
 
-![git pane showing data cleaning script as modified](../fig/05-modified-script.png){: .image-with-shadow width="200px" }
+![git pane showing data cleaning script as modified](../fig/05-modified-script.png){: .image-with-shadow width="400px" }
 
 We can follow the same process and add these changes to the stage and and commit this version of the file to our git history.
 Notice when we check the "Staged" option the `M` moves from the right side of the status column to the left?
@@ -198,7 +198,7 @@ Reminder, the two `?` for the other files is because git has not yet tracked the
 <!--- extra image, just in case
 ![Git pane with data cleaning script modified but not staged](../fig/05-modified-script.png){: .image-with-shadow }
 -->
-![Git pane with data cleaning script modified and staged](../fig/05-modified-staged-script.png){: .image-with-shadow width="200px" }
+![Git pane with data cleaning script modified and staged](../fig/05-modified-staged-script.png){: .image-with-shadow width="400px" }
 
 In this commit, notice the bottom of the git window.  This section shows the *diff*, in this case it is showing us the differences
 between the last time we committed and the new staged version of the file.
@@ -207,11 +207,11 @@ In addition to the colors, we can use the line numbers to see which lines are ch
 The numbers on the left are the old lines and the ones on the right are the new lines.
 Once we've previewed the *diff*, we can again click the commit button, write a commit message, and click commit.
 
-![Git window with loaded packages commit message](../fig/05-git-commit-packages.png){: .image-with-shadow width="400px" }
+![Git window with loaded packages commit message](../fig/05-git-commit-packages.png){: .image-with-shadow width="900px" }
 
 Then we get see the same summary window as before with info about our commit.
 
-![Git commit window summary of packages loaded commit](../fig/05-git-commit-packages-summary.png){: .image-with-shadow width="400px" }
+![Git commit window summary of packages loaded commit](../fig/05-git-commit-packages-summary.png){: .image-with-shadow width="900px" }
 
 > ## Try it yourself!
 > 
@@ -248,7 +248,7 @@ Lets add a new line to our script `# Broken Analysis`.  This line represents hou
 to get back to the old version of our script. (In this case we could delete that function but we can pretend there is an old version
 of the analysis we want to get back to.)
 
-![Script with the broken analysis line added](../fig/05-broken-analysis.png){: .image-with-shadow width="400px" }
+![Script with the broken analysis line added](../fig/05-broken-analysis.png){: .image-with-shadow width="900px" }
 
 To get back to our old version of the script, we can click the gear/cog icon in the git pane and then click the "Revert..." button.
 It will then warn us because we have not committed this version so once we revert the only option to get it back would be to code it again.
@@ -294,7 +294,7 @@ Lets create some fake data files and results to ignore in our folder.
 
 Now our git pane will show the new folders and files.
 
-![Git pane with the dat files and results folder showing](../fig/05-git-data-files.png){: .image-with-shadow width="200px" }
+![Git pane with the dat files and results folder showing](../fig/05-git-data-files.png){: .image-with-shadow width="400px" }
 
 Note that we can only see the one listing for the `results` folder.
 Git will try to track any file in our repository, including the directories within subdirectories (though not actually the folder itself).
@@ -310,7 +310,7 @@ However, they are important files for R to keep track of the history and other d
 RStudio added them to the `.gitignore` file when we created this project because these are files that are commonly
 not included in git repositories.
 
-![Git ignore file with several R files already included](../fig/05-first-gitignore.png){: .image-with-shadow width="400px" }
+![Git ignore file with several R files already included](../fig/05-first-gitignore.png){: .image-with-shadow width="900px" }
 
 Let's add a couple lines to the `.gitignore` file so git will ignore our data and results files.
 We will add a line using a line that says `*.dat` to ignore any file that ends in `.dat`.
@@ -323,7 +323,7 @@ This is because we need to refresth by clicking the arrow circle button on the r
 
 Now we can see that the data and results files no longer show up in the git pane.
 
-![git pane with only the rproj and gitignore file](05-after-ignore.png){: .image-with-shadow width="200px" }
+![git pane with only the rproj and gitignore file](05-after-ignore.png){: .image-with-shadow width="400px" }
 
 > ## Adding New Result/Output files
 > 
