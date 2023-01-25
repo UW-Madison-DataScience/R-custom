@@ -75,47 +75,27 @@ surveys<-read_csv(file = "data/Portal_rodents_19772002_scinameUUIDs.csv")
 
 
 ~~~
-
-── Column specification ────────────────────────────────────────────────────────
-cols(
-  .default = col_character(),
-  recordID = col_double(),
-  mo = col_double(),
-  dy = col_double(),
-  yr = col_double(),
-  period = col_double(),
-  plot = col_double(),
-  note1 = col_double(),
-  stake = col_double(),
-  decimalLatitude = col_double(),
-  decimalLongitude = col_double(),
-  hfl = col_double(),
-  wgt = col_double(),
-  ltag = col_double(),
-  note3 = col_logical(),
-  prevrt = col_double(),
-  prevlet = col_double(),
-  neststk = col_double(),
-  note4 = col_logical()
-)
-ℹ Use `spec()` for the full column specifications.
-~~~
-{: .output}
-
-
-
-~~~
-Warning: 674 parsing failures.
- row   col           expected actual                                            file
-1039 note4 1/0/T/F/TRUE/FALSE     TE 'data/Portal_rodents_19772002_scinameUUIDs.csv'
-1070 note4 1/0/T/F/TRUE/FALSE     TA 'data/Portal_rodents_19772002_scinameUUIDs.csv'
-1092 note4 1/0/T/F/TRUE/FALSE     TE 'data/Portal_rodents_19772002_scinameUUIDs.csv'
-1099 note4 1/0/T/F/TRUE/FALSE     TE 'data/Portal_rodents_19772002_scinameUUIDs.csv'
-1110 note4 1/0/T/F/TRUE/FALSE     TE 'data/Portal_rodents_19772002_scinameUUIDs.csv'
-.... ..... .................. ...... ...............................................
-See problems(...) for more details.
+Warning: One or more parsing issues, call `problems()` on your data frame for details,
+e.g.:
+  dat <- vroom(...)
+  problems(dat)
 ~~~
 {: .warning}
+
+
+
+~~~
+Rows: 35549 Columns: 39
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr (22): survey_id, plot_id, species, scientificName, locality, JSON, count...
+dbl (16): recordID, mo, dy, yr, period, plot, note1, stake, decimalLatitude,...
+lgl  (1): note3
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+~~~
+{: .output}
 
 Note that there are a few parsing errors. This error happens becaues `read_csv`
 looks at the first 1000 rows of each column and guess which type that column
@@ -134,26 +114,14 @@ surveys <- read_csv(file = "data/Portal_rodents_19772002_scinameUUIDs.csv",
 
 
 ~~~
-
+Rows: 35549 Columns: 39
 ── Column specification ────────────────────────────────────────────────────────
-cols(
-  .default = col_character(),
-  recordID = col_double(),
-  mo = col_double(),
-  dy = col_double(),
-  yr = col_double(),
-  period = col_double(),
-  plot = col_double(),
-  note1 = col_double(),
-  stake = col_double(),
-  decimalLatitude = col_double(),
-  decimalLongitude = col_double(),
-  hfl = col_double(),
-  wgt = col_double(),
-  prevlet = col_double(),
-  neststk = col_double()
-)
-ℹ Use `spec()` for the full column specifications.
+Delimiter: ","
+chr (25): survey_id, plot_id, species, scientificName, locality, JSON, count...
+dbl (14): recordID, mo, dy, yr, period, plot, note1, stake, decimalLatitude,...
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
 ~~~
 {: .output}
 
@@ -359,22 +327,22 @@ head(surveys)
 
 
 ~~~
-# A tibble: 6 x 40
-  survey_id  recordID    mo    dy    yr period plot_id plot  note1 stake species
-  <chr>      <chr>    <int> <int> <int>  <dbl> <fct>   <fct> <chr> <chr> <fct>  
-1 491ec41b-… 6545         9    18  1982     62 4dc160… 13    13    36    AB     
-2 f280bade-… 5220         1    24  1982     54 dcbbd3… 20    13    27    AB     
-3 2b1b4a8a-… 18932        8     7  1991    162 1e87b1… 19    13    33    AS     
-4 e98e66c4-… 20588        1    24  1993    179 91829d… 12    13    41    AS     
-5 768cdd0d-… 7020        11    21  1982     63 f24f2d… 24    13    72    AH     
-6 13851c71-… 7645         4    16  1983     67 f24f2d… 24    13    21    AH     
+# A tibble: 6 × 40
+  survey_id   recor…¹    mo    dy    yr period plot_id plot  note1 stake species
+  <chr>       <chr>   <int> <int> <int>  <dbl> <fct>   <fct> <chr> <chr> <fct>  
+1 491ec41b-0… 6545        9    18  1982     62 4dc160… 13    13    36    AB     
+2 f280bade-4… 5220        1    24  1982     54 dcbbd3… 20    13    27    AB     
+3 2b1b4a8a-c… 18932       8     7  1991    162 1e87b1… 19    13    33    AS     
+4 e98e66c4-5… 20588       1    24  1993    179 91829d… 12    13    41    AS     
+5 768cdd0d-9… 7020       11    21  1982     63 f24f2d… 24    13    72    AH     
+6 13851c71-0… 7645        4    16  1983     67 f24f2d… 24    13    21    AH     
 # … with 29 more variables: scientificName <fct>, locality <chr>, JSON <chr>,
 #   decimalLatitude <dbl>, decimalLongitude <dbl>, county <fct>, state <fct>,
 #   country <fct>, sex <fct>, age <fct>, reprod <chr>, testes <chr>,
 #   vagina <chr>, pregnant <chr>, nipples <chr>, lactation <chr>, hfl <dbl>,
 #   wgt <dbl>, tag <chr>, note2 <chr>, ltag <chr>, note3 <chr>, prevrt <chr>,
 #   prevlet <int>, nestdir <chr>, neststk <int>, note4 <chr>, note5 <chr>,
-#   mo_abbv <fct>
+#   mo_abbv <fct>, and abbreviated variable name ¹​recordID
 ~~~
 {: .output}
 
@@ -467,7 +435,7 @@ surveys %>% filter(!is.na(hfl)) %>%
 ~~~
 {: .language-r}
 
-<img src="../fig/rmd-unnamed-chunk-9-1.png" title="plot of chunk unnamed-chunk-9" alt="plot of chunk unnamed-chunk-9" width="612" style="display: block; margin: auto;" />
+<img src="../fig/rmd-unnamed-chunk-9-1.png" alt="plot of chunk unnamed-chunk-9" width="612" style="display: block; margin: auto;" />
 
 #### Ordered by number and left pad
 
@@ -533,7 +501,7 @@ surveys %>% filter(!is.na(hfl)) %>%
 ~~~
 {: .language-r}
 
-<img src="../fig/rmd-unnamed-chunk-12-1.png" title="plot of chunk unnamed-chunk-12" alt="plot of chunk unnamed-chunk-12" width="612" style="display: block; margin: auto;" />
+<img src="../fig/rmd-unnamed-chunk-12-1.png" alt="plot of chunk unnamed-chunk-12" width="612" style="display: block; margin: auto;" />
 
 
 We can also reorder only a subset of the levels without having to specify 
@@ -555,7 +523,7 @@ surveys$plot <- surveys$plot %>% fct_relevel('2', after= Inf)
 
 
 ~~~
-Warning: Unknown levels in `f`: 2
+Warning: 1 unknown level in `f`: 2
 ~~~
 {: .warning}
 
@@ -571,7 +539,7 @@ surveys %>%
 ~~~
 {: .language-r}
 
-<img src="../fig/rmd-unnamed-chunk-14-1.png" title="plot of chunk unnamed-chunk-14" alt="plot of chunk unnamed-chunk-14" width="612" style="display: block; margin: auto;" />
+<img src="../fig/rmd-unnamed-chunk-14-1.png" alt="plot of chunk unnamed-chunk-14" width="612" style="display: block; margin: auto;" />
 
 > ## Challenge
 >
@@ -612,7 +580,7 @@ surveys%>%
 
 
 ~~~
-# A tibble: 27 x 2
+# A tibble: 27 × 2
    scientificName                n
    <fct>                     <int>
  1 Amphispiza bilineata        291
@@ -659,7 +627,7 @@ surveys%>%
 
 
 ~~~
-# A tibble: 22 x 2
+# A tibble: 22 × 2
    scientificName                      n
    <fct>                           <int>
  1 Amphispiza bilineata              291
@@ -1179,9 +1147,9 @@ Warning in gregexpr(pattern, x, perl = TRUE): PCRE error
 
 
 ~~~
-Warning: Expected 2 pieces. Missing pieces filled with `NA` in 15370 rows
-[16923, 16924, 16925, 16926, 16927, 16928, 16929, 16930, 16931, 16932, 16933,
-16934, 16935, 16936, 16937, 16938, 16939, 16940, 16941, 16942, ...].
+Warning: Expected 2 pieces. Missing pieces filled with `NA` in 15370 rows [16923, 16924,
+16925, 16926, 16927, 16928, 16929, 16930, 16931, 16932, 16933, 16934, 16935,
+16936, 16937, 16938, 16939, 16940, 16941, 16942, ...].
 ~~~
 {: .warning}
 
@@ -1423,7 +1391,7 @@ surveys %>% count(scientificName)
 
 
 ~~~
-# A tibble: 22 x 2
+# A tibble: 22 × 2
    scientificName                        n
    <chr>                             <int>
  1 " Missing "                       15318
